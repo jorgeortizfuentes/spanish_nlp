@@ -220,14 +220,14 @@ class SpanishClassifier:
     def _predict_hf_(self, text):
         prediction = self.model(text, top_k=self.n_labels)
         for p in prediction:
-            p['label'] = self.labels[p['label']]
+            p["label"] = self.labels[p["label"]]
         return prediction
-
 
     def predict(self, text):
         if self.type_model == "hf":
             self.last_prediction = self._predict_hf_(text)
             return self.last_prediction
+
 
 if __name__ == "__main__":
     sc = SpanishClassifier(model_name="sexist_analysis")
@@ -241,4 +241,3 @@ if __name__ == "__main__":
     print(p)
 
 
-# Pendiente agregar info de si es single class o multiclass y encontrar etiquetas
