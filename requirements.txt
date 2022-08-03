@@ -1,0 +1,5 @@
+python==3.9
+pandas
+emoji
+nltk
+transformers==4.21.0

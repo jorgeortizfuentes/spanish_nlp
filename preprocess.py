@@ -2,20 +2,23 @@ import re
 from utilities.emo_unicode import EMOTICONS, UNICODE_EMO
 import emoji
 import string
-
+from nltk.corpus import stopwords
 
 class SpanishPreprocess:
-    def __init__(self, lower=True, remove_url=True, convert_emoticons=True, convert_emojis=True, normalize_inclusive_language=True, reduce_spam=True, remove_punctuation=True, remove_unprintable=True, remove_numbers=True, remove_stop_words=True, stop_words_list=None, stem=True):
+    """ Authors: Hernán Sarmiento, Ricardo Córdova y Jorge Ortiz"""
+    def __init__(self, lower=True, remove_url=True, remove_hashtags = True, convert_emoticons=True, convert_emojis=True, normalize_inclusive_language=True, reduce_spam=True, remove_vowels_accents = True, remove_punctuation=True, remove_unprintable=True, remove_numbers=True, remove_stopwords=True, stopwords_list=None, stem=True):
         self.lower = lower
         self.remove_url = remove_url
+        self.remove_hashtags = remove_hashtags
         self.convert_emoticons = convert_emoticons
         self.convert_emojis = convert_emojis
         self.normalize_inclusive_language = normalize_inclusive_language
         self.reduce_spam = reduce_spam
+        self.remove_vowels_accents = remove_vowels_accents
         self.remove_punctuation = remove_punctuation
         self.remove_numbers = remove_numbers
-        self.remove_stop_words = remove_stop_words
-        self.stop_words_list = stop_words_list
+        self.remove_stopwords = remove_stopwords
+        self.stopwords_list = stopwords_list
         self.remove_unprintable = remove_unprintable
         self.stem = stem
 
@@ -26,6 +29,10 @@ class SpanishPreprocess:
         text = re.sub(r"(?:\@|https?\://)\S+", "", text)
         url_pattern = re.compile(r'https?://\S+|www\.\S+')
         return url_pattern.sub(r'', text)
+
+    def _remove_hashtags_(self, text):
+        text = re.sub("#[A-Za-z_Ññ_0-9_]+"," ", text)
+        return ' '.join(text.split())
 
     def _convert_emoticons_(self, text):
         for emot in EMOTICONS:
@@ -46,9 +53,13 @@ class SpanishPreprocess:
         text = re.sub(r"(\b(\w+\s){3})\1+", r"\1\1", text)
         return ' '.join(text.split())
 
+    def _remove_vowels_accents_(self,text):
+        return text.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ü', 'u')
+
     def _remove_punctuation_(self, text):
         pattern = re.compile(r'[^\w\sáéíóúüñÁÉÍÓÚÜÑ]')
-        return pattern.sub(r'', text)
+        t = pattern.sub(r' ', text)
+        return re.sub(' +', ' ', t)
 
     def _remove_unprintable_(self, text):
         printable = set(string.printable + 'ñáéíóúü' + 'ÑÁÉÍÓÚÜ')
@@ -59,8 +70,8 @@ class SpanishPreprocess:
         text = re.sub(r'[0-9]', " ", text)
         return ' '.join(text.split())
 
-    def _remove_stop_words_(self, text):
-        return text
+    def _remove_stopwords_(self, text):
+        return ' '.join([word for word in str(text).split() if word not in self.stopwords_list])
 
     def _stem_(self, text):
         return text
@@ -70,6 +81,8 @@ class SpanishPreprocess:
             text = self._lower_(text)
         if self.remove_url:
             text = self._remove_url_(text)
+        if self.remove_hashtags:
+            text = self._remove_hashtags_(text)
         if self.convert_emoticons:
             text = self._convert_emoticons_(text)
         if self.convert_emojis:
@@ -78,14 +91,16 @@ class SpanishPreprocess:
             text = self._normalize_inclusive_language_(text)
         if self.reduce_spam:
             text = self._reduce_spam_(text)
+        if self.remove_vowels_accents:
+            text = self._remove_vowels_accents_(text)
         if self.remove_punctuation:
             text = self._remove_punctuation_(text)
         if self.remove_unprintable:
             text = self._remove_unprintable_(text)
         if self.remove_numbers:
             text = self._remove_numbers_(text)
-        if self.remove_stop_words:
-            text = self._remove_stop_words_(text)
+        if self.remove_stopwords:
+            text = self._remove_stopwords_(text)
         if self.stem:
             text = self._stem_(text)
         if self.lower:
@@ -95,8 +110,8 @@ class SpanishPreprocess:
 
 if __name__ == "__main__":
     # Test SpanishPreprocess
-    sp = SpanishPreprocess(lower=True, remove_url=True, convert_emoticons=True, convert_emojis=True, normalize_inclusive_language=True, reduce_spam=True,
-                           remove_punctuation=True, remove_unprintable=True, remove_numbers=True, remove_stop_words=False, stop_words_list=None, stem=False)
+    sp = SpanishPreprocess(lower=True, remove_url=True, remove_hashtags = True, convert_emoticons=True, convert_emojis=True, normalize_inclusive_language=True, reduce_spam=True,
+                           remove_vowels_accents = True, remove_punctuation=True, remove_unprintable=True, remove_numbers=True, remove_stopwords=False, stopwords_list=None, stem=False)
 
     test_text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
 

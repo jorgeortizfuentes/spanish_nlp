@@ -17,7 +17,7 @@ class SpanishClassifier:
 
     def _set_default_device_(self):
         self.device = (
-            torch.device(0) if torch.cuda.is_available() else torch.device("cpu")
+            0 if torch.cuda.is_available() else -1
         )
 
     def set_model(self, model_name):
@@ -219,24 +219,29 @@ class SpanishClassifier:
 
     def _predict_hf_(self, text):
         prediction = self.model(text, top_k=self.n_labels)
+        d_prediction = {}
         for p in prediction:
-            p["label"] = self.labels[p["label"]]
-        return prediction
+            #p["label"] = self.labels[p["label"]]
+            d_prediction[self.labels[p["label"]]] = p["score"]
+        return d_prediction
 
     def predict(self, text):
         if self.type_model == "hf":
-            self.last_prediction = self._predict_hf_(text)
-            return self.last_prediction
-
-
+            if type(text) == str:
+                self.last_prediction = self._predict_hf_(text)
+                return self.last_prediction
+            elif type(text) == list:
+                self.last_prediction = []
+                for t in text:
+                    self.last_prediction.append(self._predict_hf_(t))
+                return self.last_prediction
+            
 if __name__ == "__main__":
     sc = SpanishClassifier(model_name="sexist_analysis")
     t1 = "Las mujeres son tontas"
     t2 = "Las mujeres son tontas y los hombres hermosos"
-    p = sc.predict(t1)
+    p = sc.predict([t1, t2])
     print(t1)
-    print(p)
-    p = sc.predict(t2)
     print(t2)
     print(p)
 
