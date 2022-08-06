@@ -87,8 +87,9 @@ class SpanishClassifier:
             device=self.device,
         )
         self.type_model = "hf"
-        self.multiclass = False
-        self.labels = {"LABEL_0": "toxic", "LABEL_1": "very_toxic"}
+        self.n_labels = 3
+        self.multiclass = True
+        self.labels = {"hateful": "hateful", "aggressive": "aggressive", "targeted": "targeted"}
 
     def load_toxic_speach(self, type="political-tweets-es"):
         if type == "political-tweets-es":
@@ -99,18 +100,17 @@ class SpanishClassifier:
     def _toxic_political_tweets_(self):
         self.model = pipeline(
             "text-classification",
-            model="pysentimiento/robertuito-hate-speech",
+            model="Newtral/xlm-r-finetuned-toxic-political-tweets-es",
             truncation=True,
             max_length=512,
             device=self.device,
         )
         self.type_model = "hf"
-        self.multiclass = True
+        self.multiclass = False
         self.n_labels = 2
         self.labels = {
-            "hateful": "hateful",
-            "targeted": "targeted",
-            "aggresive": "aggressive",
+            "LABEL_0": "toxic",
+            "LABEL_1": "very_toxic",
         }
 
     def load_sentiment_analysis(self, type="robertuito"):

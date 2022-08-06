@@ -1,5 +1,6 @@
-python==3.9
+#python==3.9.12
 pandas
 emoji
 nltk
 transformers==4.21.0
+swifter

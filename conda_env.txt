@@ -1,1 +1,1 @@
-conda create --name spanish_nlp python==3.9 pandas numpy nltk transformers scikit-learn
+conda create --name spanish_nlp python==3.9.12 pandas numpy nltk transformers scikit-learn
