@@ -126,6 +126,7 @@ for n in classifiers_names:
 for cl_name in classifiers.keys():
     df[cl_name] = None
     df[cl_name] = df["text"].swifter.apply(lambda x: predict_label(x, classifiers[cl_name], file_log))
+    df.to_pickle("data/data_classified.pkl")
 
 
 
