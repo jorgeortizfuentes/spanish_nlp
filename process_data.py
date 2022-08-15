@@ -1,7 +1,9 @@
+import os
+from datetime import datetime
+
 import pandas as pd
 import swifter
 from tqdm import tqdm
-from datetime import datetime
 
 from classifiers import SpanishClassifier
 from preprocess import SpanishPreprocess
@@ -50,12 +52,17 @@ df_wsp["source"] = "whatsapp"
 
 
 df = pd.concat([df_tweets, df_wsp], ignore_index=True)
-
+df["n_words"] = df["text"].swifter.apply(lambda x: len(x.split()))
+df = df[df["n_words"] >= 4]
+del df["n_words"]
+df = df.reset_index(drop=True)
 
 sp = SpanishPreprocess(
     lower=True,
     remove_url=True,
     remove_hashtags=True,
+    preserve_emojis=True,
+    preserve_emoticons=True,
     convert_emoticons=False,
     convert_emojis=False,
     normalize_inclusive_language=False,
@@ -78,11 +85,9 @@ df = df[df["text"].apply(lambda x: type(x) == str)]
 df = df.reset_index(drop=True)
 
 
-import os
 os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 
-tqdm.pandas(desc='Classifying texts')
-
+tqdm.pandas(desc="Classifying texts")
 
 
 tqdm.pandas(desc="Classifying texts")
@@ -96,9 +101,10 @@ def predict_label(text, model, file_log):
         # Write log
         with open(file_log, "a") as f:
             f.write(f"{time}. Error: {e}\n")
+            f.write(f"{model}. Model: {model}\n")
             f.write(f"{time}. Text: {text}\n")
-            #time.sleep(1)
-            # Delete cache GPU    
+            # time.sleep(1)
+            # Delete cache GPU
         return None
 
 
@@ -114,21 +120,25 @@ classifiers_names = [
 classifiers = {}
 
 
+file_log = "data/classification.log"
 
-file_log = "data/classification_log.txt"
-
-classifiers_names = ["hate_speech", "toxic_speech", "sentiment_analysis", "emotion_analysis", "irony_analysis", "sexist_analysis", "racism_analysis"]
+classifiers_names = [
+    "hate_speech",
+    "toxic_speech",
+    "sentiment_analysis",
+    "emotion_analysis",
+    "irony_analysis",
+    "sexist_analysis",
+    "racism_analysis",
+]
 classifiers = {}
 
 for n in classifiers_names:
-    classifiers[n] = SpanishClassifier(model_name=n, device=-1)
+    classifiers[n] = SpanishClassifier(model_name=n, device=0)
 
 for cl_name in classifiers.keys():
     df[cl_name] = None
-    df[cl_name] = df["text"].swifter.apply(lambda x: predict_label(x, classifiers[cl_name], file_log))
+    df[cl_name] = df["text"].swifter.apply(
+        lambda x: predict_label(x, classifiers[cl_name], file_log)
+    )
     df.to_pickle("data/data_classified.pkl")
-
-
-
-
-

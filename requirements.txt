@@ -4,3 +4,4 @@ emoji
 nltk
 transformers==4.21.0
 swifter
+kaleido

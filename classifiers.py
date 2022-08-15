@@ -16,9 +16,7 @@ class SpanishClassifier:
             self._configure_model_()
 
     def _set_default_device_(self):
-        self.device = (
-            0 if torch.cuda.is_available() else -1
-        )
+        self.device = 0 if torch.cuda.is_available() else -1
 
     def set_model(self, model_name):
         self.model_name = model_name
@@ -83,13 +81,18 @@ class SpanishClassifier:
             "text-classification",
             model="pysentimiento/robertuito-hate-speech",
             truncation=True,
-            max_length=512,
+            max_length=128,
             device=self.device,
         )
+        self.max_length = 128
         self.type_model = "hf"
         self.n_labels = 3
         self.multiclass = True
-        self.labels = {"hateful": "hateful", "aggressive": "aggressive", "targeted": "targeted"}
+        self.labels = {
+            "hateful": "hateful",
+            "aggressive": "aggressive",
+            "targeted": "targeted",
+        }
 
     def load_toxic_speach(self, type="political-tweets-es"):
         if type == "political-tweets-es":
@@ -105,6 +108,7 @@ class SpanishClassifier:
             max_length=512,
             device=self.device,
         )
+        self.max_length = 512
         self.type_model = "hf"
         self.multiclass = False
         self.n_labels = 2
@@ -124,9 +128,10 @@ class SpanishClassifier:
             "text-classification",
             model="pysentimiento/robertuito-sentiment-analysis",
             truncation=True,
-            max_length=512,
+            max_length=128,
             device=self.device,
         )
+        self.max_length = 128
         self.type_model = "hf"
         self.multiclass = False
         self.n_labels = 3
@@ -143,9 +148,10 @@ class SpanishClassifier:
             "text-classification",
             model="pysentimiento/robertuito-emotion-analysis",
             truncation=True,
-            max_length=512,
+            max_length=128,
             device=self.device,
         )
+        self.max_length = 128
         self.type_model = "hf"
         self.multiclass = False
         self.n_labels = 7
@@ -170,9 +176,10 @@ class SpanishClassifier:
             "text-classification",
             model="pysentimiento/robertuito-irony",
             truncation=True,
-            max_length=512,
+            max_length=128,
             device=self.device,
         )
+        self.max_length = 128
         self.type_model = "hf"
         self.multiclass = False
         self.n_labels = 2
@@ -189,9 +196,10 @@ class SpanishClassifier:
             "text-classification",
             model="hackathon-pln-es/twitter_sexismo-finetuned-exist2021-metwo",
             truncation=True,
-            max_length=512,
+            max_length=128,
             device=self.device,
         )
+        self.max_length = 128
         self.type_model = "hf"
         self.multiclass = False
         self.n_labels = 2
@@ -212,16 +220,19 @@ class SpanishClassifier:
             max_length=512,
             device=self.device,
         )
+        self.max_length = 512
         self.type_model = "hf"
         self.multiclass = False
         self.n_labels = 2
         self.labels = {"non-racist": "non-racist", "racist": "racist"}
 
     def _predict_hf_(self, text):
-        prediction = self.model(text, top_k=self.n_labels)
+        prediction = self.model(
+            text, top_k=self.n_labels, truncation=True, max_length=self.max_length
+        )
         d_prediction = {}
         for p in prediction:
-            #p["label"] = self.labels[p["label"]]
+            # p["label"] = self.labels[p["label"]]
             d_prediction[self.labels[p["label"]]] = p["score"]
         return d_prediction
 
@@ -235,14 +246,13 @@ class SpanishClassifier:
                 for t in text:
                     self.last_prediction.append(self._predict_hf_(t))
                 return self.last_prediction
-            
+
+
 if __name__ == "__main__":
-    sc = SpanishClassifier(model_name="sexist_analysis")
-    t1 = "Las mujeres son tontas"
-    t2 = "Las mujeres son tontas y los hombres hermosos"
-    p = sc.predict([t1, t2])
-    print(t1)
-    print(t2)
+    sc = SpanishClassifier(model_name="hate_speech", device=0)
+    t0 = "estimados atrevidos estas semana no sera facil porque muchos nos trataran de atacar ayer la izquierda y los medios manipularon una respuesta para revivir a pinochet que murio hace años y tratar de influir en la eleccion el domingo pasado el dictador ortega fue reelegido y los candidatos de oposicion estaban presos aqui en chile hace años patricio aylwin fue candidato compitio gano y fue elegido presidente esa es la comparacion y todo lo que publican los medios y la izquierda son puras mentiras y falsedades la eleccion del proximo domingo no es sobre allende o pinochet es sobre futuro y quien es el mas capacitado para recuperar la paz el orden y el progreso ese sin duda es nuestro candidato jose antonio kast equipo kast"
+    # t0 = "ODIO LA POLÍTICA Y A LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
+    # t2 = "El presidente convocó a una reunión a los representates de los partidos políticos"
+    p = sc.predict(t0)
+    print(t0)
     print(p)
-
-
