@@ -719,3 +719,5 @@ z
 últimas
 último
 últimos
+ojala
+ojalá
