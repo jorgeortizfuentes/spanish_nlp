@@ -5,7 +5,7 @@ import pandas as pd
 import swifter
 from tqdm import tqdm
 
-from classifiers import SpanishClassifier
+from src.classifiers import SpanishClassifier
 from preprocess import SpanishPreprocess
 
 df_tweets = pd.read_csv(
