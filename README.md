@@ -48,6 +48,18 @@ print(sp.transform(test_text))
 
 ## Classification usage
 
+### Available classifiers
+
+* Hate Speech (hate_speech)
+* Toxic Speech (toxic_speech)
+* Sentiment Analysis (sentiment_analysis)
+* Emotion Analysis (emotion_analysis)
+* Irony Analysis (irony_analysis)
+* Sexist Analysis (sexist_analysis)
+* Racism Analysis (racism_analysis)
+
+### Example
+
 ```python
 from spanish_nlp import classifiers
 
