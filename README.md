@@ -63,6 +63,13 @@ print("Text 2: ", t2)
 print("Prediction 2: ", p2)
 ```
 
+## Pending:
+
+* Add default stopwords lists
+* Generate documentation
+* Add information about available classifiers
+
 ## License
 
 This project is licensed under GNU General Public License v3.0.
+
