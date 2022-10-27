@@ -1,12 +1,9 @@
 a
 actualmente
-acuerdo
 adelante
 ademas
 además
 adrede
-afirmó
-agregó
 ahi
 ahora
 ahí
@@ -350,10 +347,7 @@ intentar
 intentas
 intento
 ir
-j
 junto
-k
-l
 la
 lado
 largo
@@ -368,7 +362,6 @@ lo
 los
 luego
 lugar
-m
 mal
 manera
 manifestó
@@ -434,7 +427,6 @@ otra
 otras
 otro
 otros
-p
 pais
 para
 parece
@@ -699,12 +691,9 @@ vuestra
 vuestras
 vuestro
 vuestros
-w
-x
-y
+xq
 ya
 yo
-z
 él
 éramos
 ésa

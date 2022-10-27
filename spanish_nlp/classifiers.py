@@ -246,13 +246,3 @@ class SpanishClassifier:
                 for t in text:
                     self.last_prediction.append(self._predict_hf_(t))
                 return self.last_prediction
-
-
-if __name__ == "__main__":
-    sc = SpanishClassifier(model_name="hate_speech", device=0)
-    t0 = "estimados atrevidos estas semana no sera facil porque muchos nos trataran de atacar ayer la izquierda y los medios manipularon una respuesta para revivir a pinochet que murio hace años y tratar de influir en la eleccion el domingo pasado el dictador ortega fue reelegido y los candidatos de oposicion estaban presos aqui en chile hace años patricio aylwin fue candidato compitio gano y fue elegido presidente esa es la comparacion y todo lo que publican los medios y la izquierda son puras mentiras y falsedades la eleccion del proximo domingo no es sobre allende o pinochet es sobre futuro y quien es el mas capacitado para recuperar la paz el orden y el progreso ese sin duda es nuestro candidato jose antonio kast equipo kast"
-    # t0 = "ODIO LA POLÍTICA Y A LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
-    # t2 = "El presidente convocó a una reunión a los representates de los partidos políticos"
-    p = sc.predict(t0)
-    print(t0)
-    print(p)

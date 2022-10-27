@@ -1,17 +1,3 @@
-# Spanish NLP
-
-A library for Natural Language Processing in Spanish.
-
-## Installation
-
-```bash
-pip install git+https://github.com/jorgeortizfuentes/spanish_nlp
-```
-
-## Preprocess usage
-
-```python
-
 from spanish_nlp import preprocess
 sp = preprocess.SpanishPreprocess(
     lower=True,
@@ -42,27 +28,8 @@ Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧�
 
 Tengo una deuda de $10.000.000.000, pero tengo 2000 vacas. Mi teléfono es +5698791045"""
 
+print("Original text:")
+print(test_text)
+print("-"*5)
+print("Preprocessed text:")
 print(sp.transform(test_text))
-
-```
-
-## Classification usage
-
-```python
-from spanish_nlp import classifiers
-
-sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
-t1 = "ODIO LA POLÍTICA Y A LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
-t2 = "El presidente convocó a una reunión a los representantes de los partidos políticos"
-p1 = sc.predict(t1)
-p2 = sc.predict(t2)
-
-print("Text 1: ", t1)
-print("Prediction 1: ", p1)
-print("Text 2: ", t2)
-print("Prediction 2: ", p2)
-```
-
-## License
-
-This project is licensed under GNU General Public License v3.0.

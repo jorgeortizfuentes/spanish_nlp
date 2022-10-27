@@ -8,7 +8,7 @@ setup(
     author='Jorge Ortiz Fuentes',
     author_email='jorge@ortizfuentes.com',
     license='GNU General Public License v3.0',
-    packages=['spanish_nlp'],
+    packages=['spanish_nlp', 'spanish_nlp.utils'],
     install_requires=['pandas',
                       'emoji',
                       'nltk',

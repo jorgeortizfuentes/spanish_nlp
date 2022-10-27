@@ -9,5 +9,3 @@ __author__ = "Jorge Ortiz Fuentes"
 __email__ = "jorge@ortizfuentes.com"
 __license__ = "GNU General Public License v3.0"
 
-from .preprocess import SpanishPreprocess
-from .classifiers import SpanishClassifier

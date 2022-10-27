@@ -1,12 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-
 """
 Emoticons and Emoji data dictonary
 """
-
-
-__all__ = ["EMOTICONS"]
 
 EMOTICONS = {
     ":‑)": "happy_face_or_smiley_1",

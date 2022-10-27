@@ -4,7 +4,7 @@ import string
 import emoji
 from nltk.corpus import stopwords
 
-from utilities.emo_unicode import demoticonize, emoticonize
+from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
 
 
 class SpanishPreprocess:
@@ -114,7 +114,8 @@ class SpanishPreprocess:
 
     def _remove_stopwords_(self, text):
         return " ".join(
-            [word for word in str(text).split() if word not in self.stopwords_list]
+            [word for word in str(text).split()
+             if word not in self.stopwords_list]
         )
 
     def _stem_(self, text):
@@ -227,36 +228,3 @@ class SpanishPreprocess:
                 print(text)
                 print("----------------------------------------------------")
         return text.strip().replace("  ", " ")
-
-
-if __name__ == "__main__":
-    # Test SpanishPreprocess
-    sp = SpanishPreprocess(
-        lower=True,
-        remove_url=True,
-        remove_hashtags=True,
-        preserve_emoticons=True,
-        preserve_emojis=True,
-        convert_emoticons=False,
-        convert_emojis=False,
-        normalize_inclusive_language=True,
-        reduce_spam=True,
-        remove_vowels_accents=True,
-        remove_punctuation=True,
-        remove_unprintable=True,
-        remove_numbers=True,
-        remove_stopwords=False,
-        stopwords_list=None,
-        stem=False,
-    )
-
-    test_text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
-
-Este es un texto de prueba :) a continuación voy a insertar una noticia de prueba 🤭👀😅
-
-https://www.biobiochile.cl/noticias/nacional/chile/2022/07/27/presidente-boric-anuncia-copago-cero-para-fonasa-con-guinos-al-apruebo.shtml 
-
-Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧🐧. 
-
-Tengo una deuda de $10.000.000.000, pero tengo 2000 vacas. Mi teléfono es +5698791045"""
-    print(sp.transform(test_text, debug=True))
