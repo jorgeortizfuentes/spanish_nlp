@@ -1,113 +1,15 @@
 Original text:
 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
 
-Este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
+Hola, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
 
 https://www.poesi.as/rb9301.htm
 
-Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧🐧. #VivanLosPinguinos #SiSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
+Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧🐧. #VivanLosPinguinos #SíSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
 
-Tengo una deuda de $10.000.000.000, pero tengo 2000 vacas. Mi teléfono es +5698791045
------
+Si colaboras con este código te puedes ganar $10.000.000.000. O tal vez 2000 vacas. Mi teléfono es +569123456789
+==========================================================================================
 Preprocessed text:
-Method: split_hashtags
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
-
-Este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
-
-https://www.poesi.as/rb9301.htm
-
-Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧🐧. Vivan Los Pinguinos Si Señor Pinguinos Del Mundo Uníos Ñandues Del Mundo También
-
-Tengo una deuda de $10.000.000.000, pero tengo 2000 vacas. Mi teléfono es +5698791045
-========================================================================================================================
-Method: lower
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
-
-este es un texto de prueba :) a continuación les mostraré un poema de roberto bolaño llamado "los perros románticos" 🤭👀😅
-
-https://www.poesi.as/rb9301.htm
-
-me gusta la lingüística y los ñandúes… también los pingüinos 🐧🐧🐧. vivan los pinguinos si señor pinguinos del mundo uníos ñandues del mundo también
-
-tengo una deuda de $10.000.000.000, pero tengo 2000 vacas. mi teléfono es +5698791045
-========================================================================================================================
-Method: remove_url
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
-
-este es un texto de prueba :) a continuación les mostraré un poema de roberto bolaño llamado "los perros románticos" 🤭👀😅
-
-
-
-me gusta la lingüística y los ñandúes… también los pingüinos 🐧🐧🐧. vivan los pinguinos si señor pinguinos del mundo uníos ñandues del mundo también
-
-tengo una deuda de $10.000.000.000, pero tengo 2000 vacas. mi teléfono es +5698791045
-========================================================================================================================
-Method: remove_numbers
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
-
-este es un texto de prueba :) a continuación les mostraré un poema de roberto bolaño llamado "los perros románticos" 🤭👀😅
-
-
-
-me gusta la lingüística y los ñandúes… también los pingüinos 🐧🐧🐧. vivan los pinguinos si señor pinguinos del mundo uníos ñandues del mundo también
-
-tengo una deuda de $..., pero tengo  vacas. mi teléfono es +
-========================================================================================================================
-Method: stem
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪 este es un text de prueb :) a continu les mostr un poem de robert bolañ llam "los perr romanticos" 🤭👀😅 me gust la lingüist y los ñandues… tambien los pingüin 🐧🐧🐧. viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de $..., per teng vacas. mi telefon es +
-========================================================================================================================
-Method: emojis_to_text
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪 este es un text de prueb :) a continu les mostr un poem de robert bolañ llam "los perr romanticos"  __face_with_hand_over_mouth__  __eyes__  __grinning_face_with_sweat__  me gust la lingüist y los ñandues… tambien los pingüin  __penguin__  __penguin__  __penguin__ . viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de $..., per teng vacas. mi telefon es +
-========================================================================================================================
-Method: emoticons_to_text
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪 este es un text de prueb  __happy_face_or_smiley_2__  a continu les mostr un poem de robert bolañ llam "los perr romanticos"  __face_with_hand_over_mouth__  __eyes__  __grinning_face_with_sweat__  me gust la lingüist y los ñandues… tambien los pingüin  __penguin__  __penguin__  __penguin__ . viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de $..., per teng vacas. mi telefon es +
-========================================================================================================================
-Method: reduce_spam
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪 este es un text de prueb  __happy_face_or_smiley_2__  a continu les mostr un poem de robert bolañ llam "los perr romanticos"  __face_with_hand_over_mouth__  __eyes__  __grinning_face_with_sweat__  me gust la lingüist y los ñandues… tambien los pingüin  __penguin__  __penguin__  __penguin__ . viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de $..., per teng vacas. mi telefon es +
-========================================================================================================================
-Method: remove_vowels_accents
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪 este es un text de prueb  __happy_face_or_smiley_2__  a continu les mostr un poem de robert bolañ llam "los perr romanticos"  __face_with_hand_over_mouth__  __eyes__  __grinning_face_with_sweat__  me gust la linguist y los ñandues… tambien los pinguin  __penguin__  __penguin__  __penguin__ . viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de $..., per teng vacas. mi telefon es +
-========================================================================================================================
-Method: remove_punctuation
-------------------------------------------------------------------------------------------
-Text: 𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪 este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romanticos __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandues tambien los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de per teng vacas mi telefon es 
-========================================================================================================================
-Method: remove_unprintable
-------------------------------------------------------------------------------------------
-Text:    este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romanticos __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandues tambien los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambien teng una deud de per teng vacas mi telefon es 
-========================================================================================================================
-Method: stem
-------------------------------------------------------------------------------------------
-Text: este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
-========================================================================================================================
-Method: text_to_emojis (not delete emojis)
-------------------------------------------------------------------------------------------
-Text: este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
-========================================================================================================================
-Method: text_to_emoticons (not delete emoticons)
-------------------------------------------------------------------------------------------
-Text: este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
-========================================================================================================================
-Method: remove_multiples_spaces
-------------------------------------------------------------------------------------------
-Text: este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
-========================================================================================================================
-Method: normalize_breaklines
-------------------------------------------------------------------------------------------
-Text: este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
-========================================================================================================================
-Method: normalize_punctuation_spelling
-------------------------------------------------------------------------------------------
-Text: este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
-========================================================================================================================
-este es un text de prueb __happy_face_or_smiley_2__ a continu les mostr un poem de robert bolañ llam los perr romant __face_with_hand_over_mouth__ __eyes__ __grinning_face_with_sweat__ me gust la linguist y los ñandu tambi los pinguin __penguin__ __penguin__ __penguin__ viv los pinguin si señor pinguin del mund uni ñandu del mund tambi teng una deud de per teng vac mi telefon es
+hola este es un texto de prueba a continuacion les mostrare un poema de roberto bolaño llamado los perros romanticos 
+me gusta la linguistica y los ñandues tambien los pinguinos vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
+si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es

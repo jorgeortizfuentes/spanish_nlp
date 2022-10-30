@@ -114,9 +114,9 @@ class SpanishPreprocess:
             self.stopwords_list = extended_stopwords
 
         elif type_stopwords == "nltk":
-            from nltk.corpus import stopwords
-
+            import nltk
             nltk.download("stopwords")
+            from nltk.corpus import stopwords
             self.stopwords_list = stopwords.words("spanish")
         elif type_stopwords == "spacy":
             import es_core_news_sm
@@ -126,6 +126,10 @@ class SpanishPreprocess:
             )
             self.stopwords_list = nlp.Defaults.stop_words
             del nlp
+
+        elif type_stopwords is None:
+            self.stopwords_list = None
+
         else:
             if type(type_stopwords) == list:
                 self.stopwords_list = type_stopwords
@@ -195,8 +199,9 @@ class SpanishPreprocess:
         return emoticonize(text, delimiters=("__", "__"))
 
     def _normalize_inclusive_language_(self, text, inclusive_character="x"):
-        text = re.sub(r"(@s)\b", rf"{inclusive_character}s", text)
-        return re.sub(r"@([^a-z])", rf"{inclusive_character}\1", text)
+        """ TODO: implement inclusive language normalization"""
+        return text
+    
 
     def _reduce_spam_(self, text):
         """Reduce spam in text when a expression is repeated more than 3 times. Example: "hola hola hola hola hola hola" -> "hola hola hola" """

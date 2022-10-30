@@ -1,7 +1,7 @@
 from spanish_nlp import classifiers
 
 sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
-t1 = "ODIO LA POLÍTICA Y A LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
+t1 =  "LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
 t2 = "El presidente convocó a una reunión a los representantes de los partidos políticos"
 p1 = sc.predict(t1)
 p2 = sc.predict(t2)
