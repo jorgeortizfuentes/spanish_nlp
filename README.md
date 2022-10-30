@@ -50,7 +50,7 @@ print(sp.transform(test_text, debug=False))
 ```
 
 Output: 
-```python
+```bash
 hola este es un texto de prueba a continuacion les mostrare un poema de roberto bolaño llamado los perros romanticos 
 me gusta la linguistica y los ñandues tambien los pinguinos vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
 si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
@@ -86,7 +86,7 @@ print("Prediction 2: ", p2)
 ```
 
 Output:
-```python
+```bash
 Text 1:  LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS
 Prediction 1:  {'hateful': 0.29868438839912415, 'aggressive': 0.1646653413772583, 'targeted': 0.0075755491852760315}
 Text 2:  El presidente convocó a una reunión a los representantes de los partidos políticos
