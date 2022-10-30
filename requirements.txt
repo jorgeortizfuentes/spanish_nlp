@@ -6,3 +6,4 @@ transformers==4.21.0
 swifter
 kaleido
 torch
+es_core_news_sm

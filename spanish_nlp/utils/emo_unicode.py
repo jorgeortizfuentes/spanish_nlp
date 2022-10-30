@@ -232,13 +232,13 @@ EMOTICONS = {
     "^W^": "otaku_tenderness_8",
 }
 
-def emoticonize(string, delimiters=(" _", "_ ")):
+def demoticonize(string, delimiters=(" _", "_ ")):
     """ Replace emoticons with their corresponding text in the dictionary EMOTICONS """
     for emoticon, text in EMOTICONS.items():
         string = string.replace(emoticon, f"{delimiters[0]}{text}{delimiters[1]}")
     return string
 
-def demoticonize(string, delimiters=(" _", "_ ")):
+def emoticonize(string, delimiters=(" _", "_ ")):
     """ Replace text in the dictionary EMOTICONS with their corresponding emoticons """
     for emoticon, text in EMOTICONS.items():
         string = string.replace(f"{delimiters[0]}{text}{delimiters[1]}", emoticon)
