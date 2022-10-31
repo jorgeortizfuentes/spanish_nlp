@@ -32,6 +32,7 @@ class SpanishPreprocess:
         stopwords_list=None,
         lemmatize=False,
         stem=False,
+        remove_html_tags=True,
     ):
         """Spanish Preprocess Class for NLP tasks.
 
@@ -56,6 +57,7 @@ class SpanishPreprocess:
             stopwords_list (str, list, optional): stopwords name ('default', 'extended', 'nltk', 'spacy') or list of stopwords. Defaults to None.
             lemmatize (bool, optional): lemmatize text. Defaults to False.
             stem (bool, optional): stem text. Defaults to False.
+            remove_html_tags (bool, optional): remove html tags. Defaults to True.
         """
         self.lower = lower
         self.remove_url = remove_url
@@ -77,7 +79,9 @@ class SpanishPreprocess:
         self.remove_unprintable = remove_unprintable
         self.stem = stem
         self.lemmatize = lemmatize
+        self.remove_html_tags = remove_html_tags
         self.normalize_punctuation_spelling = True  # True by default
+        
         self._check_errors_()
         self._prepare_lemmatize_()
 
@@ -266,6 +270,12 @@ class SpanishPreprocess:
         text = re.sub(r"([\¡\¿\(\[\{\<]) +", r"\1", text)
         return text
 
+    def _remove_html_tags_(self, text):
+        """Remove html tags from a string"""
+        import re
+        clean = re.compile('<.*?>')
+        return re.sub(clean, '', text)
+    
     def transform(self, text, debug=False):
         if self.split_hashtags:
             text = self._split_hashtags_(text)
@@ -278,6 +288,10 @@ class SpanishPreprocess:
         if self.remove_url:
             text = self._remove_url_(text)
             self._debug_method_(text, "remove_url") if debug else None
+
+        if self.remove_html_tags:
+            text = self._remove_html_tags_(text)
+            self._debug_method_(text, "remove_html_tags") if debug else None
 
         if self.remove_numbers:
             text = self._remove_numbers_(text)

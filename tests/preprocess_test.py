@@ -20,11 +20,12 @@ sp = preprocess.SpanishPreprocess(
         stopwords_list=None,
         lemmatize=False,
         stem=False,
+        remove_html_tags=True,
 )
 
 test_text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
 
-Hola, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
+<b>Hola </b>, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
 
 https://www.poesi.as/rb9301.htm
 
