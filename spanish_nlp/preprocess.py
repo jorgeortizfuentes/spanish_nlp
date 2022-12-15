@@ -23,6 +23,7 @@ class SpanishPreprocess:
         convert_emojis=False,
         normalize_inclusive_language=False,
         reduce_spam=True,
+        remove_reduplications=True,
         remove_vowels_accents=True,
         remove_multiple_spaces=True,
         remove_punctuation=True,
@@ -70,6 +71,7 @@ class SpanishPreprocess:
         self.convert_emojis = convert_emojis
         self.normalize_inclusive_language = normalize_inclusive_language
         self.reduce_spam = reduce_spam
+        self.remove_reduplications = remove_reduplications
         self.remove_vowels_accents = remove_vowels_accents
         self.remove_multiple_spaces = remove_multiple_spaces
         self.remove_punctuation = remove_punctuation
@@ -81,7 +83,7 @@ class SpanishPreprocess:
         self.lemmatize = lemmatize
         self.remove_html_tags = remove_html_tags
         self.normalize_punctuation_spelling = True  # True by default
-        
+
         self._check_errors_()
         self._prepare_lemmatize_()
 
@@ -119,8 +121,10 @@ class SpanishPreprocess:
 
         elif type_stopwords == "nltk":
             import nltk
+
             nltk.download("stopwords")
             from nltk.corpus import stopwords
+
             self.stopwords_list = stopwords.words("spanish")
         elif type_stopwords == "spacy":
             import es_core_news_sm
@@ -186,6 +190,7 @@ class SpanishPreprocess:
 
     def _normalize_breaklines_(self, text):
         """Convert multiple breaklines to one breakline"""
+        text = text.replace("\r", "\n")
         text = re.sub(r"(\n){2,}", r"\n", text)
         return text
 
@@ -196,22 +201,36 @@ class SpanishPreprocess:
         return emoji.demojize(text, delimiters=(" __", "__ "))
 
     def _text_to_emojis_(self, text):
-        text = emoji.emojize(text, delimiters=("__", "__"))
-        return text
+        return emoji.emojize(text, delimiters=("__", "__"))
 
     def _text_to_emoticons_(self, text):
         return emoticonize(text, delimiters=("__", "__"))
 
     def _normalize_inclusive_language_(self, text, inclusive_character="x"):
-        """ TODO: implement inclusive language normalization"""
+        """TODO: implement inclusive language normalization"""
         return text
-    
 
     def _reduce_spam_(self, text):
-        """Reduce spam in text when a expression is repeated more than 3 times. Example: "hola hola hola hola hola hola" -> "hola hola hola" """
+        """Reduce spam in text when a expression is repeated more than 3 times.
+        Example: "hola hola hola hola hola hola" -> "hola hola hola" """
         text = re.sub(r"(\w+\s)\1+", r"\1\1", text)
         text = re.sub(r"(\b(\w+\s){3})\1+", r"\1\1", text)
         return text
+
+    def _remove_reduplications_(self, text):
+        """Use a regular expression to find a sequence of non-digit characters
+        that are repeated at the end of the word, and replace it with just
+        one instance of the character"""
+    # split the text into tokens, where each token is a word or punctuation
+        tokens = re.findall(r'\w+|[^\w\s]', text)
+        
+        # apply the regular expression to each word
+        for i, token in enumerate(tokens):
+            if token.isalnum(): # only apply the regular expression to words (not punctuation)
+                tokens[i] = re.sub(r'(.)\1+$', r'\1', token)
+        
+        # join the tokens back together and return the modified text
+        return " ".join(tokens)
 
     def _remove_vowels_accents_(self, text):
         """Convert vowels with accents from text (lowercase or uppercase)"""
@@ -246,8 +265,7 @@ class SpanishPreprocess:
 
     def _remove_stopwords_(self, text):
         return " ".join(
-            [word for word in str(text).split()
-             if word not in self.stopwords_list]
+            [word for word in str(text).split() if word not in self.stopwords_list]
         )
 
     def _stem_(self, text, stemmer=SnowballStemmer("spanish")):
@@ -273,9 +291,10 @@ class SpanishPreprocess:
     def _remove_html_tags_(self, text):
         """Remove html tags from a string"""
         import re
-        clean = re.compile('<.*?>')
-        return re.sub(clean, '', text)
-    
+
+        clean = re.compile("<.*?>")
+        return re.sub(clean, "", text)
+
     def transform(self, text, debug=False):
         if self.split_hashtags:
             text = self._split_hashtags_(text)
@@ -319,17 +338,19 @@ class SpanishPreprocess:
 
         if self.normalize_inclusive_language:
             text = self._normalize_inclusive_language_(text)
-            self._debug_method_(
-                text, "normalize_inclusive_language") if debug else None
+            self._debug_method_(text, "normalize_inclusive_language") if debug else None
 
         if self.reduce_spam:
             text = self._reduce_spam_(text)
             self._debug_method_(text, "reduce_spam") if debug else None
 
+        if self.remove_reduplications:
+            text = self._remove_reduplications_(text)
+            self._debug_method_(text, "remove_reduplications") if debug else None
+
         if self.remove_vowels_accents:
             text = self._remove_vowels_accents_(text)
-            self._debug_method_(
-                text, "remove_vowels_accents") if debug else None
+            self._debug_method_(text, "remove_vowels_accents") if debug else None
 
         if self.remove_punctuation:
             text = self._remove_punctuation_(text)
@@ -344,30 +365,28 @@ class SpanishPreprocess:
             self._debug_method_(text, "stem") if debug else None
 
         if not self.remove_emojis:
-            self.text = self._text_to_emojis_(text)
+            text = self._text_to_emojis_(text)
             self._debug_method_(
                 text, "text_to_emojis (not delete emojis)"
+            ) if debug else None
+
+        if not self.remove_emoticons:
+            text = self._text_to_emoticons_(text)
+            self._debug_method_(
+                text, "text_to_emoticons (not delete emoticons)"
             ) if debug else None
 
         if self.remove_stopwords:
             text = self._remove_stopwords_(text)
             self._debug_method_(text, "remove_stopwords") if debug else None
 
-        if not self.remove_emoticons:
-            self.text = self._text_to_emoticons_(text)
-            self._debug_method_(
-                text, "text_to_emoticons (not delete emoticons)"
-            ) if debug else None
-
         if self.remove_multiple_spaces:
             text = self._remove_multiples_spaces_(text).strip()
-            self._debug_method_(
-                text, "remove_multiples_spaces") if debug else None
+            self._debug_method_(text, "remove_multiples_spaces") if debug else None
 
         if self.normalize_breaklines:
             text = self._normalize_breaklines_(text)
-            self._debug_method_(
-                text, "normalize_breaklines") if debug else None
+            self._debug_method_(text, "normalize_breaklines") if debug else None
 
         if self.normalize_punctuation_spelling:
             text = self._normalize_punctuation_spelling_(text)

@@ -5,12 +5,13 @@ sp = preprocess.SpanishPreprocess(
         remove_hashtags=False,
         split_hashtags=True,
         normalize_breaklines=True,
-        remove_emoticons=True,
-        remove_emojis=True,
+        remove_emoticons=False,
+        remove_emojis=False,
         convert_emoticons=False,
         convert_emojis=False,
         normalize_inclusive_language=False,
         reduce_spam=True,
+        remove_reduplications=True,
         remove_vowels_accents=True,
         remove_multiple_spaces=True,
         remove_punctuation=True,
@@ -25,12 +26,12 @@ sp = preprocess.SpanishPreprocess(
 
 test_text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
 
-<b>Hola </b>, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
+<b>Holaaaaaaaa </b>, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
 
 https://www.poesi.as/rb9301.htm
 
-Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧🐧. #VivanLosPinguinos #SíSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
+Me gusta la LINGÜÍSTICAAAA, los pandas y los ñandúes… También los pingüinosssss 🐧🐧🐧 🐧. #VivanLosPinguinos #SíSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
 
 Si colaboras con este código te puedes ganar $10.000.000.000. O tal vez 2000 vacas. Mi teléfono es +569123456789"""
 
-print(sp.transform(test_text, debug=False))
+print(sp.transform(test_text, debug=True))

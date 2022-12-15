@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Spanish NLP',
-    version='0.1.2',    
+    version='0.1.3',
     description='A package for Spanish NLP',
     url='https://github.com/jorgeortizfuentes/spanish_nlp',
     author='Jorge Ortiz Fuentes',
@@ -19,7 +19,7 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Text Processing :: Linguistic',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3.9',
     ],
