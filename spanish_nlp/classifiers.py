@@ -126,7 +126,7 @@ class SpanishClassifier:
     def _bert_incivility_(self):
         self.model = pipeline(
             "text-classification",
-            model="jorgeortizfuentes/spanish-bert-hatespeech",
+            model="jorgeortizfuentes/spanish-bert-incivility",
             truncation=True,
             max_length=512,
             device=self.device,
