@@ -113,8 +113,8 @@ class SpanishClassifier:
         self.n_labels = 2
         self.multiclass = False
         self.labels = {
-            "LABEL_0": "hate_speech",
-            "LABEL_1": "not_hate_speech",
+            "LABEL_0": "not_hate_speech",
+            "LABEL_1": "hate_speech",
         }
 
     def load_incivility(self, type="bert"):
