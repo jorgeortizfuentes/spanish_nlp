@@ -113,8 +113,8 @@ class SpanishClassifier:
         self.n_labels = 2
         self.multiclass = False
         self.labels = {
-            "LABEL_0": "hateful",
-            "LABEL_1": "not_hateful",
+            "LABEL_0": "hate_speech",
+            "LABEL_1": "not_hate_speech",
         }
 
     def load_incivility(self, type="bert"):
@@ -136,8 +136,8 @@ class SpanishClassifier:
         self.n_labels = 2
         self.multiclass = False
         self.labels = {
-            "LABEL_0": "incivility",
-            "LABEL_1": "not_incivility",
+            "LABEL_0": "not_incivility",
+            "LABEL_1": "incivility",
         }
 
     def load_toxic_speach(self, type="political-tweets-es"):
