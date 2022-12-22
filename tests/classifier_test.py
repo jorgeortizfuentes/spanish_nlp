@@ -10,3 +10,6 @@ print("Text 1: ", t1)
 print("Prediction 1: ", p1)
 print("Text 2: ", t2)
 print("Prediction 2: ", p2)
+
+
+# Install package pip in this folder pip (forcing): pip install --force-reinstall -e .

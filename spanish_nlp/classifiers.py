@@ -1,7 +1,5 @@
 import torch
 from transformers import pipeline
-
-
 class SpanishClassifier:
     def __init__(self, model_name=None, device=None):
         self.model_name = model_name
@@ -23,7 +21,9 @@ class SpanishClassifier:
 
     def _configure_model_(self):
         if self.model_name == "hate_speech":
-            self.load_hate_speach()
+            self.load_hate_speech()
+        elif self.model_name == "incivility":
+            self.load_incivility()
         elif self.model_name == "toxic_speech":
             self.load_toxic_speach()
         elif self.model_name == "sentiment_analysis":
@@ -40,8 +40,12 @@ class SpanishClassifier:
     def get_info_about_models(self):
         info = {
             "hate_speech": {
-                "function": self.load_hate_speach(),
-                "types": ["robertuito"],
+                "function": self.load_hate_speech(),
+                "types": ["robertuito", "bert"],
+            },
+            "incivility": {
+                "function": self.load_incivility(),
+                "types": ["bert"],
             },
             "toxic_speech": {
                 "function": self.load_toxic_speach(),
@@ -70,9 +74,11 @@ class SpanishClassifier:
         }
         return info
 
-    def load_hate_speach(self, type="robertuito"):
+    def load_hate_speech(self, type="bert"):
         if type == "robertuito":
             self._robertuito_hate_speech_()
+        elif type == "bert":
+            self._bert_hate_speech_()
         else:
             raise ValueError("Unknown type of hate speech model")
 
@@ -92,6 +98,46 @@ class SpanishClassifier:
             "hateful": "hateful",
             "aggressive": "aggressive",
             "targeted": "targeted",
+        }
+
+    def _bert_hate_speech_(self):
+        self.model = pipeline(
+            "text-classification",
+            model="jorgeortizfuentes/spanish-bert-hatespeech",
+            truncation=True,
+            max_length=512,
+            device=self.device,
+        )
+        self.max_length = 512
+        self.type_model = "hf"
+        self.n_labels = 2
+        self.multiclass = False
+        self.labels = {
+            "LABEL_0": "hateful",
+            "LABEL_1": "not_hateful",
+        }
+
+    def load_incivility(self, type="bert"):
+        if type == "bert":
+            self._bert_incivility_()
+        else:
+            raise ValueError("Unknown type of hate speech model")
+
+    def _bert_incivility_(self):
+        self.model = pipeline(
+            "text-classification",
+            model="jorgeortizfuentes/spanish-bert-hatespeech",
+            truncation=True,
+            max_length=512,
+            device=self.device,
+        )
+        self.max_length = 512
+        self.type_model = "hf"
+        self.n_labels = 2
+        self.multiclass = False
+        self.labels = {
+            "LABEL_0": "incivility",
+            "LABEL_1": "not_incivility",
         }
 
     def load_toxic_speach(self, type="political-tweets-es"):

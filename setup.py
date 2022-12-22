@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='Spanish NLP',
-    version='0.1.3',
+    version='0.1.4',
     description='A package for Spanish NLP',
     url='https://github.com/jorgeortizfuentes/spanish_nlp',
     author='Jorge Ortiz Fuentes',
