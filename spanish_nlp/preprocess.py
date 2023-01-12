@@ -395,4 +395,3 @@ class SpanishPreprocess:
             self._debug_method_(text, "reduce_spam") if debug else None
 
         return text
-y
