@@ -283,7 +283,7 @@ class SpanishPreprocess:
     def _normalize_punctuation_spelling_(self, text):
         """Remove all wrong spaces with punctuation"""
         # Remove spaces before punctuation
-        text = re.sub(r' +([\.\,\!\?\)\]\}\>\:\"\#}])', r"\1", text)
+        text = re.sub(r' +([\.\,\!\?\)\]\}\>\:}])', r"\1", text)
         # Remove spaces after punctuation
         text = re.sub(r"([\¡\¿\(\[\{\<])\: +", r"\1", text)
         return text
@@ -340,10 +340,6 @@ class SpanishPreprocess:
             text = self._normalize_inclusive_language_(text)
             self._debug_method_(text, "normalize_inclusive_language") if debug else None
 
-        if self.reduce_spam:
-            text = self._reduce_spam_(text)
-            self._debug_method_(text, "reduce_spam") if debug else None
-
         if self.remove_reduplications:
             text = self._remove_reduplications_(text)
             self._debug_method_(text, "remove_reduplications") if debug else None
@@ -393,4 +389,10 @@ class SpanishPreprocess:
             self._debug_method_(
                 text, "normalize_punctuation_spelling"
             ) if debug else None
+
+        if self.reduce_spam:
+            text = self._reduce_spam_(text)
+            self._debug_method_(text, "reduce_spam") if debug else None
+
         return text
+y
