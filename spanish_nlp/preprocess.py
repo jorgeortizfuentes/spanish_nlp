@@ -283,7 +283,7 @@ class SpanishPreprocess:
     def _normalize_punctuation_spelling_(self, text):
         """Remove all wrong spaces with punctuation"""
         # Remove spaces before punctuation
-        text = re.sub(r' +([\.\,\!\?\)\]\}\>\:}])', r"\1", text)
+        text = re.sub(r' +([\.\,\!\?\)\]\}\>\:\#}])', r"\1", text)
         # Remove spaces after punctuation
         text = re.sub(r"([\¡\¿\(\[\{\<])\: +", r"\1", text)
         return text
