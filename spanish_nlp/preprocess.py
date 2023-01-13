@@ -222,10 +222,13 @@ class SpanishPreprocess:
         that are repeated at the end of the word, and replace it with just
         one instance of the character"""
         # Replace ... with …
-        text = re.sub(r'\.{3,}', '…', text)
-        text = re.sub(r'(?i)(.+?)\1+', r'\1', text)
-        # Replace … with ...
-        text = re.sub(r'…', '...', text)
+        # text = re.sub(r'\.{3,}', '…', text)
+        # # text = re.sub(r'(?i)(.+?)\1+', r'\1', text)
+        # # Replace … with ...
+        # text = re.sub(r'…', '...', text)
+        # return text
+        
+        # It has bugs, please code it   
         return text
 
     def _remove_vowels_accents_(self, text):
@@ -336,10 +339,6 @@ class SpanishPreprocess:
             text = self._normalize_inclusive_language_(text)
             self._debug_method_(text, "normalize_inclusive_language") if debug else None
 
-        if self.remove_reduplications:
-            text = self._remove_reduplications_(text)
-            self._debug_method_(text, "remove_reduplications") if debug else None
-
         if self.remove_vowels_accents:
             text = self._remove_vowels_accents_(text)
             self._debug_method_(text, "remove_vowels_accents") if debug else None
@@ -389,5 +388,9 @@ class SpanishPreprocess:
         if self.reduce_spam:
             text = self._reduce_spam_(text)
             self._debug_method_(text, "reduce_spam") if debug else None
+
+        if self.remove_reduplications:
+            text = self._remove_reduplications_(text)
+            self._debug_method_(text, "remove_reduplications") if debug else None
 
         return text
