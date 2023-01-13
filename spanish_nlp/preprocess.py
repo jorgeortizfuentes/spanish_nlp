@@ -221,16 +221,12 @@ class SpanishPreprocess:
         """Use a regular expression to find a sequence of non-digit characters
         that are repeated at the end of the word, and replace it with just
         one instance of the character"""
-    # split the text into tokens, where each token is a word or punctuation
-        tokens = re.findall(r'\w+|[^\w\s]', text)
-        
-        # apply the regular expression to each word
-        for i, token in enumerate(tokens):
-            if token.isalnum(): # only apply the regular expression to words (not punctuation)
-                tokens[i] = re.sub(r'(.)\1+$', r'\1', token)
-        
-        # join the tokens back together and return the modified text
-        return " ".join(tokens)
+        # Replace ... with …
+        text = re.sub(r'\.{3,}', '…', text)
+        text = re.sub(r'(?i)(.+?)\1+', r'\1', text)
+        # Replace … with ...
+        text = re.sub(r'…', '...', text)
+        return text
 
     def _remove_vowels_accents_(self, text):
         """Convert vowels with accents from text (lowercase or uppercase)"""
