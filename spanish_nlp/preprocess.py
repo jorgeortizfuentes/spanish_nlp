@@ -164,7 +164,7 @@ class SpanishPreprocess:
         return text.lower()
 
     def _remove_url_(self, text):
-        text = re.sub(r"(?:\@|https?\://)\S+", "", text)
+        text = re.sub(r"(?:\|https?\://)\S+", "", text)
         url_pattern = re.compile(r"https?://\S+|www\.\S+")
         return url_pattern.sub(r"", text)
 
