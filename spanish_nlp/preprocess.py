@@ -8,8 +8,6 @@ from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
 
 
 class SpanishPreprocess:
-    """Authors: Jorge Ortiz, Hernán Sarmiento, Ricardo Córdova"""
-
     def __init__(
         self,
         lower=True,
@@ -35,7 +33,7 @@ class SpanishPreprocess:
         stem=False,
         remove_html_tags=True,
     ):
-        """Spanish Preprocess Class for NLP tasks.
+        """A class for preprocessing Spanish text for NLP tasks.
 
         Args:
             lower (bool, optional): convert text to lowercase. Defaults to True.
@@ -82,7 +80,7 @@ class SpanishPreprocess:
         self.stem = stem
         self.lemmatize = lemmatize
         self.remove_html_tags = remove_html_tags
-        self.normalize_punctuation_spelling = True  # True by default
+        self.normalize_punctuation_spelling = True
 
         self._check_errors_()
         self._prepare_lemmatize_()
@@ -146,8 +144,8 @@ class SpanishPreprocess:
                     "Stopwords must be a list or one of the following: 'default', 'extended', 'nltk', 'spacy'"
                 )
 
-    def _prepare_lemmatize_(self):
-        if self.lemmatize:
+    def _prepare_lemmatize_(self, force=False):
+        if self.lemmatize or force:
             import es_core_news_sm
 
             self.nlp_spacy = es_core_news_sm.load(
@@ -164,29 +162,40 @@ class SpanishPreprocess:
         return text.lower()
 
     def _remove_url_(self, text):
-        text = re.sub(r"(?:\|https?\://)\S+", "", text)
-        url_pattern = re.compile(r"https?://\S+|www\.\S+")
-        return url_pattern.sub(r"", text)
+        """ Remove urls from text. By example:
+        "Este es un texto con una url: https://www.google.com" -> "Este es un texto con una url: "
+        "Una URL como http://page.com/page/test?param=1&param2=2 tiene parámetros" -> "Una URL como tiene parámetros"
+        """
+        url_pattern = re.compile(r'https?://\S+')
+        text = url_pattern.sub('', text).replace("  ", " ")
+        return text
 
     def _remove_hashtags_(self, text):
-        """Remove hashtags from text"""
-        return text.replace(" #", " ").replace("#", " ")
+        """Remove hashtags from text. By example:
+        "Este es un texto con un hashtag: #hashtag" -> "Este es un texto con un hashtag:"
+        "Tengo un #hashtag1 #HashTag2 y #hasTag3" -> "Tengo un y"
+        """
+        return re.sub(r'#\w+', '', text).strip().replace("  ", " ")
 
     def _split_hashtags_(self, text):
         """Split hashtags from text.
         Example:
-            * #HolaMundo -> Hola Mundo
+            "este es #unEjemplo de #TextosConHashtag #SiSeñor #yey." -> "este es un Ejemplo de Textos Con Hashtag Si Señor yey."
         """
         # Find all hashtags
-        hashtags = re.findall(r"#(\w+)", text)
+        hashtags = re.findall(r"(?<=\s)#(\w+)", text)
+        # Delete hashtag with numbers
+        hashtags = [ht for ht in hashtags if not re.search(r"\d", ht)]
+        print(hashtags)
         # Split all hashtags and replace them in the text
         pattern = re.compile(
-            r"[A-ZÑÁÉIÓÚ][a-zñáéíóúü0-9]+|\d+|[A-ZÑÁÉIÓÚ]+(?![a-zñáéíóúü])"
+            r"[A-ZÑÁÉIÓÚ]*[a-zñáéíóúü0-9]+|\d+|[A-ZÑÁÉIÓÚ]+(?![a-zñáéíóúü])"
         )
         for ht in hashtags:
             words = " ".join(pattern.findall(ht)).strip()
             text = text.replace(f"#{ht}", f"{words}")
-        return text
+        return text.replace("  ", " ").strip()
+
 
     def _normalize_breaklines_(self, text):
         """Convert multiple breaklines to one breakline"""

@@ -4,9 +4,17 @@ A library for Natural Language Processing in Spanish.
 
 ## Installation
 
+### With PIP
 ```bash
 pip install git+https://github.com/jorgeortizfuentes/spanish_nlp
 ```
+
+### Cloning the repository
+```bash
+git clone https://github.com/jorgeortizfuentes/spanish_nlp.git
+pip install . -U
+```
+
 
 ## Preprocess usage
 
