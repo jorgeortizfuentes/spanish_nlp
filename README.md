@@ -1,6 +1,6 @@
 # Spanish NLP
 
-A library for Natural Language Processing in Spanish.
+A Python library for Natural Language Processing in Spanish.
 
 ## Installation
 
@@ -17,7 +17,6 @@ pip install . -U
 
 
 ## Preprocess usage
-
 ```python
 from spanish_nlp import preprocess
 sp = preprocess.SpanishPreprocess(
@@ -110,4 +109,5 @@ Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.01065948326140
 ## License
 
 This project is licensed under GNU General Public License v3.0.
+
 
