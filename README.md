@@ -74,15 +74,15 @@ si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
 
 #### Available classifiers
 
-- Hate Speech (hate_speech)
-- Toxic Speech (toxic_speech)
-- Sentiment Analysis (sentiment_analysis)
-- Emotion Analysis (emotion_analysis)
-- Irony Analysis (irony_analysis)
-- Sexist Analysis (sexist_analysis)
-- Racism Analysis (racism_analysis)
+* Hate Speech (hate_speech)
+* Toxic Speech (toxic_speech)
+* Sentiment Analysis (sentiment_analysis)
+* Emotion Analysis (emotion_analysis)
+* Irony Analysis (irony_analysis)
+* Sexist Analysis (sexist_analysis)
+* Racism Analysis (racism_analysis)
 
-#### Examples
+#### Classification Examples
 
 ```python
 from spanish_nlp import classifiers
@@ -110,7 +110,7 @@ Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.01065948326140
 
 ### Augmentation
 
-#### Avaible models
+#### Available Augmentation Models
 
 - Spelling augmentation
   - Keyboard method
@@ -123,9 +123,8 @@ Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.01065948326140
   - Insert method
 - Others models under development (such as Synonyms, WordEmbeddings, GenerativeOpenSource, GenerativeOpenAI, BackTranslation, AbstractiveSummarization)
 
-*
 
-#### Examples
+#### Augmentation Models Examples
 
 ```python
 from spanish_nlp import augmentation
