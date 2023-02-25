@@ -6,3 +6,4 @@ swifter
 kaleido
 torch
 es_core_news_sm
+flake8
