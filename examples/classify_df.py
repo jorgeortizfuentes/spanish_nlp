@@ -38,7 +38,7 @@ df["text"] = df["text"].swifter.apply(sp.transform)
 
 df = df[df.text.notnull()]
 df = df[df.text != ""]
-df = df[df["text"].apply(lambda x: type(x) == str)]
+df = df[df["text"].apply(lambda x: isinstance(x, str))]
 df = df.reset_index(drop=True)
 
 

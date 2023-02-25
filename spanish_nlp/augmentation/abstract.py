@@ -1,3 +1,31 @@
+"""
+
+Abstract class for data augmentation.
+
+It was inspired by nlpaug (https://nlpaug.readthedocs.io/en/latest/augmenter/word/spelling.html)
+
+These class allow to augmentate data with different ways: with spelling, language generative models, masked language models, back translation augmenter, word embeddings, abstractive summarization and synonyms.
+
+TO DO:
+* DataAugmentationSynonyms
+** __init__(method, stopwords, aug_percent, dictionary, top_k)
+* DataAugmentationWordEmbeddings
+** __init__(method, stopwords, aug_percent, model, device, top_k)
+* DataAugmentationGenerativeOpenSource
+** __init__(method, stopwords, max_words, model, device, temperature, top_k, top_p, device, frequency_penalty, presence_penalty)
+* DataAugmentationGenerativeOpenAI
+** __init__(method, stopwords, max_words, model, token, temperature, top_k, top_p, frequency_penalty, presence_penalty)
+* DataAugmentationBackTranslation
+** __init__(method, stopwords, max_words, model, device, temperature, top_k)
+* DataAugmentationAbstractiveSummarization
+** __init__(method, stopwords, max_words, model, device, temperature, top_k)
+
+DataAugmentationSynonyms uses WordNet to find synonyms.
+DataAugmentationWordEmbeddings uses GenSim to find similar words (word2vec or fasttext)
+Masked, DataAugmentationGenerative, DataAugmentationBackTranslation and DataAugmentationAbstractiveSummarization use HuggingFace transformers.
+
+"""
+
 import os
 
 import es_core_news_sm
@@ -8,6 +36,7 @@ from datasets import load_dataset
 class DataAugmentationAbstract:
     """
     Abstract class for data augmentation.
+
     """
 
     def __init__(self, method):
@@ -55,7 +84,9 @@ class DataAugmentationAbstract:
         Augment a pandas Series.
         """
         return texts.swifter.apply(
-            self._text_augment_, num_samples=num_samples, num_workers=num_workers
+            self._text_augment_,
+            num_samples=num_samples,
+            num_workers=num_workers,
         )
 
     def _datasets_augment_(self, dataset, num_samples, num_workers):
@@ -84,3 +115,9 @@ class DataAugmentationAbstract:
         from spanish_nlp.utils.stopwords import extended_stopwords
 
         self.stopwords = extended_stopwords
+
+    def set_stopwords(self, stopwords):
+        """
+        Set the stopwords.
+        """
+        self.stopwords = stopwords

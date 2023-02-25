@@ -1,6 +1,8 @@
 # __init__.py
-# Import DataAugmentationSpelling in spelling.py (in the same folder)
-# from .spelling import DataAugmentationSpelling
+# Import Spelling in spelling.py (in the same folder)
+# from .spelling import Spelling
+
+from .masked import Masked
 
 # from .abstract import *
-from .spelling import DataAugmentationSpelling
+from .spelling import Spelling

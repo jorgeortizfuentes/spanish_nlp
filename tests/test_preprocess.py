@@ -1,8 +1,8 @@
 import unittest
 from spanish_nlp import preprocess
 
-class TestTextPreprocessor(unittest.TestCase):
 
+class TestTextPreprocessor(unittest.TestCase):
     def setUp(self):
         self.preprocessor = preprocess.SpanishPreprocess()
 
@@ -20,7 +20,7 @@ class TestTextPreprocessor(unittest.TestCase):
         text = "esto es #unEjemplo de texto con #hashtags"
         expected = "esto es un Ejemplo de texto con hashtags"
         self.assertEqual(self.preprocessor._split_hashtags_(text), expected)
-        
+
     def test_split_hashtags3(self):
         text = "esto es #UnEjemplo de texto con #hashtags"
         expected = "esto es Un Ejemplo de texto con hashtags"
@@ -30,19 +30,19 @@ class TestTextPreprocessor(unittest.TestCase):
         text = "esto es un #hashtag, pero 4gcf#assf y 13#3 no lo son"
         expected = "esto es un hashtag, pero 4gcf#assf y 13#3 no lo son"
         self.assertEqual(self.preprocessor._split_hashtags_(text), expected)
-        
+
     def test_remove_url1(self):
         self.preprocessor.remove_url = True
         text = "Este texto contiene una URL: https://www.ejemplo.com"
         expected = "Este texto contiene una URL: "
         self.assertEqual(self.preprocessor._remove_url_(text), expected)
-        
+
     def test_remove_url2(self):
         self.preprocessor.remove_url = True
         text = "Este texto contiene una URL https://www.ejemplo.com/hola/test?param=1&param2=2 con parámetros."
         expected = "Este texto contiene una URL con parámetros."
         self.assertEqual(self.preprocessor._remove_url_(text), expected)
-        
+
     def test_remove_html_tags(self):
         self.preprocessor.remove_html_tags = True
         text = "<p>Este texto</p> <b>contiene</b> <i>etiquetas HTML</i>."
@@ -73,12 +73,12 @@ class TestTextPreprocessor(unittest.TestCase):
         self.assertTrue(self.preprocessor._lemmatize_(text) != text)
 
     # TODO: Fix the following tests
-    
+
     # def test_convert_emojis(self):
     #     self.preprocessor.convert_emojis = True
     #     text = "Este texto tiene 😀 y 🙁."
-    #     expected = "Este texto tiene feliz cara y triste cara."
-    #     self.assertEqual(self.preprocessor.transform(text), expected)
+    #     expected = "Este texto tiene y ."
+    #     self.assertEqual(self.preprocessor._
 
     # def test_remove_emojis(self):
     #     self.preprocessor.remove_emojis = True
@@ -100,7 +100,7 @@ class TestTextPreprocessor(unittest.TestCase):
 
     # def test_normalize_inclusive_language(self):
     #     self.preprocessor.normalize_inclusive_language = True
-    #     text = "hola a todxs" 
+    #     text = "hola a todxs"
     #     expected = "hola a todoxs"
     #     self.assertEqual(self.preprocessor.transform(text), expected)
 

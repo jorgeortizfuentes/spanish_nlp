@@ -253,7 +253,9 @@ class SpanishClassifier:
         self.n_labels = 2
         self.labels = {"LABEL_0": "not_sexist", "LABEL_1": "sexist"}
 
-    def load_racism_analysis(self, type="racism_paula_lobo_et_al_average_strict"):
+    def load_racism_analysis(
+        self, type="racism_paula_lobo_et_al_average_strict"
+    ):
         if type == "racism_paula_lobo_et_al_average_strict":
             self._racism_paula_lobo_et_al_average_()
         else:
@@ -276,7 +278,10 @@ class SpanishClassifier:
 
     def _predict_hf_(self, text):
         prediction = self.model(
-            text, top_k=self.n_labels, truncation=True, max_length=self.max_length
+            text,
+            top_k=self.n_labels,
+            truncation=True,
+            max_length=self.max_length,
         )
         d_prediction = {}
         for p in prediction:
@@ -286,10 +291,10 @@ class SpanishClassifier:
 
     def predict(self, text):
         if self.type_model == "hf":
-            if type(text) == str:
+            if isinstance(text, str):
                 self.last_prediction = self._predict_hf_(text)
                 return self.last_prediction
-            elif type(text) == list:
+            elif isinstance(text, list):
                 self.last_prediction = []
                 for t in text:
                     self.last_prediction.append(self._predict_hf_(t))

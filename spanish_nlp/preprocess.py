@@ -137,7 +137,7 @@ class SpanishPreprocess:
             self.stopwords_list = None
 
         else:
-            if type(type_stopwords) == list:
+            if isinstance(type_stopwords, list):
                 self.stopwords_list = type_stopwords
             else:
                 raise ValueError(

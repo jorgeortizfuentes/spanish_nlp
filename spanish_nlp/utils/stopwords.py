@@ -821,7 +821,7 @@ extended_stopwords = [
     "unas",
     "fuimos",
     "ésa",
-    "ojalá"
+    "ojalá",
 ]
 
-extended_stopwords = list(set(default_stopwords  + extended_stopwords))
+extended_stopwords = list(set(default_stopwords + extended_stopwords))
