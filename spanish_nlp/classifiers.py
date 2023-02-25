@@ -1,5 +1,7 @@
 import torch
 from transformers import pipeline
+
+
 class SpanishClassifier:
     def __init__(self, model_name=None, device=None):
         self.model_name = model_name

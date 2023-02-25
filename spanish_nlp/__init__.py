@@ -10,4 +10,3 @@ __email__ = "jorge@ortizfuentes.com"
 __license__ = "GNU General Public License v3.0"
 
 from .augmentation import *
-

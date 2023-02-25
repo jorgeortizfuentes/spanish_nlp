@@ -39,14 +39,13 @@ DataAugmentationWordEmbeddings uses GenSim to find similar words (word2vec or fa
 DataAugmentationMasked, DataAugmentationGenerative, DataAugmentationBackTranslation and DataAugmentationAbstractiveSummarization use HuggingFace transformers.
 
 """
-import os
-import random
-import sys
+
+import re
 
 import numpy as np
-import pandas as pd
-import re
+
 from .abstract import DataAugmentationAbstract
+
 
 class DataAugmentationSpelling(DataAugmentationAbstract):
     """
@@ -358,7 +357,7 @@ class DataAugmentationSpelling(DataAugmentationAbstract):
     def _misspelling_augment_(self, text, num_samples):
         """
         Increase textual data by modifying characters randomly according to the common misspellings for Spanish
-        
+
         TODO: improve this function because only replace the first occurrence of the token
         """
         # If self.keyboard_augment_dict is not defined, define it
@@ -378,13 +377,19 @@ class DataAugmentationSpelling(DataAugmentationAbstract):
             n = num_aug
             new_text = text
             # Get a list of random number (without order and without repetition). Numbers are int between 0 and len(keys_token_in_text)-1
-            random_numbers = np.random.choice(range(len(keys_token_in_text)), num_aug, replace=False)
+            random_numbers = np.random.choice(
+                range(len(keys_token_in_text)), num_aug, replace=False
+            )
             for rn in random_numbers:
                 # Count keys_token_in_text[rn] in text
                 n_rn = re.findall(keys_token_in_text[rn], text)
                 if len(n_rn) > 0:
                     n -= len(n_rn)
-                new_text = new_text.replace(keys_token_in_text[rn], self.misspelling_dict[keys_token_in_text[rn]], 2)
+                new_text = new_text.replace(
+                    keys_token_in_text[rn],
+                    self.misspelling_dict[keys_token_in_text[rn]],
+                    2,
+                )
                 if n <= 0:
                     break
             output_texts.append(new_text)
@@ -395,7 +400,7 @@ class DataAugmentationSpelling(DataAugmentationAbstract):
         Increase textual data by modifying characters randomly according to the common misspellings for Spanish
         """
         aug_percent = self.aug_percent
-        self.aug_percent = aug_percent/4
+        self.aug_percent = aug_percent / 4
         output_texts = []
         for i in range(num_samples):
             text = self._misspelling_augment_(text, num_samples)

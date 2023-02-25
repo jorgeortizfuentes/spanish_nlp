@@ -1,7 +1,9 @@
+import os
+
 import es_core_news_sm
 import pandas as pd
-import os
 from datasets import load_dataset
+
 
 class DataAugmentationAbstract:
     """
@@ -48,7 +50,6 @@ class DataAugmentationAbstract:
             pd.Series(texts), num_samples, num_workers
         ).tolist()
 
-
     def _pandas_augment_(self, texts, num_samples, num_workers):
         """
         Augment a pandas Series.
@@ -61,10 +62,9 @@ class DataAugmentationAbstract:
         """
         Augment a datasets Dataset.
         """
-        # Not Implemented yet, return error 
+        # Not Implemented yet, return error
         raise NotImplementedError("This method is not implemented yet.")
-        
-            
+
     def _load_default_tokenizer_(self):
         # import es_core_news_sm if it is not imported
         # if "es_core_news_sm" not in sys.modules:

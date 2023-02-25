@@ -162,12 +162,12 @@ class SpanishPreprocess:
         return text.lower()
 
     def _remove_url_(self, text):
-        """ Remove urls from text. By example:
+        """Remove urls from text. By example:
         "Este es un texto con una url: https://www.google.com" -> "Este es un texto con una url: "
         "Una URL como http://page.com/page/test?param=1&param2=2 tiene parámetros" -> "Una URL como tiene parámetros"
         """
-        url_pattern = re.compile(r'https?://\S+')
-        text = url_pattern.sub('', text).replace("  ", " ")
+        url_pattern = re.compile(r"https?://\S+")
+        text = url_pattern.sub("", text).replace("  ", " ")
         return text
 
     def _remove_hashtags_(self, text):
@@ -175,7 +175,7 @@ class SpanishPreprocess:
         "Este es un texto con un hashtag: #hashtag" -> "Este es un texto con un hashtag:"
         "Tengo un #hashtag1 #HashTag2 y #hasTag3" -> "Tengo un y"
         """
-        return re.sub(r'#\w+', '', text).strip().replace("  ", " ")
+        return re.sub(r"#\w+", "", text).strip().replace("  ", " ")
 
     def _split_hashtags_(self, text):
         """Split hashtags from text.
@@ -195,7 +195,6 @@ class SpanishPreprocess:
             words = " ".join(pattern.findall(ht)).strip()
             text = text.replace(f"#{ht}", f"{words}")
         return text.replace("  ", " ").strip()
-
 
     def _normalize_breaklines_(self, text):
         """Convert multiple breaklines to one breakline"""
@@ -236,8 +235,8 @@ class SpanishPreprocess:
         # # Replace … with ...
         # text = re.sub(r'…', '...', text)
         # return text
-        
-        # It has bugs, please code it   
+
+        # It has bugs, please code it
         return text
 
     def _remove_vowels_accents_(self, text):
@@ -291,7 +290,7 @@ class SpanishPreprocess:
     def _normalize_punctuation_spelling_(self, text):
         """Remove all wrong spaces with punctuation"""
         # Remove spaces before punctuation
-        text = re.sub(r' +([\.\,\!\?\)\]\}\>\:\#}])', r"\1", text)
+        text = re.sub(r" +([\.\,\!\?\)\]\}\>\:\#}])", r"\1", text)
         # Remove spaces after punctuation
         text = re.sub(r"([\¡\¿\(\[\{\<])\: +", r"\1", text)
         return text

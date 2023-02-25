@@ -1,5 +1,7 @@
 from datetime import datetime
+
 import pandas as pd
+
 from spanish_nlp.classifiers import SpanishClassifier
 from spanish_nlp.preprocess import SpanishPreprocess
 
