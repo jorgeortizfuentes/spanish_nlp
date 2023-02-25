@@ -1,0 +1,43 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "spanish_nlp"
+author = "Jorge Ortiz-Fuentes"
+author-email = "jorge@ortizfuentes.com"
+home-page = "https://github.com/jorgeortizfuentes/spanish_nlp"
+description = "A package for NLP in Spanish"
+license = "GPL-3.0-or-later"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Text Processing :: Linguistic",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+[tool.flit.scripts]
+# Add any console scripts here, for example:
+# my-script = "my_package.module:main"
+
+[tool.flit.metadata.requires]
+python = ">=3.6"
+pandas = "*"
+emoji = "*"
+nltk = "*"
+torch = "*"
+transformers = "*"
+datasets = "*"
+swifter = "*"
+kaleido = "*"
+es_core_news_sm = "*"
+
+[tool.flit.package]
+directory = "src"
+module = "spanish_nlp"

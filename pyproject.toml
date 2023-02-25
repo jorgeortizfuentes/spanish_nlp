@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spanish-nlp"
+dynamic = ["version"]
+description = "A package for NLP in Spanish"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.6"
+authors = [
+    { name = "Jorge Ortiz-Fuentes", email = "jorge@ortizfuentes.com" },
+]
+keywords = [
+    "augmentation",
+    "aumento",
+    "clasificacion",
+    "classifier",
+    "español",
+    "nlp",
+    "pln",
+    "preprocesamiento",
+    "preprocess",
+    "spanish",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Text Processing :: Linguistic",
+]
+dependencies = [
+    "datasets",
+    "emoji",
+    "es_core_news_sm",
+    "kaleido",
+    "nltk",
+    "pandas",
+    "swifter",
+    "torch",
+    "transformers",
+]
+
+[project.urls]
+Homepage = "https://github.com/jorgeortizfuentes/spanish_nlp"
+
+[tool.hatch.version]
+path = "src/spanish_nlp/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+]

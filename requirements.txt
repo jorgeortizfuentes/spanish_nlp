@@ -7,5 +7,6 @@ datasets
 swifter
 kaleido
 es_core_news_sm
-poetry
 flit
+twine
+sphinx
