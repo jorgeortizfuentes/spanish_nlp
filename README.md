@@ -2,21 +2,25 @@
 
 A Python library for Natural Language Processing in Spanish.
 
-## Installation
 
-### With PIP
+Spanish NLP is a Python library designed for Natural Language Processing tasks in Spanish. It provides three main modules:
+
+* preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
+* classify: The classify module allows users to classify texts using different models and algorithms.
+* augmentation: The augmentation module can be used to generate synthetic data to increase the amount of labeled data available for training models.
+
+
+## Installation
+Spanish NLP can be installed via pip:
+
 ```bash
 pip install git+https://github.com/jorgeortizfuentes/spanish_nlp
 ```
 
-### Cloning the repository
-```bash
-git clone https://github.com/jorgeortizfuentes/spanish_nlp.git
-pip install . -U
-```
+## Usage
+### Preprocessing
+To preprocess text using the preprocess module, you can import it and call the desired parameters:
 
-
-## Preprocess usage
 ```python
 from spanish_nlp import preprocess
 sp = preprocess.SpanishPreprocess(
@@ -64,9 +68,9 @@ me gusta la linguistica y los ñandues tambien los pinguinos vivan los pinguinos
 si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
 ```
 
-## Classification usage
+### Classification
 
-### Available classifiers
+#### Available classifiers
 
 * Hate Speech (hate_speech)
 * Toxic Speech (toxic_speech)
@@ -76,8 +80,7 @@ si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
 * Sexist Analysis (sexist_analysis)
 * Racism Analysis (racism_analysis)
 
-### Example
-
+#### Example
 ```python
 from spanish_nlp import classifiers
 
@@ -100,14 +103,31 @@ Prediction 1:  {'hateful': 0.29868438839912415, 'aggressive': 0.1646653413772583
 Text 2:  El presidente convocó a una reunión a los representantes de los partidos políticos
 Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.010659483261406422, 'hateful': 0.009115356020629406}
 ```
+### Augmentation
 
-## Pending:
+EXAMPLE 3
 
-* Include better documentation
-* Include information about available classifiers
+### Contributing and roadmap
+
+Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributing guide) for more information.
+
+## Acknowledgements
+
+We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
 
 ## License
+Spanish NLP is licensed under the [LICENSE](GNU General Public License v3.0).
 
-This project is licensed under GNU General Public License v3.0.
+
+### Cloning the repository
+```bash
+git clone https://github.com/jorgeortizfuentes/spanish_nlp.git
+pip install . -U
+```
+
+
+
+
+
 
 

@@ -1,10 +1,11 @@
 pandas
 emoji
 nltk
+torch
 transformers
+datasets
 swifter
 kaleido
-torch
 es_core_news_sm
-flake8
-torch
+poetry
+flit
