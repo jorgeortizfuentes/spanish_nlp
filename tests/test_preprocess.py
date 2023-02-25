@@ -72,42 +72,53 @@ class TestTextPreprocessor(unittest.TestCase):
         text = "Este texto contiene varias palabras."
         self.assertTrue(self.preprocessor._lemmatize_(text) != text)
 
-    # TODO: Fix the following tests
+    def test_convert_emojis(self):
+         text = "Este texto tiene 😀 y 🙁."
+         expected = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
+         pp_text = self.preprocessor._emojis_to_text_(text)
+         self.assertEqual(pp_text, expected)
+         self.assertTrue(text != pp_text)
 
-    # def test_convert_emojis(self):
-    #     self.preprocessor.convert_emojis = True
-    #     text = "Este texto tiene 😀 y 🙁."
-    #     expected = "Este texto tiene y ."
-    #     self.assertEqual(self.preprocessor._
+    def test_remove_emojis(self):
+        text = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
+        expected = "Este texto tiene 😀 y 🙁."
 
-    # def test_remove_emojis(self):
-    #     self.preprocessor.remove_emojis = True
-    #     text = "Este texto tiene 😀 y 🙁."
-    #     expected = "Este texto tiene  y ."
-    #     self.assertEqual(self.preprocessor.transform(text), expected)
+        pp_text = self.preprocessor._text_to_emojis_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
-    # def test_convert_emoticons(self):
-    #     self.preprocessor.convert_emoticons = True
-    #     text = "Este texto tiene :), :(, y :D."
-    #     expected = "Este texto tiene cara feliz, cara triste, y cara con sonrisa grande."
-    #     self.assertEqual(self.preprocessor.transform(text), expected)
 
-    # def test_remove_emoticons(self):
-    #     self.preprocessor.remove_emoticons = True
-    #     text = "Este texto tiene :), :(, y :D."
-    #     expected = "Este texto tiene , , y ."
-    #     self.assertEqual(self.preprocessor.transform(text), expected)
+    def test_convert_emoticons(self):
+        text = "Este texto tiene :) y :(."
+        expected = "Este texto tiene __happy_face_or_smiley_2__ y __frown_sad_andry_or_pouting_3__."
+        pp_text = self.preprocessor._emoticons_to_text_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
-    # def test_normalize_inclusive_language(self):
-    #     self.preprocessor.normalize_inclusive_language = True
-    #     text = "hola a todxs"
-    #     expected = "hola a todoxs"
-    #     self.assertEqual(self.preprocessor.transform(text), expected)
+    def test_remove_emoticons(self):
+        text = "Este texto tiene __happy_face_or_smiley_2__ y __frown_sad_andry_or_pouting_3__."
+        expected = "Este texto tiene :) y :(."
 
-    # def test_transform_remove_stopwords(self):
-    #     t = TextPreprocessor(remove_stopwords=True, language="spanish")
-    #     result = t.transform("Este es un texto de prueba con muchas palabras comunes en español")
-    #     self.assertEqual(result, "texto prueba palabras comunes español")
+        pp_text = self.preprocessor._text_to_emoticons_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
+
+    def test_normalize_inclusive_language(self):
+        text = "hola a todxs un saludo a mis amiges"
+        expected = "hola a todos un saludo a mis amigos"
+
+        pp_text = self.preprocessor._normalize_inclusive_language_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
+
+    def test_transform_remove_stopwords(self):
+        text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos." 
+        expected = "tiempo tenía veinte años estaba loco. Había perdido país había ganado sueño. si tenía sueño lo demás no importaba. trabajar rezar estudiar madrugada junto perros románticos."
+
+        self.preprocessor._prepare_stopwords_(type="default")
+        pp_text = self.preprocessor._remove_stopwords_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
     # def test_transform_remove_multiple_spaces(self):
     #     t = TextPreprocessor(remove_multiple_spaces=True)

@@ -111,7 +111,23 @@ PRONOMBRES = [
     "consigo",
 ]
 
-default_stopwords = list(set(DETERMINANTES + PREPOSICIONES + PRONOMBRES))
+CONJUNCIONES = [
+    "y",
+    "ni",
+    "sino",
+    "tanto",
+    "como",
+    "que",
+    "pero",
+    "mas",
+    "empero",
+    "mientras",
+    "o",
+    "bien",
+    "ya",
+]
+
+default_stopwords = list(set(DETERMINANTES + PREPOSICIONES + PRONOMBRES + CONJUNCIONES))
 
 extended_stopwords = [
     "cómo",

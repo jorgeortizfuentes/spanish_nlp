@@ -5,6 +5,7 @@ import emoji
 from nltk.stem.snowball import SnowballStemmer
 
 from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
+from spanish_nlp.utils.inclusive_words import normalize_inclusive_language
 
 
 class SpanishPreprocess:
@@ -106,25 +107,25 @@ class SpanishPreprocess:
                 "If remove stopwords is True, you must provide a type of stopwords list ('default', 'extended', 'nltk', 'spacy') or a list of stopwords."
             )
 
-    def _prepare_stopwords_(self, type_stopwords):
-        if type_stopwords == "default":
+    def _prepare_stopwords_(self, type="default"):
+        if type == "default":
             from spanish_nlp.utils.stopwords import default_stopwords
 
             self.stopwords_list = default_stopwords
 
-        elif type_stopwords == "extended":
+        elif type == "extended":
             from spanish_nlp.utils.stopwords import extended_stopwords
 
             self.stopwords_list = extended_stopwords
 
-        elif type_stopwords == "nltk":
+        elif type == "nltk":
             import nltk
 
             nltk.download("stopwords")
             from nltk.corpus import stopwords
 
             self.stopwords_list = stopwords.words("spanish")
-        elif type_stopwords == "spacy":
+        elif type == "spacy":
             import es_core_news_sm
 
             nlp = es_core_news_sm.load(
@@ -133,16 +134,17 @@ class SpanishPreprocess:
             self.stopwords_list = nlp.Defaults.stop_words
             del nlp
 
-        elif type_stopwords is None:
+        elif type is None:
             self.stopwords_list = None
 
         else:
-            if isinstance(type_stopwords, list):
-                self.stopwords_list = type_stopwords
+            if isinstance(type, list):
+                self.stopwords_list = type
             else:
                 raise ValueError(
                     "Stopwords must be a list or one of the following: 'default', 'extended', 'nltk', 'spacy'"
                 )
+
 
     def _prepare_lemmatize_(self, force=False):
         if self.lemmatize or force:
@@ -186,7 +188,6 @@ class SpanishPreprocess:
         hashtags = re.findall(r"(?<=\s)#(\w+)", text)
         # Delete hashtag with numbers
         hashtags = [ht for ht in hashtags if not re.search(r"\d", ht)]
-        print(hashtags)
         # Split all hashtags and replace them in the text
         pattern = re.compile(
             r"[A-ZÑÁÉIÓÚ]*[a-zñáéíóúü0-9]+|\d+|[A-ZÑÁÉIÓÚ]+(?![a-zñáéíóúü])"
@@ -203,20 +204,24 @@ class SpanishPreprocess:
         return text
 
     def _emoticons_to_text_(self, text):
-        return demoticonize(text, delimiters=(" __", "__ "))
+        pp_text = demoticonize(text, delimiters=(" __", "__ "))
+        return self._normalize_punctuation_spelling_(pp_text)
 
     def _emojis_to_text_(self, text):
-        return emoji.demojize(text, delimiters=(" __", "__ "))
-
+        pp_text = emoji.demojize(text, delimiters=(" __", "__ ")).replace("  ", " ")
+        return self._normalize_punctuation_spelling_(pp_text)
+    
     def _text_to_emojis_(self, text):
-        return emoji.emojize(text, delimiters=("__", "__"))
+        pp_text= emoji.emojize(text, delimiters=("__", "__"))
+        return self._normalize_punctuation_spelling_(pp_text)
 
     def _text_to_emoticons_(self, text):
-        return emoticonize(text, delimiters=("__", "__"))
+        pp_text = emoticonize(text, delimiters=("__", "__"))
+        return pp_text
 
-    def _normalize_inclusive_language_(self, text, inclusive_character="x"):
-        """TODO: implement inclusive language normalization"""
-        return text
+    def _normalize_inclusive_language_(self, text):
+        """Replace inclusive language with a dictionary of some words"""
+        return normalize_inclusive_language(text)
 
     def _reduce_spam_(self, text):
         """Reduce spam in text when a expression is repeated more than 3 times.
@@ -272,7 +277,7 @@ class SpanishPreprocess:
 
     def _remove_stopwords_(self, text):
         return " ".join(
-            [word for word in str(text).split() if word not in self.stopwords_list]
+            [word for word in str(text).split() if word.lower() not in self.stopwords_list]
         )
 
     def _stem_(self, text, stemmer=SnowballStemmer("spanish")):
@@ -293,6 +298,8 @@ class SpanishPreprocess:
         text = re.sub(r" +([\.\,\!\?\)\]\}\>\:\#}])", r"\1", text)
         # Remove spaces after punctuation
         text = re.sub(r"([\¡\¿\(\[\{\<])\: +", r"\1", text)
+        # Remove duplicated spaces
+        text = re.sub(r" +", " ", text)
         return text
 
     def _remove_html_tags_(self, text):
