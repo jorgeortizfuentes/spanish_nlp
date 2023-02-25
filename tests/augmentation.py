@@ -60,4 +60,4 @@ class TestDataAugmentationSpelling(unittest.TestCase):
             self.assertFalse(text == "")
     
 if __name__ == "__main__":
-    unittest.main(buffer=False)
+    unittest.main(buffer=True)
