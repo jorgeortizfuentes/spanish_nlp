@@ -2,23 +2,24 @@
 
 A Python library for Natural Language Processing in Spanish.
 
-
 Spanish NLP is a Python library designed for Natural Language Processing tasks in Spanish. It provides three main modules:
 
-* preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
-* classify: The classify module allows users to classify texts using different models and algorithms.
-* augmentation: The augmentation module can be used to generate synthetic data to increase the amount of labeled data available for training models.
-
+- preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
+- classify: The classify module allows users to classify texts using different models and algorithms.
+- augmentation: The augmentation module can be used to generate synthetic data to increase the amount of labeled data available for training models.
 
 ## Installation
+
 Spanish NLP can be installed via pip:
 
 ```bash
-pip install git+https://github.com/jorgeortizfuentes/spanish_nlp
+pip install spanish_nlp
 ```
 
 ## Usage
+
 ### Preprocessing
+
 To preprocess text using the preprocess module, you can import it and call the desired parameters:
 
 ```python
@@ -61,9 +62,10 @@ print(sp.transform(test_text, debug=False))
 
 ```
 
-Output: 
+Output:
+
 ```bash
-hola este es un texto de prueba a continuacion les mostrare un poema de roberto bolaño llamado los perros romanticos 
+hola este es un texto de prueba a continuacion les mostrare un poema de roberto bolaño llamado los perros romanticos
 me gusta la linguistica y los ñandues tambien los pinguinos vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
 si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
 ```
@@ -72,15 +74,16 @@ si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
 
 #### Available classifiers
 
-* Hate Speech (hate_speech)
-* Toxic Speech (toxic_speech)
-* Sentiment Analysis (sentiment_analysis)
-* Emotion Analysis (emotion_analysis)
-* Irony Analysis (irony_analysis)
-* Sexist Analysis (sexist_analysis)
-* Racism Analysis (racism_analysis)
+- Hate Speech (hate_speech)
+- Toxic Speech (toxic_speech)
+- Sentiment Analysis (sentiment_analysis)
+- Emotion Analysis (emotion_analysis)
+- Irony Analysis (irony_analysis)
+- Sexist Analysis (sexist_analysis)
+- Racism Analysis (racism_analysis)
 
-#### Example
+#### Examples
+
 ```python
 from spanish_nlp import classifiers
 
@@ -97,15 +100,89 @@ print("Prediction 2: ", p2)
 ```
 
 Output:
+
 ```bash
 Text 1:  LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS
 Prediction 1:  {'hateful': 0.29868438839912415, 'aggressive': 0.1646653413772583, 'targeted': 0.0075755491852760315}
 Text 2:  El presidente convocó a una reunión a los representantes de los partidos políticos
 Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.010659483261406422, 'hateful': 0.009115356020629406}
 ```
+
 ### Augmentation
 
-EXAMPLE 3
+#### Avaible models
+
+- Spelling augmentation
+  - Keyboard method
+  - OCR method
+  - Random method
+  - Misspelling method
+  - All method
+- Masked augmentation
+  - Sustitute method
+  - Insert method
+- Others models under development (such as Synonyms, WordEmbeddings, GenerativeOpenSource, GenerativeOpenAI, BackTranslation, AbstractiveSummarization)
+
+*
+
+#### Examples
+
+```python
+from spanish_nlp import augmentation
+ocr = augmentation.Spelling(method="ocr",
+                            stopwords="default",
+                            aug_percent=0.3,
+                            tokenizer="default")
+
+misspelling = augmentation.Spelling(method="keyboard",
+                                    stopwords="default",
+                                    aug_percent=0.3,
+                                    tokenizer="default")
+
+masked_sustitute = augmentation.Masked(method="sustitute",
+                                       model="dccuchile/bert-base-spanish-wwm-cased",
+                                       tokenizer="default",
+                                       stopwords="default",
+                                       aug_percent=0.4,
+                                       device="cpu",
+                                       top_k=10)
+
+masked_insert = augmentation.Masked(method="insert",
+                                    model="dccuchile/bert-base-spanish-wwm-cased",
+                                    tokenizer="default",
+                                    stopwords="default",
+                                    aug_percent=0.4,
+                                    device="cpu",
+                                    top_k=10)
+
+text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
+
+new_texts = [text]
+new_texts.append(ocr.augment(text, num_samples=1, num_workers=1))
+new_texts.append(misspelling.augment(text, num_samples=1, num_workers=1))
+new_texts.append(masked_sustitute.augment(text, num_samples=1))
+new_texts.append(masked_insert.augment(text, num_samples=1))
+
+for t in new_texts:
+    print(t)
+    print("---")
+
+```
+
+Output:
+
+```bash
+En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.
+---
+['3n aqueI 7iempo yo t3nía veinte añQs V 3sta8a loGo. Había perO10o un país pero había Canado un BueñQ. V si t3nía ese su3N0 lo d3WáB no imp0rtaEa. Hi trabaLar ni rezaP ni estudiaP en la maOPuga0a Lun7o a IoB perros roWánticos.']
+---
+['En squel tjempo yo tfbíx vsknte alod y estxba lpfo. Hanía pfddido un país pero hqvís ganaeo uj skeol. Y si tebía ese syrño lo demáz no jmppfgabx. Nj travayar ni rezar mu estudist eh la nadtugads junto a loa peerks eomábticox.']
+---
+['En aquel tiempo yo tenía 18 años y estaba loco. Había arruinado un hogar pero había ganado un sueño. Ahora si tenía ese sueño lo demás no importaba. Pero trabajar ni rezar ni trabajar en la madrugada junto a los perros ni']
+---
+['En aquel tiempo yo tenía los veinteséis años y estaba loco. Había perdido un gran país pero sí había ganado tener un sueño. Y si tenía ese sueño lo demás ya no importaba.. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.']
+---
+```
 
 ### Contributing and roadmap
 
@@ -116,18 +193,6 @@ Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributi
 We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
 
 ## License
+
 Spanish NLP is licensed under the [LICENSE](GNU General Public License v3.0).
-
-
-### Cloning the repository
-```bash
-git clone https://github.com/jorgeortizfuentes/spanish_nlp.git
-pip install . -U
-```
-
-
-
-
-
-
 

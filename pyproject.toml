@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "spanish-nlp"
+name = "spanish_nlp"
 dynamic = ["version"]
 description = "A package for NLP in Spanish"
 readme = "README.md"
