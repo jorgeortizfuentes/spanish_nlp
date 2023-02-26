@@ -187,11 +187,11 @@ En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pe
 ```
 ## License
 
-Spanish NLP is licensed under the [https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/LICENSE](GNU General Public License v3.0).
+Spanish NLP is licensed under the [GNU General Public License v3.0](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/LICENSE).
 
-## Contributing and roadmap
+## Contributing
 
-Contributions to Spanish NLP are welcome! Please see the [https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/ROADMAP.md](contributing guide) for more information.
+Contributions to Spanish NLP are welcome! Please see the [contributing guide](https://github.com/users/jorgeortizfuentes/projects/1) for more information.
 
 ## Acknowledgements
 
