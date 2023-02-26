@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: 3.10
 
       - name: Install dependencies
         run: pip install -r requirements.txt
@@ -27,10 +27,22 @@ jobs:
         run: pytest tests/
         
       - name: Build package
-        run: hatchling build
+        run: |
+          hatchling build
+          export VERSION=$(hatchling version | awk '{print $NF}')
+          echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Add tag to repository
+        if: success()
+        uses: anothrNick/github-tag-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ env.PACKAGE_VERSION }}
+          message: "Release version ${{ env.PACKAGE_VERSION }}"
+          target_commitish: ${{ github.sha }}

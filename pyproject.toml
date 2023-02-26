@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "A package for NLP in Spanish"
 readme = "README.md"
 license = "GPL-3.0-or-later"
-requires-python = ">=3.6, <3.10"
+requires-python = ">=3.6, <=3.10"
 authors = [
     { name = "Jorge Ortiz-Fuentes", email = "jorge@ortizfuentes.com" },
 ]
@@ -33,6 +33,8 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+
     "Topic :: Text Processing :: Linguistic",
 ]
 dependencies = [
