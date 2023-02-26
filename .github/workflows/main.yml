@@ -27,7 +27,7 @@ jobs:
         run: pytest tests/
         
       - name: Build package
-        run: hatch build
+        run: hatchling build
         
       - name: Publish distribution to PyPI
         uses: pypa/gh-action-pypi-publish@master
