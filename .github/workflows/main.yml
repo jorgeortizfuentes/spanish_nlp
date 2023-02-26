@@ -40,7 +40,7 @@ jobs:
 
       - name: Add tag to repository
         if: success()
-        uses: anothrNick/github-tag-action@v1.55.0
+        uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: v${{ env.PACKAGE_VERSION }}
