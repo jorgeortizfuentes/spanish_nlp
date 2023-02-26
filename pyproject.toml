@@ -14,7 +14,6 @@ authors = [
 ]
 keywords = [
     "augmentation",
-    "aumento",
     "clasificacion",
     "classifier",
     "español",
@@ -23,6 +22,8 @@ keywords = [
     "preprocesamiento",
     "preprocess",
     "spanish",
+    "language",
+    "lenguaje",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",

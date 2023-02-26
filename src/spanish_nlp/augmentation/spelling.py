@@ -3,6 +3,7 @@ import re
 import numpy as np
 
 from .abstract import DataAugmentationAbstract
+import random
 
 
 class Spelling(DataAugmentationAbstract):
@@ -22,11 +23,11 @@ class Spelling(DataAugmentationAbstract):
             "keyboard",
             "ocr",
             "random",
-            "misspelling",
+            "orthography",
             "all",
         ]:
             raise ValueError(
-                "The method must be 'keyboard', 'ocr', 'random','misspelling' or 'all'"
+                "The method must be 'keyboard', 'ocr', 'random','orthography' or 'all'"
             )
 
         self.aug_percent = aug_percent
@@ -62,13 +63,13 @@ class Spelling(DataAugmentationAbstract):
             return self._ocr_augment_(text, num_samples)
         elif self.method == "random":
             return self._random_augment_(text, num_samples)
-        elif self.method == "misspelling":
-            return self._misspelling_augment_(text, num_samples)
+        elif self.method == "orthography":
+            return self._orthography_augment_(text, num_samples)
         elif self.method == "all":
             return self._all_augment_(text, num_samples)
         else:
             raise ValueError(
-                "The method must be 'keyboard', 'ocr', 'random','misspelling' or 'all'"
+                "The method must be 'keyboard', 'ocr', 'random','orthography' or 'all'"
             )
 
     def _set_keyboard_augment_dict_(self):
@@ -118,8 +119,10 @@ class Spelling(DataAugmentationAbstract):
         for i in range(num_samples):
             # Get the number of characters to augment
             num_aug = int(len(text) * self.aug_percent)
+
             # Get the indices of the characters to augment
-            aug_indices = np.random.choice(range(len(text)), num_aug, replace=False)
+            aug_indices = np.random.choice(
+                range(len(text)), num_aug, replace=False)
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
             # Get the augmented characters
@@ -222,7 +225,8 @@ class Spelling(DataAugmentationAbstract):
             # Get the number of characters to augment
             num_aug = int(len(text) * self.aug_percent)
             # Get the indices of the characters to augment
-            aug_indices = np.random.choice(range(len(text)), num_aug, replace=False)
+            aug_indices = np.random.choice(
+                range(len(text)), num_aug, replace=False)
 
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
@@ -287,7 +291,8 @@ class Spelling(DataAugmentationAbstract):
             # Get the number of characters to augment
             num_aug = int(len(text) * self.aug_percent)
             # Get the indices of the characters to augment
-            aug_indices = np.random.choice(range(len(text)), num_aug, replace=False)
+            aug_indices = np.random.choice(
+                range(len(text)), num_aug, replace=False)
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
             # Get the augmented characters if they are in the alphabet
@@ -304,81 +309,92 @@ class Spelling(DataAugmentationAbstract):
             output_texts.append(output_text)
         return output_texts
 
-    def _set_misspelling_dict_(self):
+    def _set_orthography_dict_(self):
         """
-        Set the misspelling dictionary
+        Set the orthography dictionary
         """
-        misspelling_dict = {
+        orthography_dict = {
             "mb": "nv",
             "nv": "mb",
             "m": "n",
             "n": "m",
             "v": "b",
             "b": "v",
-            "ll": "y",
-            "y": "ll",
-            "h": "",
-            "qu": "k",
+            # "ll": "y",
+            # "y": "ll",
+            "h": " ",
+            # "qu": "k",
             "g": "j",
             "j": "g",
             "z": "s",
             "ci": "si",
         }
 
-        self.misspelling_dict = misspelling_dict
+        self.orthography_dict = orthography_dict
 
-    def _misspelling_augment_(self, text, num_samples):
+    def __find_substring_indexes__(self, string, substring):
+        """Find all indexes of a substring in a string.
+
+        Args:
+            string (str): string to search in.
+            substring (str): substring to search for.
+
+        Returns:
+            list: list of tuples with the start and end indexes of the substring.
         """
-        Increase textual data by modifying characters randomly according to the common misspellings for Spanish
+        pattern = re.compile(re.escape(substring))
+        matches = pattern.finditer(string)
+        return [(match.start(), match.end() - 1) for match in matches]
+
+    def _orthography_augment_(self, text, num_samples):
+        """
+        Increase textual data by modifying characters randomly according to the common orthographys for Spanish
 
         TODO: improve this function because only replace the first occurrence of the token
         """
-        # If self.keyboard_augment_dict is not defined, define it
-        if not hasattr(self, "misspelling_dict"):
-            self._set_misspelling_dict_()
-
+        # If self.orthography_dict is not defined, define it
+        if not hasattr(self, "orthography_dict"):
+            self._set_orthography_dict_()
+        # List to save the augmented texts
         output_texts = []
-        # Tokenize the text
-        tokens = self.tokenizer(text)
-        num_aug = int(len(tokens) * self.aug_percent)
-        new_text = text
 
-        keys_token = list(self.misspelling_dict.keys())
-        keys_token_in_text = [token for token in keys_token if token in text]
-
+        # Count the times that are self.keyboard_augment_dict keys in the text with self.__find_substring_indexes__(string, substring)
+        aparitions = [
+            self.__find_substring_indexes__(text, key)
+            for key in self.orthography_dict.keys()
+        ]
+        # Join all the sublists in a single list
+        # Get the number of characters to augment
+        aparitions = sum(aparitions, [])
+        num_aug = int(len(aparitions) * self.aug_percent)
+        # Iterate over the number of samples
         for i in range(num_samples):
-            n = num_aug
             new_text = text
-            # Get a list of random number (without order and without
-            # repetition). Numbers are int between 0 and
-            # len(keys_token_in_text)-1
-            random_numbers = np.random.choice(
-                range(len(keys_token_in_text)), num_aug, replace=False
-            )
-            for rn in random_numbers:
-                # Count keys_token_in_text[rn] in text
-                n_rn = re.findall(keys_token_in_text[rn], text)
-                if len(n_rn) > 0:
-                    n -= len(n_rn)
-                new_text = new_text.replace(
-                    keys_token_in_text[rn],
-                    self.misspelling_dict[keys_token_in_text[rn]],
-                    2,
-                )
-                if n <= 0:
-                    break
+            # Create a list with num_aug elements in aparitions without repetition
+            elements = random.sample(aparitions, num_aug)
+            for e in elements:
+                start = e[0]
+                end = e[1]+1
+                substring = new_text[start:end]
+                replacement = self.orthography_dict[substring]
+                # Select a random element from the list of replacements
+                replacement = random.choice(replacement)
+                start_str = new_text[:start]
+                end_str = new_text[end:] if end < len(new_text) else ""
+                new_text = start_str + replacement + end_str
+            # Append the augmented text to the list
             output_texts.append(new_text)
         return output_texts
 
     def _all_augment_(self, text, num_samples):
         """
-        Increase textual data by modifying characters randomly according to the common misspellings for Spanish
+        Increase textual data by modifying characters randomly according to the common orthographys for Spanish
         """
         aug_percent = self.aug_percent
         self.aug_percent = aug_percent / 4
         output_texts = []
         for i in range(num_samples):
-            text = self._misspelling_augment_(text, num_samples)
+            text = self._orthography_augment_(text, num_samples)
             text = self._keyboard_augment_(text, num_samples)
             text = self._ocr_augment_(text, num_samples)
             text = self._random_augment_(text, num_samples)

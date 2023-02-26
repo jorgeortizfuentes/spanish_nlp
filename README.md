@@ -120,7 +120,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
   - Keyboard method
   - OCR method
   - Random method
-  - Misspelling method
+  - Orthography method
   - All method
 - Masked augmentation
   - Sustitute method
@@ -132,17 +132,23 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 
 ```python
 from spanish_nlp import augmentation
-ocr = augmentation.Spelling(method="ocr",
-                            stopwords="default",
-                            aug_percent=0.3,
+
+ocr = augmentation.Spelling(method="ocr", 
+                            stopwords="default", 
+                            aug_percent=0.3, 
                             tokenizer="default")
 
-misspelling = augmentation.Spelling(method="keyboard",
-                                    stopwords="default",
-                                    aug_percent=0.3,
+keyboard = augmentation.Spelling(method="keyboard", 
+                                    stopwords="default", 
+                                    aug_percent=0.3, 
                                     tokenizer="default")
 
-masked_sustitute = augmentation.Masked(method="sustitute",
+orthography = augmentation.Spelling(method="orthography", 
+                                    stopwords="default", 
+                                    aug_percent=0.3, 
+                                    tokenizer="default")
+
+masked_sustitute = augmentation.Masked(method="sustitute", 
                                        model="dccuchile/bert-base-spanish-wwm-cased",
                                        tokenizer="default",
                                        stopwords="default",
@@ -150,7 +156,7 @@ masked_sustitute = augmentation.Masked(method="sustitute",
                                        device="cpu",
                                        top_k=10)
 
-masked_insert = augmentation.Masked(method="insert",
+masked_insert = augmentation.Masked(method="insert", 
                                     model="dccuchile/bert-base-spanish-wwm-cased",
                                     tokenizer="default",
                                     stopwords="default",
@@ -162,14 +168,14 @@ text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un 
 
 new_texts = [text]
 new_texts.append(ocr.augment(text, num_samples=1, num_workers=1))
-new_texts.append(misspelling.augment(text, num_samples=1, num_workers=1))
+new_texts.append(keyboard.augment(text, num_samples=1, num_workers=1))
+new_texts.append(orthography.augment(text, num_samples=1, num_workers=1))
 new_texts.append(masked_sustitute.augment(text, num_samples=1))
 new_texts.append(masked_insert.augment(text, num_samples=1))
 
 for t in new_texts:
     print(t)
     print("---")
-
 ```
 
 Output:
@@ -177,15 +183,18 @@ Output:
 ```bash
 En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.
 ---
-['3n aqueI 7iempo yo t3nía veinte añQs V 3sta8a loGo. Había perO10o un país pero había Canado un BueñQ. V si t3nía ese su3N0 lo d3WáB no imp0rtaEa. Hi trabaLar ni rezaP ni estudiaP en la maOPuga0a Lun7o a IoB perros roWánticos.']
+['En a9uel tleWpo Vo t3nía velnt3 aNos y es7aba locQ. Ha8ía pePdido Vn paí8 pePQ había ganad0 un sueñQ. Y si 73nía 35e sueño lo d3más no lmRoPtaba. Hi tra8aLar nl P3zar nl 3stuOiar 3n la ma0rugada Lun7Q a los perr0s roWántiGQs.']
 ---
-['En squel tjempo yo tfbíx vsknte alod y estxba lpfo. Hanía pfddido un país pero hqvís ganaeo uj skeol. Y si tebía ese syrño lo demáz no jmppfgabx. Nj travayar ni rezar mu estudist eh la nadtugads junto a loa peerks eomábticox.']
+['En zquel tuempl yo henía veinte aloe y ezhavs lkdo. Havía lerwido ub oqís pfgo había gwnzxo jj susoo. Y si trníx ese sueño lp wemás no importaba. Ni tragajar ji reaaf no esguriat en la ksetuhada uunto a pke perrls dományicos.']
 ---
-['En aquel tiempo yo tenía 18 años y estaba loco. Había arruinado un hogar pero había ganado un sueño. Ahora si tenía ese sueño lo demás no importaba. Pero trabajar ni rezar ni trabajar en la madrugada junto a los perros ni']
+['En aquel tiempo yo tenía beinte años y estaba loco. Había perdido um país pero  abía gamado um sueño. Y si temía ese sueño lo denás no importava. Ni trabajar ni rezar ni estudiar en la madrujada junto a los perros románticos.']
 ---
-['En aquel tiempo yo tenía los veinteséis años y estaba loco. Había perdido un gran país pero sí había ganado tener un sueño. Y si tenía ese sueño lo demás ya no importaba.. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.']
+['En aquel tiempo yo tenía 16 años y estaba. Ven roto un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.!']
+---
+['En aquel tiempo yo tenía veintesieteés años y estaba muy loco. Habían perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los viejos viejos perros. románticos.']
 ---
 ```
+
 ## License
 
 Spanish NLP is licensed under the [GNU General Public License v3.0](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/LICENSE).

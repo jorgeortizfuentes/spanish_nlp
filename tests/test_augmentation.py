@@ -8,7 +8,7 @@ class TestSpelling(unittest.TestCase):
         self.keyboard_augmentator = augmentation.Spelling(method="keyboard")
         self.ocr_augmentator = augmentation.Spelling(method="ocr")
         self.random_augmentator = augmentation.Spelling(method="random")
-        self.misspelling_augmentator = augmentation.Spelling(method="misspelling")
+        self.orthography_augmentator = augmentation.Spelling(method="orthography")
         self.all_augmentator = augmentation.Spelling(method="all")
 
     def print_augmentations(self, original, augmentations, method):
@@ -44,10 +44,10 @@ class TestSpelling(unittest.TestCase):
             self.assertFalse(text == text_aug[i])
             self.assertFalse(text == "")
 
-    def test_misspelling_augment(self):
+    def test_orthography_augment(self):
         text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
-        text_aug = self.misspelling_augmentator.augment(text, 1)
-        self.print_augmentations(text, text_aug, method="misspelling")
+        text_aug = self.orthography_augmentator.augment(text, 1)
+        self.print_augmentations(text, text_aug, method="orthography")
         for i in range(len(text_aug)):
             self.assertFalse(text == text_aug[i])
             self.assertFalse(text == "")
