@@ -11,3 +11,4 @@ flit
 twine
 sphinx
 parameterized
+myst-parser

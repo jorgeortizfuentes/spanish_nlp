@@ -187,6 +187,10 @@ En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pe
 
 Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributing guide) for more information.
 
+## Author
+
+This project was developed by [Jorge Ortiz-Fuentes](https://ortizfuentes.com/), Linguist and Data Scientist from Chile.
+
 ## Acknowledgements
 
 We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
