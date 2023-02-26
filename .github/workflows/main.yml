@@ -40,9 +40,8 @@ jobs:
 
       - name: Add tag to repository
         if: success()
-        uses: anothrNick/github-tag-action@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ env.PACKAGE_VERSION }}
-          message: "Release version ${{ env.PACKAGE_VERSION }}"
-          target_commitish: ${{ github.sha }}
+        uses: anothrNick/github-tag-action@v1.55.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: v${{ env.PACKAGE_VERSION }}
+
