@@ -13,3 +13,4 @@ sphinx
 parameterized
 myst-parser
 pytest
+hatchling
