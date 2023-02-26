@@ -1,15 +1,12 @@
 # Spanish NLP
 
-A Python library for Natural Language Processing in Spanish.
+## Introduction
 
+Spanish NLP is the first low code Python library for Natural Language Processing in Spanish. It provides three main modules:
 
-Spanish NLP is a Python library designed for Natural Language Processing tasks in Spanish. It provides three main modules:
-
-- preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
-- classify: The classify module allows users to classify texts using different models and algorithms.
-- augmentation: The augmentation module can be used to generate synthetic data to increase the amount of labeled data available for training models.
-
-This project was developed by [Jorge Ortiz-Fuentes](https://ortizfuentes.com/), Linguist and Data Scientist from Chile.
+* Preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
+* Classify: The classify module allows users to quickly classify texts using different pre-trained models
+* Augmentation: The augmentation module allows generate synthetic data. It is useful for increasing labeled data and improving results in classification model training.
 
 ## Installation
 
@@ -28,16 +25,16 @@ To preprocess text using the preprocess module, you can import it and call the d
 ```python
 from spanish_nlp import preprocess
 sp = preprocess.SpanishPreprocess(
-        lower=True,
+        lower=False,
         remove_url=True,
         remove_hashtags=False,
         split_hashtags=True,
         normalize_breaklines=True,
-        remove_emoticons=True,
-        remove_emojis=True,
+        remove_emoticons=False,
+        remove_emojis=False,
         convert_emoticons=False,
         convert_emojis=False,
-        normalize_inclusive_language=False,
+        normalize_inclusive_language=True,
         reduce_spam=True,
         remove_vowels_accents=True,
         remove_multiple_spaces=True,
@@ -53,25 +50,22 @@ sp = preprocess.SpanishPreprocess(
 
 test_text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
 
-<b>Hola </b>, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
+<b>Holaaaaaaaa a todxs </b>, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
 
 https://www.poesi.as/rb9301.htm
 
-Me gusta la LINGÜÍSTICA y los ñandúes… También los pingüinos 🐧🐧🐧. #VivanLosPinguinos #SíSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
+¡Me gustan los pingüinos! Sí, los PINGÜINOS 🐧🐧🐧 🐧 #VivanLosPinguinos #SíSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
 
-Si colaboras con este código te puedes ganar $10.000.000.000. O tal vez 2000 vacas. Mi teléfono es +569123456789"""
+Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O tal vez 20 pingüinos. Mi teléfono es +561212121212"""
 
 print(sp.transform(test_text, debug=False))
-
 ```
 
 Output:
-
 ```bash
-hola este es un texto de prueba a continuacion les mostrare un poema de roberto bolaño llamado los perros romanticos
-me gusta la linguistica y los ñandues tambien los pinguinos vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
-si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
-```
+holaaaaaaaa a todos este es un texto de prueba:) a continuacion los mostrare un poema de roberto bolaño llamado los perros romanticos 🤭 👀 😅 
+me gustan los pinguinos si los pinguinos 🐧 🐧 🐧 🐧 vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
+si colaboras con este repositorio te puedes ganar en dinero falso o tal vez pinguinos mi telefono es```
 
 ### Classification
 
@@ -85,13 +79,13 @@ si colaboras con este codigo te puedes ganar o tal vez vacas mi telefono es
 * Sexist Analysis (sexist_analysis)
 * Racism Analysis (racism_analysis)
 
-#### Classification Examples
+#### Classification Example
 
 ```python
 from spanish_nlp import classifiers
 
 sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
-t1 =  "LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
+t1 =  "LAS MUJERES Y GAYS DEBERIAN SER EXTERMINADOS"
 t2 = "El presidente convocó a una reunión a los representantes de los partidos políticos"
 p1 = sc.predict(t1)
 p2 = sc.predict(t2)
@@ -196,3 +190,7 @@ Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributi
 ## Acknowledgements
 
 We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
+
+# Author
+
+This project was developed by [Jorge Ortiz-Fuentes](https://ortizfuentes.com/), Linguist and Data Scientist from Chile.
