@@ -27,7 +27,7 @@ jobs:
         run: hatch build
         
       - name: Upload package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1
+        run: twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p password ${{ secrets.PYPI_PASSWORD }}
         with:
           repository_url: https://upload.pypi.org/legacy/
           username: __token__
