@@ -12,3 +12,4 @@ twine
 sphinx
 parameterized
 myst-parser
+pytest
