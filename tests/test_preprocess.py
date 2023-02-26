@@ -1,46 +1,89 @@
 import unittest
+
+from parameterized import parameterized
+
 from spanish_nlp import preprocess
 
 
 class TestTextPreprocessor(unittest.TestCase):
     def setUp(self):
         self.preprocessor = preprocess.SpanishPreprocess()
+        self.params = {
+            "lower": False,
+            "remove_url": False,
+            "remove_hashtags": False,
+            "split_hashtags": False,
+            "normalize_breaklines": False,
+            "remove_emoticons": False,
+            "remove_emojis": False,
+            "convert_emoticons": False,
+            "convert_emojis": False,
+            "normalize_inclusive_language": False,
+            "reduce_spam": False,
+            "remove_reduplications": False,
+            "remove_vowels_accents": False,
+            "remove_multiple_spaces": False,
+            "remove_punctuation": False,
+            "remove_unprintable": False,
+            "remove_numbers": False,
+            "remove_stopwords": False,
+            "stopwords_list": None,
+            "lemmatize": False,
+            "stem": False,
+            "remove_html_tags": False,
+        }
+        self.text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
+
+<b>Holaaaaaaaa a todxs </b>, este es un texto de prueba :) a continuación les mostraré un poema de Roberto Bolaño llamado "Los perros románticos" 🤭👀😅
+
+https://www.poesi.as/rb9301.htm
+
+¡Me gustan los pingüinos! Sí, los PINGÜINOS 🐧🐧🐧 🐧 #VivanLosPinguinos #SíSeñor #PinguinosDelMundoUníos #ÑanduesDelMundoTambién
+
+Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O tal vez 20 pingüinos. Mi teléfono es +561212121212"""
 
     def test_lower(self):
         text = "Ejemplo de TEXTO con mayúsculas."
         expected = "ejemplo de texto con mayúsculas."
         self.assertEqual(self.preprocessor._lower_(text), expected)
 
-    def test_split_hashtags1(self):
-        text = "Esto es un #ejemplo de texto con #hashtags"
-        expected = "Esto es un ejemplo de texto con hashtags"
+    @parameterized.expand(
+        [
+            (
+                "Esto es un #ejemplo de texto con #hashtags",
+                "Esto es un ejemplo de texto con hashtags",
+            ),
+            (
+                "esto es #unEjemplo de texto con #hashtags",
+                "esto es un Ejemplo de texto con hashtags",
+            ),
+            (
+                "esto es #UnEjemplo de texto con #hashtags",
+                "esto es Un Ejemplo de texto con hashtags",
+            ),
+            (
+                "esto es un #hashtag, pero 4gcf#assf y 13#3 no lo son",
+                "esto es un hashtag, pero 4gcf#assf y 13#3 no lo son",
+            ),
+        ]
+    )
+    def test_split_hashtags(self, text, expected):
         self.assertEqual(self.preprocessor._split_hashtags_(text), expected)
 
-    def test_split_hashtags2(self):
-        text = "esto es #unEjemplo de texto con #hashtags"
-        expected = "esto es un Ejemplo de texto con hashtags"
-        self.assertEqual(self.preprocessor._split_hashtags_(text), expected)
-
-    def test_split_hashtags3(self):
-        text = "esto es #UnEjemplo de texto con #hashtags"
-        expected = "esto es Un Ejemplo de texto con hashtags"
-        self.assertEqual(self.preprocessor._split_hashtags_(text), expected)
-
-    def test_split_hashtags4(self):
-        text = "esto es un #hashtag, pero 4gcf#assf y 13#3 no lo son"
-        expected = "esto es un hashtag, pero 4gcf#assf y 13#3 no lo son"
-        self.assertEqual(self.preprocessor._split_hashtags_(text), expected)
-
-    def test_remove_url1(self):
+    @parameterized.expand(
+        [
+            (
+                "Este texto contiene una URL: https://www.ejemplo.com",
+                "Este texto contiene una URL: ",
+            ),
+            (
+                "Este texto contiene una URL https://www.ejemplo.com/hola/test?param=1&param2=2 con parámetros.",
+                "Este texto contiene una URL con parámetros.",
+            ),
+        ]
+    )
+    def test_remove_url(self, text, expected):
         self.preprocessor.remove_url = True
-        text = "Este texto contiene una URL: https://www.ejemplo.com"
-        expected = "Este texto contiene una URL: "
-        self.assertEqual(self.preprocessor._remove_url_(text), expected)
-
-    def test_remove_url2(self):
-        self.preprocessor.remove_url = True
-        text = "Este texto contiene una URL https://www.ejemplo.com/hola/test?param=1&param2=2 con parámetros."
-        expected = "Este texto contiene una URL con parámetros."
         self.assertEqual(self.preprocessor._remove_url_(text), expected)
 
     def test_remove_html_tags(self):
@@ -73,11 +116,11 @@ class TestTextPreprocessor(unittest.TestCase):
         self.assertTrue(self.preprocessor._lemmatize_(text) != text)
 
     def test_convert_emojis(self):
-         text = "Este texto tiene 😀 y 🙁."
-         expected = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
-         pp_text = self.preprocessor._emojis_to_text_(text)
-         self.assertEqual(pp_text, expected)
-         self.assertTrue(text != pp_text)
+        text = "Este texto tiene 😀 y 🙁."
+        expected = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
+        pp_text = self.preprocessor._emojis_to_text_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
     def test_remove_emojis(self):
         text = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
@@ -86,7 +129,6 @@ class TestTextPreprocessor(unittest.TestCase):
         pp_text = self.preprocessor._text_to_emojis_(text)
         self.assertEqual(pp_text, expected)
         self.assertTrue(text != pp_text)
-
 
     def test_convert_emoticons(self):
         text = "Este texto tiene :) y :(."
@@ -112,7 +154,7 @@ class TestTextPreprocessor(unittest.TestCase):
         self.assertTrue(text != pp_text)
 
     def test_transform_remove_stopwords(self):
-        text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos." 
+        text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
         expected = "tiempo tenía veinte años estaba loco. Había perdido país había ganado sueño. si tenía sueño lo demás no importaba. trabajar rezar estudiar madrugada junto perros románticos."
 
         self.preprocessor._prepare_stopwords_(type="default")
@@ -120,35 +162,85 @@ class TestTextPreprocessor(unittest.TestCase):
         self.assertEqual(pp_text, expected)
         self.assertTrue(text != pp_text)
 
-    # def test_transform_remove_multiple_spaces(self):
-    #     t = TextPreprocessor(remove_multiple_spaces=True)
-    #     result = t.transform("Este es     un texto con espacios   multiples ")
-    #     self.assertEqual(result, "Este es un texto con espacios multiples")
+    def test_transform_remove_multiple_spaces(self):
+        text = "Este    texto  tiene varios         espacios. "
+        expected = "Este texto tiene varios espacios."
 
-    # def test_transform_normalize_breaklines(self):
-    #     t = TextPreprocessor(normalize_breaklines=True)
-    #     result = t.transform("Este es\nun texto\ncon saltos de\nlínea")
-    #     self.assertEqual(result, "Este es un texto con saltos de línea")
+        pp_text = self.preprocessor._remove_multiples_spaces_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
-    # def test_transform_normalize_punctuation_spelling(self):
-    #     t = TextPreprocessor(normalize_punctuation_spelling=True)
-    #     result = t.transform("Este es un texto con: varias, puntuaciones.. y algunos acentos")
-    #     self.assertEqual(result, "Este es un texto con varias puntuaciones y algunos acentos")
+    def test_transform_normalize_breaklines(self):
+        text = "Sopaipillas \n\n\n Dos tazas de harina"
+        expected = "Sopaipillas \nDos tazas de harina"
+        pp_text = self.preprocessor._normalize_breaklines_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
-    # def test_transform_reduce_spam(self):
-    #     t = TextPreprocessor(reduce_spam=True)
-    #     result = t.transform("Oferta especial!!! Compra ya nuestro producto!!!")
-    #     self.assertEqual(result, "Oferta especial Compra ya nuestro producto")
+    def test_transform_normalize_punctuation_spelling(self):
+        text = (
+            "Este es un texto,con la puntuación incorrecta . Se tiene que solucionar!"
+        )
+        expected = (
+            "Este es un texto, con la puntuación incorrecta. Se tiene que solucionar!"
+        )
+        pp_text = self.preprocessor._normalize_punctuation_spelling_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
-    # def test_transform_remove_reduplications(self):
-    #     t = TextPreprocessor(remove_reduplications=True)
-    #     result = t.transform("Este es un texto con con algunas algunas palabras repetidas")
-    #     self.assertEqual(result, "Este es un texto con algunas palabras repetidas")
+    def test_transform_reduce_spam(self):
+        text = "Este es un gran gran texto con muchas muchas muchas muchas muchas repeticiones"
+        expected = "Este es un gran gran texto con muchas muchas repeticiones"
+        pp_text = self.preprocessor._reduce_spam_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
 
-    # def test_transform_debug(self):
-    #     t = TextPreprocessor(remove_numbers=True, lower=True, debug=True)
-    #     result = t.transform("Este es un TEXTO con 123 números")
-    #     self.assertEqual(result, "Este es un texto con números")
+    def test_transform_remove_reduplications(self):
+        text = "holaaaa banana no te creoooo naaada"
+        expected = "hola banana no te creo nada"
+        pp_text = self.preprocessor._remove_reduplications_(text)
+        self.assertEqual(pp_text, expected)
+        self.assertTrue(text != pp_text)
+
+    def test_transform_false(self):
+        pp = preprocess.SpanishPreprocess(**self.params)
+        pp_text = pp.transform(self.text)
+        self.assertEqual(pp_text, pp_text)
+
+    def test_transform_true(self):
+        # Set all values in the dict with True
+        params = {
+            "lower": False,
+            "remove_url": True,
+            "remove_hashtags": False,
+            "split_hashtags": True,
+            "normalize_breaklines": True,
+            "remove_emoticons": False,
+            "remove_emojis": False,
+            "convert_emoticons": True,
+            "convert_emojis": True,
+            "normalize_inclusive_language": True,
+            "reduce_spam": True,
+            "remove_reduplications": True,
+            "remove_vowels_accents": True,
+            "remove_multiple_spaces": True,
+            "remove_punctuation": False,
+            "remove_unprintable": True,
+            "remove_numbers": False,
+            "remove_stopwords": False,
+            "stopwords_list": None,
+            "lemmatize": False,
+            "stem": False,
+            "remove_html_tags": True,
+        }
+
+        pp = preprocess.SpanishPreprocess(**params)
+        pp_text = pp.transform(self.text)
+        expected = """Holaaaaaaaa a todos, este es un texto de prueba:) a continuacion los mostrare un poema de Roberto Bolaño llamado "Los perros romanticos" 🤭 👀 😅 
+Me gustan los pinguinos! Si, los PINGUINOS 🐧 🐧 🐧 🐧 Vivan Los Pinguinos Si Señor Pinguinos Del Mundo Unios Ñandues Del Mundo Tambien
+Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O tal vez 20 pinguinos. Mi telefono es +561212121212
+"""
+        self.assertEqual(pp_text, pp_text)
 
 
 if __name__ == "__main__":

@@ -200,8 +200,10 @@ class SpanishPreprocess:
     def _normalize_breaklines_(self, text):
         """Convert multiple breaklines to one breakline"""
         text = text.replace("\r", "\n")
-        text = re.sub(r"(\n){2,}", r"\n", text)
-        return text
+        # text = re.sub(r"(\n){2,}", r"\n", text)
+        # Can there are 0 or more spaces between breaklines
+        text = re.sub(r"(\n\s*)+", r"\n", text)
+        return text.strip()
 
     def _emoticons_to_text_(self, text):
         pp_text = demoticonize(text, delimiters=(" __", "__ "))
@@ -224,8 +226,9 @@ class SpanishPreprocess:
         return normalize_inclusive_language(text)
 
     def _reduce_spam_(self, text):
-        """Reduce spam in text when a expression is repeated more than 3 times.
-        Example: "hola hola hola hola hola hola" -> "hola hola hola" """
+        """Reduce a expression if it is repeated more than 3 times and convert it to two expressions.
+        Example: "hola hola hola hola hola hola" -> "hola hola hola"
+        """
         text = re.sub(r"(\w+\s)\1+", r"\1\1", text)
         text = re.sub(r"(\b(\w+\s){3})\1+", r"\1\1", text)
         return text
@@ -233,16 +236,15 @@ class SpanishPreprocess:
     def _remove_reduplications_(self, text):
         """Use a regular expression to find a sequence of non-digit characters
         that are repeated at the end of the word, and replace it with just
-        one instance of the character"""
-        # Replace ... with …
-        # text = re.sub(r'\.{3,}', '…', text)
-        # # text = re.sub(r'(?i)(.+?)\1+', r'\1', text)
-        # # Replace … with ...
-        # text = re.sub(r'…', '...', text)
-        # return text
+        one instance of the character
+        
+        Examples: "holaaa cómo estás?" -> "hola cómo estás?"
+                  "no te creoooo naaada" -> "no te creo naaada"
+        """
+        pattern = r"([aeiou])\1+"
+        return re.sub(pattern, r"\1", text)
 
-        # It has bugs, please code it
-        return text
+
 
     def _remove_vowels_accents_(self, text):
         """Convert vowels with accents from text (lowercase or uppercase)"""
@@ -290,7 +292,7 @@ class SpanishPreprocess:
         return " ".join([token.lemma_ for token in doc])
 
     def _remove_multiples_spaces_(self, text):
-        return re.sub(" +", " ", text)
+        return re.sub(" +", " ", text).strip()
 
     def _normalize_punctuation_spelling_(self, text):
         """Remove all wrong spaces with punctuation"""
@@ -298,9 +300,10 @@ class SpanishPreprocess:
         text = re.sub(r" +([\.\,\!\?\)\]\}\>\:\#}])", r"\1", text)
         # Remove spaces after punctuation
         text = re.sub(r"([\¡\¿\(\[\{\<])\: +", r"\1", text)
+        # Add space after , and . if it is not a number or an url and it does not have a space
+        text = re.sub(r"([\.\,])([^\s\d])", r"\1 \2", text)
         # Remove duplicated spaces
-        text = re.sub(r" +", " ", text)
-        return text
+        return self._remove_multiples_spaces_(text).strip()
 
     def _remove_html_tags_(self, text):
         """Remove html tags from a string"""

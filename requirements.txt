@@ -10,3 +10,4 @@ es_core_news_sm
 flit
 twine
 sphinx
+parameterized
