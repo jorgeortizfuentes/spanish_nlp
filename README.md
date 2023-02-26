@@ -4,9 +4,9 @@
 
 Spanish NLP is the first low code Python library for Natural Language Processing in Spanish. It provides three main modules:
 
-* Preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
-* Classify: The classify module allows users to quickly classify texts using different pre-trained models
-* Augmentation: The augmentation module allows generate synthetic data. It is useful for increasing labeled data and improving results in classification model training.
+* **Preprocess**: it offers several text preprocessing options to clean and prepare texts for further analysis.
+* **Classify**: it allows users to quickly classify texts using different pre-trained models
+* **Augmentation**: it allows generate synthetic data. It is useful for increasing labeled data and improving results in classification model training.
 
 ## Installation
 
@@ -19,6 +19,9 @@ pip install spanish_nlp
 ## Usage
 
 ### Preprocessing
+
+See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Preprocess.ipynb)
+
 
 To preprocess text using the preprocess module, you can import it and call the desired parameters:
 
@@ -65,12 +68,11 @@ Output:
 ```bash
 holaaaaaaaa a todos este es un texto de prueba:) a continuacion los mostrare un poema de roberto bolaño llamado los perros romanticos 🤭 👀 😅 
 me gustan los pinguinos si los pinguinos 🐧 🐧 🐧 🐧 vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
-si colaboras con este repositorio te puedes ganar en dinero falso o tal vez pinguinos mi telefono es```
-
-See more information in the [Jupyter Notebook example]()
-
+si colaboras con este repositorio te puedes ganar en dinero falso o tal vez pinguinos mi telefono es
+```
 ### Classification
 
+See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Classify.ipynb)
 #### Available classifiers
 
 * Hate Speech (hate_speech)
@@ -108,6 +110,8 @@ Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.01065948326140
 ```
 
 ### Augmentation
+
+See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Data%20Augmentation.ipynb)
 
 #### Available Augmentation Models
 
@@ -183,11 +187,11 @@ En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pe
 ```
 ## License
 
-Spanish NLP is licensed under the [LICENSE](GNU General Public License v3.0).
+Spanish NLP is licensed under the [https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/LICENSE](GNU General Public License v3.0).
 
 ## Contributing and roadmap
 
-Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributing guide) for more information.
+Contributions to Spanish NLP are welcome! Please see the [https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/ROADMAP.md](contributing guide) for more information.
 
 ## Acknowledgements
 
