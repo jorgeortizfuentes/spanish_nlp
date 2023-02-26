@@ -67,6 +67,8 @@ holaaaaaaaa a todos este es un texto de prueba:) a continuacion los mostrare un 
 me gustan los pinguinos si los pinguinos 🐧 🐧 🐧 🐧 vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
 si colaboras con este repositorio te puedes ganar en dinero falso o tal vez pinguinos mi telefono es```
 
+See more information in the [Jupyter Notebook example]()
+
 ### Classification
 
 #### Available classifiers
