@@ -2,11 +2,14 @@
 
 A Python library for Natural Language Processing in Spanish.
 
+
 Spanish NLP is a Python library designed for Natural Language Processing tasks in Spanish. It provides three main modules:
 
 - preprocess: This module offers several text preprocessing options to clean and prepare texts for further analysis.
 - classify: The classify module allows users to classify texts using different models and algorithms.
 - augmentation: The augmentation module can be used to generate synthetic data to increase the amount of labeled data available for training models.
+
+This project was developed by [Jorge Ortiz-Fuentes](https://ortizfuentes.com/), Linguist and Data Scientist from Chile.
 
 ## Installation
 
@@ -182,20 +185,14 @@ En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pe
 ['En aquel tiempo yo tenía los veinteséis años y estaba loco. Había perdido un gran país pero sí había ganado tener un sueño. Y si tenía ese sueño lo demás ya no importaba.. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.']
 ---
 ```
-
-### Contributing and roadmap
-
-Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributing guide) for more information.
-
-## Author
-
-This project was developed by [Jorge Ortiz-Fuentes](https://ortizfuentes.com/), Linguist and Data Scientist from Chile.
-
-## Acknowledgements
-
-We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
-
 ## License
 
 Spanish NLP is licensed under the [LICENSE](GNU General Public License v3.0).
 
+## Contributing and roadmap
+
+Contributions to Spanish NLP are welcome! Please see the [ROADMAP.md](contributing guide) for more information.
+
+## Acknowledgements
+
+We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
