@@ -26,10 +26,8 @@ jobs:
       - name: Build package
         run: hatch build
         
-      - name: Upload package to PyPI
-        run: twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p password ${{ secrets.PYPI_PASSWORD }}
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@master
         with:
-          repository_url: https://upload.pypi.org/legacy/
-          username: __token__
+          user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          package_glob: dist/*.whl dist/*.tar.gz
