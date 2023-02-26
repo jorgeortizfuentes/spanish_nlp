@@ -236,11 +236,13 @@ Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O 
 
         pp = preprocess.SpanishPreprocess(**params)
         pp_text = pp.transform(self.text)
-        expected = """Holaaaaaaaa a todos, este es un texto de prueba:) a continuacion los mostrare un poema de Roberto Bolaño llamado "Los perros romanticos" 🤭 👀 😅 
+        expected = """Hola a todos, este es un texto de prueba:) a continuacion los mostrare un poema de Roberto Bolaño llamado "Los perros romanticos" 🤭 👀 😅 
 Me gustan los pinguinos! Si, los PINGUINOS 🐧 🐧 🐧 🐧 Vivan Los Pinguinos Si Señor Pinguinos Del Mundo Unios Ñandues Del Mundo Tambien
-Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O tal vez 20 pinguinos. Mi telefono es +561212121212
-"""
-        self.assertEqual(pp_text, pp_text)
+Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O tal vez 20 pinguinos. Mi telefono es +561212121212"""
+        print(pp_text)
+        print(expected)
+
+        self.assertEqual(pp_text, expected)
 
 
 if __name__ == "__main__":

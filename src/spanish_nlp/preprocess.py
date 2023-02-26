@@ -145,7 +145,6 @@ class SpanishPreprocess:
                     "Stopwords must be a list or one of the following: 'default', 'extended', 'nltk', 'spacy'"
                 )
 
-
     def _prepare_lemmatize_(self, force=False):
         if self.lemmatize or force:
             import es_core_news_sm
@@ -212,9 +211,9 @@ class SpanishPreprocess:
     def _emojis_to_text_(self, text):
         pp_text = emoji.demojize(text, delimiters=(" __", "__ ")).replace("  ", " ")
         return self._normalize_punctuation_spelling_(pp_text)
-    
+
     def _text_to_emojis_(self, text):
-        pp_text= emoji.emojize(text, delimiters=("__", "__"))
+        pp_text = emoji.emojize(text, delimiters=("__", "__"))
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _text_to_emoticons_(self, text):
@@ -237,14 +236,12 @@ class SpanishPreprocess:
         """Use a regular expression to find a sequence of non-digit characters
         that are repeated at the end of the word, and replace it with just
         one instance of the character
-        
+
         Examples: "holaaa cómo estás?" -> "hola cómo estás?"
                   "no te creoooo naaada" -> "no te creo naaada"
         """
         pattern = r"([aeiou])\1+"
         return re.sub(pattern, r"\1", text)
-
-
 
     def _remove_vowels_accents_(self, text):
         """Convert vowels with accents from text (lowercase or uppercase)"""
@@ -279,7 +276,11 @@ class SpanishPreprocess:
 
     def _remove_stopwords_(self, text):
         return " ".join(
-            [word for word in str(text).split() if word.lower() not in self.stopwords_list]
+            [
+                word
+                for word in str(text).split()
+                if word.lower() not in self.stopwords_list
+            ]
         )
 
     def _stem_(self, text, stemmer=SnowballStemmer("spanish")):
