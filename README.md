@@ -66,7 +66,7 @@ print(sp.transform(test_text, debug=False))
 
 Output:
 ```bash
-holaaaaaaaa a todos este es un texto de prueba:) a continuacion los mostrare un poema de roberto bolaño llamado los perros romanticos 🤭 👀 😅 
+hola a todos este es un texto de prueba:) a continuacion los mostrare un poema de roberto bolaño llamado los perros romanticos 🤭 👀 😅 
 me gustan los pinguinos si los pinguinos 🐧 🐧 🐧 🐧 vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
 si colaboras con este repositorio te puedes ganar en dinero falso o tal vez pinguinos mi telefono es
 ```

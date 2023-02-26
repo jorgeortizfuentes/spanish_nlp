@@ -136,7 +136,7 @@ dmypy.json
 .markdownlint.yaml
 
 #Other
-.vscode
+.vscode/
 .DS_Store
 
 # Data
