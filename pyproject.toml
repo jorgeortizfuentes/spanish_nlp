@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "A package for NLP in Spanish"
 readme = "README.md"
 license = "GPL-3.0-or-later"
-requires-python = ">=3.6"
+requires-python = ">=3.6, <3.10"
 authors = [
     { name = "Jorge Ortiz-Fuentes", email = "jorge@ortizfuentes.com" },
 ]
