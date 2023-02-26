@@ -89,6 +89,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 from spanish_nlp import classifiers
 
 sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
+# DISCLAIMER: The following message is merely an example of hate speech and does not represent the views of the author or contributors.
 t1 =  "LAS MUJERES Y GAYS DEBERIAN SER EXTERMINADOS"
 t2 = "El presidente convocó a una reunión a los representantes de los partidos políticos"
 p1 = sc.predict(t1)
@@ -103,10 +104,10 @@ print("Prediction 2: ", p2)
 Output:
 
 ```bash
-Text 1:  LAS RATAS QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS
-Prediction 1:  {'hateful': 0.29868438839912415, 'aggressive': 0.1646653413772583, 'targeted': 0.0075755491852760315}
+Text 1:  LAS MUJERES Y GAYS DEBERÍAN SER EXTERMINADOS
+Prediction 1:  {'hate_speech': 0.7544152736663818, 'not_hate_speech': 0.24558477103710175}
 Text 2:  El presidente convocó a una reunión a los representantes de los partidos políticos
-Prediction 2:  {'targeted': 0.013353983871638775, 'aggressive': 0.010659483261406422, 'hateful': 0.009115356020629406}
+Prediction 2:  {'not_hate_speech': 0.9793208837509155, 'hate_speech': 0.02067909575998783}
 ```
 
 ### Augmentation
