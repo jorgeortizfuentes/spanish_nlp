@@ -76,7 +76,7 @@ class SpanishClassifier:
         }
         return info
 
-    def load_hate_speech(self, type="bert"):
+    def load_hate_speech(self, type="robertuito"):
         if type == "robertuito":
             self._robertuito_hate_speech_()
         elif type == "bert":
