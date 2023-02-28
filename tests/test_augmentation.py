@@ -91,6 +91,22 @@ class TestMasked(unittest.TestCase):
             self.assertFalse(text == text_aug[i])
             self.assertFalse(text == "")
 
+    def test_sustitute_large(self):
+        text = 10*"En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
+        text_aug = self.sustitute_augmentor.augment(text, 1)
+        self.print_augmentations(text, text_aug, method="substitute")
+        for i in range(len(text_aug)):
+            self.assertFalse(text == text_aug[i])
+            self.assertFalse(text == "")
+
+    def test_insert_large(self):
+        text = 10*"En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
+        text_aug = self.insert_augmentor.augment(text, 1)
+        self.print_augmentations(text, text_aug, method="insert")
+        for i in range(len(text_aug)):
+            self.assertFalse(text == text_aug[i])
+            self.assertFalse(text == "")
+
 
 if __name__ == "__main__":
     unittest.main(buffer=False, defaultTest='TestSpelling')

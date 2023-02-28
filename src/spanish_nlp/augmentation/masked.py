@@ -148,7 +148,9 @@ class Masked(DataAugmentationAbstract):
         for K in K_list:
             words = sentence.split(" ")
             masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K + 1 :])
-            predictions = self.fillmask(masked_sentence, top_k=self.top_k)
+            predictions = self.fillmask(masked_sentence,
+                                        top_k=self.top_k,
+                                        truncation=True)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
 
@@ -259,7 +261,9 @@ class Masked(DataAugmentationAbstract):
         for K in K_list:
             words = sentence.split(" ")
             masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K:])
-            predictions = self.fillmask(masked_sentence, top_k=self.top_k)
+            predictions = self.fillmask(masked_sentence,
+                                        top_k=self.top_k,
+                                        truncation=True)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
 
