@@ -96,6 +96,9 @@ class TestMasked(unittest.TestCase):
         text_aug = self.sustitute_augmentor.augment(text, 1)
         self.print_augmentations(text, text_aug, method="substitute")
         for i in range(len(text_aug)):
+            print(text)
+            print(".....")
+            print(text_aug[i])
             self.assertTrue(text == text_aug[i])
             self.assertFalse(text == "")
 

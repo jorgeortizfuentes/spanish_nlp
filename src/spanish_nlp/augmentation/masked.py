@@ -213,7 +213,7 @@ class Masked(DataAugmentationAbstract):
         """
 
         # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
-        tokens = self.tokenizer.tokenize(sentence)
+        tokens = len(self.tokenizer.tokenize(sentence))
         if tokens > self.tokenizer.model_max_length:
             warnings.warn("The sentence is too long for the model. The sentence is not augmented.")
             return sentence
