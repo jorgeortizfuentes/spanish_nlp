@@ -1,6 +1,7 @@
 import numpy as np
 import torch
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
+import warnings
 
 from .abstract import DataAugmentationAbstract
 
@@ -54,12 +55,18 @@ class Masked(DataAugmentationAbstract):
                 self.device = torch.device("cpu")
         else:
             self.device = device
-        if tokenizer == "default":
-            tokenizer = model
+        if self.tokenizer == "default":
+            self.tokenizer = model
+        self.__load__tokenizer__()
         self.fillmask = pipeline(
-            "fill-mask", model=model, tokenizer=tokenizer, device=self.device
+            "fill-mask", model=model, tokenizer=self.tokenizer, device=self.device
         )
         self.mask_token = self.fillmask.tokenizer.mask_token
+
+    def __load__tokenizer__(self):
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer,
+                                                       truncation=True,
+                                                       use_fast=True)
 
     def set_aug_percent(self, aug_percent):
         """
@@ -90,6 +97,13 @@ class Masked(DataAugmentationAbstract):
         Returns:
             str: Augmented sentence.
         """
+        
+        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
+        tokens = len(self.tokenizer.tokenize(sentence))
+        if tokens > self.tokenizer.model_max_length:
+            warnings.warn("The sentence is too long for the model. The sentence is not augmented.")
+            return sentence
+        
         words = sentence.split(" ")
         punct = [
             ".",
@@ -131,7 +145,7 @@ class Masked(DataAugmentationAbstract):
             "›",
         ]
         not_allowed = punct + self.stopwords
-
+        
         n_stopwords = sum([1 for word in words if word in not_allowed])
         n_total_words = len(words) - n_stopwords
 
@@ -148,8 +162,7 @@ class Masked(DataAugmentationAbstract):
         for K in K_list:
             words = sentence.split(" ")
             masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K + 1 :])
-            predictions = self.fillmask(masked_sentence,top_k=self.top_k,
-                                        truncation=True)
+            predictions = self.fillmask(masked_sentence,top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
 
@@ -198,6 +211,13 @@ class Masked(DataAugmentationAbstract):
         Returns:
             str: Augmented sentence.
         """
+
+        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
+        tokens = self.tokenizer.tokenize(sentence)
+        if tokens > self.tokenizer.model_max_length:
+            warnings.warn("The sentence is too long for the model. The sentence is not augmented.")
+            return sentence
+
         words = sentence.split(" ")
         punct = [
             ".",
@@ -261,8 +281,7 @@ class Masked(DataAugmentationAbstract):
             words = sentence.split(" ")
             masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K:])
             predictions = self.fillmask(masked_sentence,
-                                        top_k=self.top_k,
-                                        truncation=True)
+                                        top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
 
