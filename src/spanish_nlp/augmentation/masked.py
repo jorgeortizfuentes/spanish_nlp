@@ -211,13 +211,7 @@ class Masked(DataAugmentationAbstract):
         Returns:
             str: Augmented sentence.
         """
-
-        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
-        tokens = len(self.tokenizer.tokenize(sentence))
-        if tokens > self.tokenizer.model_max_length:
-            warnings.warn("The sentence is too long for the model. The sentence is not augmented.")
-            return sentence
-
+        
         words = sentence.split(" ")
         punct = [
             ".",
@@ -260,14 +254,20 @@ class Masked(DataAugmentationAbstract):
         ]
         not_allowed = punct + self.stopwords
 
-        # If the sentence is too long, return it
-        if len(words) > max_words:
-            return sentence
-
         n_stopwords = sum([1 for word in words if word in not_allowed])
         n_total_words = len(words) - n_stopwords
 
         num_words = int(n_total_words * self.aug_percent)
+
+        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
+        tokens = len(self.tokenizer.tokenize(sentence))
+
+        # If the sentence is too long, return it
+        if num_words > max_words or tokens > self.tokenizer.model_max_length or num_words > self.tokenizer.model_max_length:
+            warnings.warn("The sentence is too long for the model. The sentence is not augmented.")
+            return sentence
+
+
         K_list = []
 
         # Select the words to be replaced
