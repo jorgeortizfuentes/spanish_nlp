@@ -144,10 +144,17 @@ class Masked(DataAugmentationAbstract):
         K_list = []
 
         # Select the words to be replaced
+        if num_words >= len(words):
+            count = num_words
+        else:
+            count = len(words)
         while len(K_list) < num_words:
             K = np.random.randint(0, len(words))
             if words[K] not in punct:
                 K_list.append(K)
+            count -= 1
+            if count == 0:
+                break
 
         # Iterate over the words to be replaced
         for K in K_list:
@@ -269,11 +276,17 @@ class Masked(DataAugmentationAbstract):
         K_list = []
 
         # Select the words to be replaced
+        if num_words >= len(words):
+            count = num_words
+        else:
+            count = len(words)
         while len(K_list) < num_words:
             K = np.random.randint(0, len(words))
             if words[K] not in not_allowed:
                 K_list.append(K)
-
+            count -= 1
+            if count == 0:
+                break
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
