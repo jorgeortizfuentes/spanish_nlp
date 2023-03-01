@@ -5,10 +5,10 @@ from transformers import pipeline, AutoTokenizer
 import warnings
 from spanish_nlp.utils.stopwords import punct
 from .abstract import DataAugmentationAbstract
-import re
 
 from transformers.utils import logging
 logging.set_verbosity(40)
+
 
 
 class Masked(DataAugmentationAbstract):
@@ -106,25 +106,36 @@ class Masked(DataAugmentationAbstract):
 
         output_texts = []
         for _ in range(num_samples):
-            # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
-            n_tokens = len(self.tokenizer.tokenize(text))
-            n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))+1
-            n_splits = math.ceil((n_tokens / n_tokens_split))
-
-            if n_splits > 1:
-                new_text = self._large_sustitute_(text)
-            else:
-                new_text = self._normal_sustitute_(text)
-
+            new_text = self._augment_with_sustitute_(text)
             if new_text not in output_texts:
                 output_texts.append(new_text)
             else:
                 num_samples += 1
 
         return output_texts
+    
+    def _augment_with_sustitute_(self, sentence, num_samples=1):
+        """
+        Augments the input sentence by replacing a percentage of its non-stopword words with predicted words obtained by
+        masking them using a pre-trained language model.
 
-    def _normal_sustitute_(self, sentence, num_samples=1):
+        Args:
+            sentence (str): Input sentence to be augmented.
+        Returns:
+            str: Augmented sentence.
+        """
+        
+        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
+        n_tokens = len(self.tokenizer.tokenize(sentence))
+        n_tokens_split = int(self.tokenizer.model_max_length / (self.aug_percent+1))+1
+        n_splits = math.ceil((n_tokens / n_tokens_split))
+        if n_splits > 1:
+            return self._augment_with_sustitute_large_(sentence, num_samples=num_samples)
+        else:
+            return self._augment_with_sustitute_normal_(sentence, num_samples=num_samples)
+        
+
+    def _augment_with_sustitute_normal_(self, sentence, num_samples=1):
         """
         Augments the input sentence by replacing a percentage of its non-stopword words with predicted words obtained by
         masking them using a pre-trained language model.
@@ -136,7 +147,7 @@ class Masked(DataAugmentationAbstract):
         """
         words = sentence.split(" ")
         not_allowed = punct + self.stopwords
-
+        
         n_stopwords = sum([1 for word in words if word in not_allowed])
         n_total_words = len(words) - n_stopwords
 
@@ -152,9 +163,8 @@ class Masked(DataAugmentationAbstract):
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
-            masked_sentence = " ".join(
-                words[:K] + [self.mask_token] + words[K + 1:])
-            predictions = self.fillmask(masked_sentence, top_k=self.top_k)
+            masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K + 1 :])
+            predictions = self.fillmask(masked_sentence,top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
 
@@ -162,9 +172,7 @@ class Masked(DataAugmentationAbstract):
             count = 0
             while True:
                 random_number = np.random.randint(0, self.top_k)
-                # Check if there is a punctuation in new_word
-                pattern = "|".join(re.escape(p) for p in punct)
-                if re.search(pattern, new_word) == None and new_word not in not_allowed:
+                if new_word not in not_allowed:
                     break
                 elif count > self.top_k:
                     break
@@ -174,7 +182,7 @@ class Masked(DataAugmentationAbstract):
             sentence = predictions[random_number]["sequence"]
         return sentence
 
-    def _large_sustitute_(self, sentence, num_samples=1):
+    def _augment_with_sustitute_large_(self, sentence, num_samples=1):
         """
         Augments the input sentence by replacing a percentage of its non-stopword words with predicted words obtained by
         masking them using a pre-trained language model. This method is used for long texts that exceed the maximum token
@@ -187,21 +195,20 @@ class Masked(DataAugmentationAbstract):
         """
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
-        n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+        n_tokens_split = int(self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
         n_splits = math.ceil((n_tokens / n_tokens_split))
-        sentence_splits = self._split_text_into_chunks_(
-            sentence, n_splits=n_splits)
+        sentence_splits = self._split_text_into_chunks_(sentence, n_splits=n_splits)
 
         # Augment each chunk of the text and concatenate the results
         augmented_chunks = []
         for chunk in sentence_splits:
-            augmented_chunk = self._normal_sustitute_(chunk, num_samples=1)
+            augmented_chunk = self._augment_with_sustitute_normal_(chunk, num_samples=1)
             augmented_chunks.append(augmented_chunk)
 
         augmented_sentence = " ".join(augmented_chunks)
 
         return augmented_sentence
+
 
     def _split_text_into_chunks_(self, text, n_splits):
         """
@@ -217,9 +224,72 @@ class Masked(DataAugmentationAbstract):
         tokens = self.tokenizer.tokenize(text)
         n_tokens = len(tokens)
         chunk_size = int(n_tokens / n_splits)
-        chunks = [tokens[i:i+chunk_size]
-                  for i in range(0, n_tokens, chunk_size)]
+        chunks = [tokens[i:i+chunk_size] for i in range(0, n_tokens, chunk_size)]
         return [" ".join(chunk) for chunk in chunks]
+
+
+
+    def _augment_with_insert_(self, sentence, max_words=450):
+        """Insert a self.aug_percent% of words within the sentence (not after punctuation marks)
+
+        Args:
+            sentence (str): Input sentence to be augmented.
+        Returns:
+            str: Augmented sentence.
+        """
+        
+        words = sentence.split(" ")
+        not_allowed = punct + self.stopwords
+
+        n_stopwords = sum([1 for word in words if word in not_allowed])
+        n_total_words = len(words) - n_stopwords
+
+        num_words = int(n_total_words * self.aug_percent)
+
+        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
+        tokens = len(self.tokenizer.tokenize(sentence))
+
+        # If the sentence is too long, return it
+        if num_words > max_words or tokens > self.tokenizer.model_max_length or num_words > self.tokenizer.model_max_length:
+            warnings.warn("The sentence is too long for the model. The sentence is not augmented.")
+            return sentence
+
+
+        K_list = []
+
+        # Select the words to be replaced
+        while len(K_list) < num_words:
+            K = np.random.randint(0, len(words))
+            if words[K] not in not_allowed:
+                K_list.append(K)
+
+        # Iterate over the words to be replaced
+        for K in K_list:
+            words = sentence.split(" ")
+            masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K:])
+            predictions = self.fillmask(masked_sentence,
+                                        top_k=self.top_k)
+            random_number = np.random.randint(0, self.top_k)
+            new_word = predictions[random_number]["token_str"]
+
+            # Verify that the new word is not a punctuation or a stopword
+            count = 0
+            while True:
+                random_number = np.random.randint(0, self.top_k)
+                if new_word not in not_allowed:
+                    break
+                elif count > self.top_k:
+                    break
+                else:
+                    count += 1
+
+            # Save the new sentence
+            sentence = predictions[random_number]["sequence"]
+
+            # If the sentence is too long, stop the augmentation and return the sentence
+            if len(sentence.split(" ")) > max_words:
+                return sentence
+        return sentence
 
     def _insert_augment_(self, text, num_samples=1, max_words=450):
         """
@@ -234,93 +304,7 @@ class Masked(DataAugmentationAbstract):
         """
         output_texts = []
         for _ in range(num_samples):
-            # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
-            n_tokens = len(self.tokenizer.tokenize(text))
-            n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))+1
-            n_splits = math.ceil((n_tokens / n_tokens_split))
+            new_text = self._augment_with_insert_(text, max_words=max_words)
+            output_texts.append(new_text)
 
-            if n_splits > 1:
-                new_text = self._large_insert_(text)
-            else:
-                new_text = self._normal_insert_(text)
-
-            if new_text not in output_texts:
-                output_texts.append(new_text)
-            else:
-                num_samples += 1
         return output_texts
-
-    def _normal_insert_(self, sentence, num_samples=1):
-        """Insert a self.aug_percent% of words within the sentence (not after punctuation marks)
-
-        Args:
-            sentence (str): Input sentence to be augmented.
-        Returns:
-            str: Augmented sentence.
-        """
-
-        # Tokens that are not allowed to be replaced
-        words = sentence.split(" ")
-        not_allowed = punct + self.stopwords
-        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
-        tokens = len(self.tokenizer.tokenize(sentence))
-        num_words = int(len(words) * self.aug_percent)
-        K_list = []
-
-        # Select the words to be replaced
-        while len(K_list) < num_words:
-            K = np.random.randint(0, len(words))
-            if words[K] not in not_allowed:
-                K_list.append(K)
-
-        # Iterate over the words to be replaced
-        for K in K_list:
-            words = sentence.split(" ")
-            masked_sentence = " ".join(
-                words[:K] + [self.mask_token] + words[K:])
-            predictions = self.fillmask(masked_sentence,
-                                        top_k=self.top_k)
-            random_number = np.random.randint(0, self.top_k)
-            new_word = predictions[random_number]["token_str"]
-
-            # Verify that the new word is not a punctuation or a stopword
-            count = 0
-            while True:
-                random_number = np.random.randint(0, self.top_k)
-                pattern = "|".join(re.escape(p) for p in punct)
-                if re.search(pattern, new_word) == None and new_word not in not_allowed:
-                    break
-                elif count > self.top_k:
-                    break
-                else:
-                    count += 1
-            # Save the new sentence
-            sentence = predictions[random_number]["sequence"]
-        return sentence
-
-    def _large_insert_(self, sentence, num_samples=1):
-        """
-        Augment a text with the insert method. This method inserts new words to the text.
-
-        Args:
-            sentence (str): Input sentence to be augmented.
-        Returns:
-            str: Augmented sentence.
-        """
-        # Split the text into chunks with the desired length
-        n_tokens = len(self.tokenizer.tokenize(sentence))
-        n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
-        n_splits = math.ceil((n_tokens / n_tokens_split))
-        sentence_splits = self._split_text_into_chunks_(
-            sentence, n_splits=n_splits)
-
-        # Augment each chunk of the text and concatenate the results
-        augmented_chunks = []
-        for chunk in sentence_splits:
-            augmented_chunk = self._normal_insert_(chunk, num_samples=1)
-            augmented_chunks.append(augmented_chunk)
-
-        augmented_sentence = " ".join(augmented_chunks)
-        return augmented_sentence
