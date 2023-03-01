@@ -109,7 +109,7 @@ class Masked(DataAugmentationAbstract):
             # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
             n_tokens = len(self.tokenizer.tokenize(text))
             n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))+1
+                self.tokenizer.model_max_length+50 / (self.aug_percent+1))+1
             n_splits = math.ceil((n_tokens / n_tokens_split))
 
             if n_splits > 1:
@@ -195,7 +195,7 @@ class Masked(DataAugmentationAbstract):
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
         n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+            self.tokenizer.model_max_length+50 / (self.aug_percent+1)) + 1
         n_splits = math.ceil((n_tokens / n_tokens_split))
         sentence_splits = self._split_text_into_chunks_(
             sentence, n_splits=n_splits)
@@ -244,7 +244,7 @@ class Masked(DataAugmentationAbstract):
             # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
             n_tokens = len(self.tokenizer.tokenize(text))
             n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))+1
+                self.tokenizer.model_max_length+50 / (self.aug_percent+1))+1
             n_splits = math.ceil((n_tokens / n_tokens_split))
 
             if n_splits > 1:
@@ -324,7 +324,7 @@ class Masked(DataAugmentationAbstract):
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
         n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+            self.tokenizer.model_max_length +50/ (self.aug_percent+1)) + 1
         n_splits = math.ceil((n_tokens / n_tokens_split))
         sentence_splits = self._split_text_into_chunks_(
             sentence, n_splits=n_splits)
