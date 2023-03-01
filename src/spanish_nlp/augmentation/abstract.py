@@ -55,7 +55,7 @@ class DataAugmentationAbstract:
             # Get the number of CPUs in the system
             num_workers = os.cpu_count() - 1
         if isinstance(texts, str):
-            return self._text_augment_(texts, num_samples, num_workers)
+            return self._text_augment_(texts, num_samples)
         elif isinstance(texts, list):
             return self._list_augment_(texts, num_samples, num_workers)
         elif isinstance(texts, pd.Series):
@@ -67,7 +67,7 @@ class DataAugmentationAbstract:
                 "The texts must be a string, a list of strings or a pandas Series."
             )
 
-    def _text_augment_(self, text, num_samples):
+    def _text_augment_(self, text, num_sample):
         """
         Augment a single text.
         """
