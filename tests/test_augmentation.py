@@ -99,7 +99,7 @@ class TestMasked(unittest.TestCase):
             print(text)
             print(".....")
             print(text_aug[i])
-            self.assertTrue(text == text_aug[i])
+            self.assertFalse(text == text_aug[i])
             self.assertFalse(text == "")
 
     def test_insert_large(self):
@@ -107,7 +107,7 @@ class TestMasked(unittest.TestCase):
         text_aug = self.insert_augmentor.augment(text, 1)
         self.print_augmentations(text, text_aug, method="insert")
         for i in range(len(text_aug)):
-            self.assertTrue(text == text_aug[i])
+            self.assertFalse(text == text_aug[i])
             self.assertFalse(text == "")
 
 
