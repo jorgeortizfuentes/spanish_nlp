@@ -1,4 +1,5 @@
 import unittest
+import pandas as pd
 
 from spanish_nlp import augmentation
 
@@ -109,6 +110,15 @@ class TestMasked(unittest.TestCase):
         for i in range(len(text_aug)):
             self.assertFalse(text == text_aug[i])
             self.assertFalse(text == "")
+
+    def test_pandas(self):
+        texts = ["soy un texto para probar pandas en ste test"]*100
+        df = pd.DataFrame({"text": texts})
+        df["sustitute"] = self.sustitute_augmentor.augment(df["text"], num_workers=1)
+        df["insert"] = self.insert_augmentor.augment(df["text"], num_workers=1)
+        # Compare if df["text"] is equal to df["sustitute"] or df["insert"]
+        self.assertFalse(df["text"].equals(df["sustitute"]))
+        self.assertFalse(df["text"].equals(df["insert"]))
 
 
 if __name__ == "__main__":

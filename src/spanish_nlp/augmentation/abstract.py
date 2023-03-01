@@ -31,7 +31,9 @@ import os
 import es_core_news_sm
 import pandas as pd
 from datasets import load_dataset
-
+from tqdm import tqdm
+tqdm.pandas()
+import swifter
 
 class DataAugmentationAbstract:
     """
@@ -53,7 +55,7 @@ class DataAugmentationAbstract:
             # Get the number of CPUs in the system
             num_workers = os.cpu_count() - 1
         if isinstance(texts, str):
-            return self._text_augment_(texts, num_samples)
+            return self._text_augment_(texts, num_samples, num_workers)
         elif isinstance(texts, list):
             return self._list_augment_(texts, num_samples, num_workers)
         elif isinstance(texts, pd.Series):
@@ -83,18 +85,33 @@ class DataAugmentationAbstract:
         """
         Augment a pandas Series.
         """
-        return texts.swifter.apply(
-            self._text_augment_,
-            num_samples=num_samples,
-            num_workers=num_workers,
-        )
+        # return texts.progress_apply(
+        #     self._text_augment_,
+        # )
+        if num_workers == 1:
+            return texts.progress_apply(
+                self._text_augment_,
+                num_samples=num_samples
+            )
+        else:
+            return texts.swifter.apply(
+                self._text_augment_,
+                num_samples=num_samples,
+            )
 
     def _datasets_augment_(self, dataset, num_samples, num_workers):
         """
         Augment a datasets Dataset.
         """
-        # Not Implemented yet, return error
-        raise NotImplementedError("This method is not implemented yet.")
+        # Apply self._text_augment_(text) to every text in dataset["text"] (HuggingFace datasets)
+        dataset = dataset.map(
+            self._text_augment_,
+            batched=True,
+            num_proc=num_workers,
+            load_from_cache_file=False,
+        )
+        return dataset
+
 
     def _load_default_tokenizer_(self):
         # import es_core_news_sm if it is not imported
