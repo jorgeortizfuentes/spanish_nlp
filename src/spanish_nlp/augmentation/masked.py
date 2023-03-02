@@ -109,8 +109,8 @@ class Masked(DataAugmentationAbstract):
             # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
             n_tokens = len(self.tokenizer.tokenize(text))
             n_tokens_split = int(
-                self.tokenizer.model_max_length/ (self.aug_percent+1))
-            n_splits = math.ceil((n_tokens / n_tokens_split+30))
+                self.tokenizer.model_max_length / (self.aug_percent+1))+1
+            n_splits = math.ceil((n_tokens / n_tokens_split))
 
             if n_splits > 1:
                 new_text = self._large_sustitute_(text)
@@ -144,17 +144,10 @@ class Masked(DataAugmentationAbstract):
         K_list = []
 
         # Select the words to be replaced
-        if num_words >= len(words):
-            count = num_words
-        else:
-            count = len(words)
         while len(K_list) < num_words:
             K = np.random.randint(0, len(words))
             if words[K] not in punct:
                 K_list.append(K)
-            count -= 1
-            if count == 0:
-                break
 
         # Iterate over the words to be replaced
         for K in K_list:
@@ -195,8 +188,8 @@ class Masked(DataAugmentationAbstract):
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
         n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) 
-        n_splits = math.ceil((n_tokens / n_tokens_split+30))
+            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+        n_splits = math.ceil((n_tokens / n_tokens_split))
         sentence_splits = self._split_text_into_chunks_(
             sentence, n_splits=n_splits)
 
@@ -244,8 +237,8 @@ class Masked(DataAugmentationAbstract):
             # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
             n_tokens = len(self.tokenizer.tokenize(text))
             n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))
-            n_splits = math.ceil((n_tokens / n_tokens_split+30))
+                self.tokenizer.model_max_length / (self.aug_percent+1))+1
+            n_splits = math.ceil((n_tokens / n_tokens_split))
 
             if n_splits > 1:
                 new_text = self._large_insert_(text)
@@ -276,17 +269,11 @@ class Masked(DataAugmentationAbstract):
         K_list = []
 
         # Select the words to be replaced
-        if num_words >= len(words):
-            count = num_words
-        else:
-            count = len(words)
         while len(K_list) < num_words:
             K = np.random.randint(0, len(words))
             if words[K] not in not_allowed:
                 K_list.append(K)
-            count -= 1
-            if count == 0:
-                break
+
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
@@ -324,8 +311,8 @@ class Masked(DataAugmentationAbstract):
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
         n_tokens_split = int(
-            self.tokenizer.model_max_length/ (self.aug_percent+1))
-        n_splits = math.ceil((n_tokens / n_tokens_split+30))
+            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+        n_splits = math.ceil((n_tokens / n_tokens_split))
         sentence_splits = self._split_text_into_chunks_(
             sentence, n_splits=n_splits)
 
