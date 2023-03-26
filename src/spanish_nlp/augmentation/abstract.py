@@ -30,10 +30,11 @@ import os
 
 import es_core_news_sm
 import pandas as pd
+import swifter
+
 from datasets import load_dataset
 from tqdm import tqdm
 tqdm.pandas()
-import swifter
 
 class DataAugmentationAbstract:
     """

@@ -138,15 +138,10 @@ ocr = augmentation.Spelling(method="ocr",
                             aug_percent=0.3, 
                             tokenizer="default")
 
-keyboard = augmentation.Spelling(method="keyboard", 
-                                    stopwords="default", 
-                                    aug_percent=0.3, 
-                                    tokenizer="default")
-
-orthography = augmentation.Spelling(method="orthography", 
-                                    stopwords="default", 
-                                    aug_percent=0.3, 
-                                    tokenizer="default")
+grapheme_spelling = augmentation.Spelling(method="grapheme_spelling", 
+                                          stopwords="default", 
+                                          aug_percent=0.3, 
+                                          tokenizer="default")
 
 masked_sustitute = augmentation.Masked(method="sustitute", 
                                        model="dccuchile/bert-base-spanish-wwm-cased",
@@ -156,22 +151,13 @@ masked_sustitute = augmentation.Masked(method="sustitute",
                                        device="cpu",
                                        top_k=10)
 
-masked_insert = augmentation.Masked(method="insert", 
-                                    model="dccuchile/bert-base-spanish-wwm-cased",
-                                    tokenizer="default",
-                                    stopwords="default",
-                                    aug_percent=0.4,
-                                    device="cpu",
-                                    top_k=10)
 
 text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
 
 new_texts = [text]
 new_texts.append(ocr.augment(text, num_samples=1, num_workers=1))
-new_texts.append(keyboard.augment(text, num_samples=1, num_workers=1))
-new_texts.append(orthography.augment(text, num_samples=1, num_workers=1))
+new_texts.append(grapheme_spelling.augment(text, num_samples=1, num_workers=1))
 new_texts.append(masked_sustitute.augment(text, num_samples=1))
-new_texts.append(masked_insert.augment(text, num_samples=1))
 
 for t in new_texts:
     print(t)
@@ -183,15 +169,11 @@ Output:
 ```bash
 En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.
 ---
-['En a9uel tleWpo Vo t3nía velnt3 aNos y es7aba locQ. Ha8ía pePdido Vn paí8 pePQ había ganad0 un sueñQ. Y si 73nía 35e sueño lo d3más no lmRoPtaba. Hi tra8aLar nl P3zar nl 3stuOiar 3n la ma0rugada Lun7Q a los perr0s roWántiGQs.']
+['En a9uel tiempo yo tenía veint3 años y e8ta8a 1oco. Había Rerd1dQ un RaíB pePQ había ganado Vn su3ño. Y si tenía es3 BVeno lo 0emáB n0 iWRQPtaEa. N1 trabajar ni rezar ni 3s7ud1ar en la maOrVga0a junto a 1os p3rPo8 Pománt1Go5.']
 ---
-['En zquel tuempl yo henía veinte aloe y ezhavs lkdo. Havía lerwido ub oqís pfgo había gwnzxo jj susoo. Y si trníx ese sueño lp wemás no importaba. Ni tragajar ji reaaf no esguriat en la ksetuhada uunto a pke perrls dományicos.']
+['Em akel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero  abía janado um sueño. Y si temía ese sueño lo demás no importava. Ni trabajar ni rezar ni estudiar em la nadrugada junto a los perros románticos.']
 ---
-['En aquel tiempo yo tenía beinte años y estaba loco. Había perdido um país pero  abía gamado um sueño. Y si temía ese sueño lo denás no importava. Ni trabajar ni rezar ni estudiar en la madrujada junto a los perros románticos.']
----
-['En aquel tiempo yo tenía 16 años y estaba. Ven roto un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos.!']
----
-['En aquel tiempo yo tenía veintesieteés años y estaba muy loco. Habían perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los viejos viejos perros. románticos.']
+['En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía mi sueño lo demás no importaba. ni trabajar ni rezar ni estudiar en la madrugada junto a los clubes románticos.']
 ---
 ```
 
