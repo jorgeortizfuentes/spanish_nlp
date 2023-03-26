@@ -7,15 +7,19 @@ class TestSpelling(unittest.TestCase):
         self.keyboard_augmentator = augmentation.Spelling(method="keyboard")
         self.ocr_augmentator = augmentation.Spelling(method="ocr")
         self.random_augmentator = augmentation.Spelling(method="random")
-        self.orthography_augmentator = augmentation.Spelling(
-            method="orthography"
+        self.grapheme_augmentator = augmentation.Spelling(
+            method="grapheme_spelling"
         )
+        self.word_augmentator = augmentation.Spelling(method="word_spelling")
         self.remove_punctuation_augmentator = augmentation.Spelling(
             method="remove_punctuation"
         )
         self.remove_accents_augmentator = augmentation.Spelling(
             method="remove_accents"
         )
+        self.lowercase_augmentator = augmentation.Spelling(method="lowercase")
+        self.uppercase_augmentator = augmentation.Spelling(method="uppercase")
+        self.randomcase_augmentator = augmentation.Spelling(method="randomcase")
         self.all_augmentator = augmentation.Spelling(method="all")
         self.text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
         
@@ -49,23 +53,51 @@ class TestSpelling(unittest.TestCase):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
 
-    def test_orthography_augment(self):
-        text_aug = self.orthography_augmentator.augment(self.text, 1)
-        self.print_augmentations(self.text, text_aug, method="orthography")
+    def test_grapheme_spelling_augment(self):
+        text_aug = self.grapheme_augmentator.augment(self.text, 1)
+        self.print_augmentations(self.text, text_aug, method="grapheme_spelling")
         for i in range(len(text_aug)):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
 
+    def test_word_spelling_augment(self):
+        text_aug = self.word_augmentator.augment(self.text, 1)
+        self.print_augmentations(self.text, text_aug, method="word_spelling")
+        for i in range(len(text_aug)):
+            self.assertTrue(self.text == text_aug[i])
+            self.assertFalse(self.text == "")
+    
     def test_remove_punctuation_augment(self):
         text_aug = self.remove_punctuation_augmentator.augment(self.text, 1)
-        self.print_augmentations(self.text, text_aug, method="orthography")
+        self.print_augmentations(self.text, text_aug, method="remove_punctuation")
         for i in range(len(text_aug)):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
 
     def test_remove_accents_augment(self):
         text_aug = self.remove_accents_augmentator.augment(self.text, 1)
-        self.print_augmentations(self.text, text_aug, method="orthography")
+        self.print_augmentations(self.text, text_aug, method="remove_accents")
+        for i in range(len(text_aug)):
+            self.assertFalse(self.text == text_aug[i])
+            self.assertFalse(self.text == "")
+
+    def test_lowercase_augment(self):
+        text_aug = self.lowercase_augmentator.augment(self.text, 1)
+        self.print_augmentations(self.text, text_aug, method="lowercase")
+        for i in range(len(text_aug)):
+            self.assertFalse(self.text == text_aug[i])
+            self.assertFalse(self.text == "")
+    
+    def test_uppercase_augment(self):
+        text_aug = self.uppercase_augmentator.augment(self.text, 1)
+        self.print_augmentations(self.text, text_aug, method="uppercase")
+        for i in range(len(text_aug)):
+            self.assertFalse(self.text == text_aug[i])
+            self.assertFalse(self.text == "")
+    
+    def test_randomcase_augment(self):
+        text_aug = self.randomcase_augmentator.augment(self.text, 1)
+        self.print_augmentations(self.text, text_aug, method="randomcase")
         for i in range(len(text_aug)):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
