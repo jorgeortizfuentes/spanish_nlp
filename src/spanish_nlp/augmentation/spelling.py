@@ -23,20 +23,24 @@ class Spelling(DataAugmentationAbstract):
         """
         super().__init__(method)
 
-        if self.method not in [
+        available_methods = [
             "keyboard",
             "ocr",
             "random",
-            "orthography",
+            "grapheme_spelling",
+            "word_spelling",
             "remove_punctuation",
             "remove_accents",
             "lowercase",
             "uppercase",
             "randomcase",
             "all",
-        ]:
+        ]
+        
+        if self.method not in available_methods:
+            str_methods = ", ".join(available_methods)
             raise ValueError(
-                "The method must be 'keyboard', 'ocr', 'random','orthography', 'remove_punctuation' or 'all'"
+                f"Method not available. The method must be {str_methods}."
             )
 
         self.aug_percent = aug_percent
@@ -72,8 +76,10 @@ class Spelling(DataAugmentationAbstract):
             return self._ocr_augment_(text, num_samples)
         elif self.method == "random":
             return self._random_augment_(text, num_samples)
-        elif self.method == "orthography":
-            return self._orthography_augment_(text, num_samples)
+        elif self.method == "grapheme_spelling":
+            return self._grapheme_spelling_augment_(text, num_samples)
+        elif self.method == "word_spelling":
+            return self._word_spelling_augmentation_(text, num_samples)
         elif self.method == "remove_punctuation":
             return self._remove_punctuation_augment_(text, num_samples)
         elif self.method == "remove_accents":
@@ -81,14 +87,14 @@ class Spelling(DataAugmentationAbstract):
         elif self.method == "lowercase":
             return self._lowercase_augmentation_(text, num_samples)
         elif self.method == "uppercase":
-            self._uppercase_augmentation_(text, num_samples)
+            return self._uppercase_augmentation_(text, num_samples)
         elif self.method == "randomcase":
-            self._random_case_augmentation_(text, num_samples)
+            return self._random_case_augmentation_(text, num_samples)
         elif self.method == "all":
             return self._all_augment_(text, num_samples)
         else:
             raise ValueError(
-                "The method must be 'keyboard', 'ocr', 'random','orthography' or 'all'"
+                "Invalid method"
             )
 
     def _set_keyboard_augment_dict_(self):
@@ -332,11 +338,11 @@ class Spelling(DataAugmentationAbstract):
             output_texts.append(output_text)
         return output_texts
 
-    def _set_orthography_dict_(self):
+    def _set_grapheme_spelling_dict_(self):
         """
-        Set the orthography dictionary
+        Set the grapheme_spelling dictionary
         """
-        orthography_dict = {
+        grapheme_spelling_dict = {
             "mb": "nv",
             "nv": "mb",
             "m": "n",
@@ -353,7 +359,7 @@ class Spelling(DataAugmentationAbstract):
             "ci": "si",
         }
 
-        self.orthography_dict = orthography_dict
+        self.grapheme_spelling_dict = grapheme_spelling_dict
 
     def __find_substring_indexes__(self, string, substring):
         """Find all indexes of a substring in a string.
@@ -369,22 +375,22 @@ class Spelling(DataAugmentationAbstract):
         matches = pattern.finditer(string)
         return [(match.start(), match.end() - 1) for match in matches]
 
-    def _orthography_augment_(self, text, num_samples):
+    def _grapheme_spelling_augment_(self, text, num_samples):
         """
-        Increase textual data by modifying characters randomly according to the common orthographys for Spanish
+        Increase textual data by modifying characters randomly according to the common grapheme_spellings for Spanish
 
         TODO: improve this function because only replace the first occurrence of the token
         """
-        # If self.orthography_dict is not defined, define it
-        if not hasattr(self, "orthography_dict"):
-            self._set_orthography_dict_()
+        # If self.grapheme_spelling_dict is not defined, define it
+        if not hasattr(self, "grapheme_spelling_dict"):
+            self._set_grapheme_spelling_dict_()
         # List to save the augmented texts
         output_texts = []
 
         # Count the times that are self.keyboard_augment_dict keys in the text with self.__find_substring_indexes__(string, substring)
         aparitions = [
             self.__find_substring_indexes__(text, key)
-            for key in self.orthography_dict.keys()
+            for key in self.grapheme_spelling_dict.keys()
         ]
         # Join all the sublists in a single list
         # Get the number of characters to augment
@@ -399,7 +405,7 @@ class Spelling(DataAugmentationAbstract):
                 start = e[0]
                 end = e[1] + 1
                 substring = new_text[start:end]
-                replacement = self.orthography_dict[substring]
+                replacement = self.grapheme_spelling_dict[substring]
                 # Select a random element from the list of replacements
                 # replacement = random.choice(replacement)
                 start_str = new_text[:start]
@@ -474,8 +480,6 @@ class Spelling(DataAugmentationAbstract):
         """Randomly chooses words containing at least one capital letter 
         and converts them to lowercase according to the aug_percent.
         
-        Don't use .join() because it will remove the spaces between words
-
         Args:
             text (str): text to augment
             num_samples (int): number of samples to generate
@@ -484,16 +488,20 @@ class Spelling(DataAugmentationAbstract):
         output_texts = []
         uppercase_words = []
         word = ""
+        start = 0
         # Add to uppercase_words the words (separated by spaces) with at least one letter uppercase ({'word': 'word', 'start': first_int, 'end': last_int}})
         for index, character in enumerate(text):
-            if character.isupper():
+            if character != " ":
                 word += character
-            elif word:
-                uppercase_words.append({'word': word, 'start': index - len(word), 'end': index})
+            else:
+                end = index
+                if any(char.isupper() for char in word):
+                    uppercase_words.append(
+                        {"word": word, "start": index - len(word), "end": index}
+                    )  
+                start = index+1
                 word = ""
-            if word:
-                uppercase_words.append({'word': word, 'start': len(text) - len(word), 'end': len(text)})
-        return uppercase_words
+                
         # Num of words to lowercase
         num_aug = ceil(len(uppercase_words) * self.aug_percent)
         for i in range(num_samples):
@@ -509,31 +517,42 @@ class Spelling(DataAugmentationAbstract):
         return output_texts
 
     def _uppercase_augmentation_(self, text, num_samples):
-        """Randomly uppercase words in the text according to the aug_percent
-
+        """Randomly chooses words containing at least one lower letter 
+        and converts them to lowercase according to the aug_percent.
+        
         Args:
             text (str): text to augment
             num_samples (int): number of samples to generate
         """
         # List to save the augmented texts
         output_texts = []
-        # List of all words
-        words = text.split()
-        # Count the number of words with at least one letter uppercase
-        words = [w for w in words if w != w.lower()]
-        num_aug = len(words) * self.aug_percent
-        # Round by the upper integer
-        num_aug = ceil(num_aug)
-        print(num_aug)
+        lowercase_worsd = []
+        word = ""
+        start = 0
+        # Add to lowercase_worsd the words (separated by spaces) with at least one letter lowercase ({'word': 'word', 'start': first_int, 'end': last_int}})
+        for index, character in enumerate(text):
+            if character != " ":
+                word += character
+            else:
+                end = index
+                if any(char.islower() for char in word):
+                    lowercase_worsd.append(
+                        {"word": word, "start": index - len(word), "end": index}
+                    )  
+                start = index+1
+                word = ""
+                
+        # Num of words to lowercase
+        num_aug = ceil(len(lowercase_worsd) * self.aug_percent)
         for i in range(num_samples):
             # Copy the original text
             new_text = text
-            # Choose a random subset of words to uppercase
-            selected_words = random.sample(words, num_aug)
-            # Uppercase the selected words in the new text
+            # Choose a random subset of words to lowercase
+            selected_words = random.sample(lowercase_worsd, num_aug)
+            # Lowercase the selected words in the new text
             for word in selected_words:
-                new_text = new_text.replace(word, word.upper())
-            # Add the new text to the output list
+                new_word = word["word"].upper()
+                new_text = new_text[:word["start"]] + new_word + new_text[word["end"]:]
             output_texts.append(new_text)
         return output_texts
 
@@ -546,32 +565,23 @@ class Spelling(DataAugmentationAbstract):
         """
         # List to save the augmented texts
         output_texts = []
-        # List with the punctuation to eliminate
-        punctuation = [".", ",", "¡", "¿"]
-        num_text_punctuation = [c for c in text if c in punctuation]
-        num_aug = len(num_text_punctuation) * self.aug_percent
-        # Round by the upper integer
-        num_aug = ceil(num_aug)
+        half_aug_percent = self.aug_percent / 2
+        
         for i in range(num_samples):
+            # Copy the original text
             new_text = text
-            # Get the indices of the punctuation to eliminate
-            indices = [i for i, c in enumerate(new_text) if c in punctuation]
-            # Create a list with num_aug elements in indices without repetition
-            elements = random.sample(indices, num_aug)
-            # Replace every element with accent with the same element without accent
-            for e in elements:
-                new_e = (
-                    new_text[e].lower()
-                    if random.random() > 0.5
-                    else new_text[e].upper()
-                )
-                new_text = new_text[:e] + new_e + new_text[e + 1 :]
-
+            # Lowercase the text
+            new_text = new_text.lower()
+            # Uppercase the text
+            new_text = self._uppercase_augmentation_(new_text, 1)[0]
+            # Lowercase the text
+            new_text = self._lowercase_augmentation_(new_text, 1)[0]
             # Append the augmented text to the list
             output_texts.append(new_text)
         return output_texts
+        
 
-    def _load_misspelled_words_dictionary_(self):
+    def _load_mispelled_words_dictionary_(self):
         """
         Set the dictionary of misspelled words
         """
@@ -582,20 +592,36 @@ class Spelling(DataAugmentationAbstract):
         with open(json_path, "r") as f:
             self.misspelled_dict = json.load(f)
 
+    def _word_spelling_augmentation_(self, text, num_samples):
+        """ Randomly chooses words from a dictionary and replaces them with a random misspelled word 
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # If self.misspelled_dict is not defined, define it
+        if not hasattr(self, "misspelled_dict"):
+            self._load_mispelled_words_dictionary_()
+        output_texts = []
+        return output_texts
+        
+        
+
     def _all_augment_(self, text, num_samples):
         """
-        Increase textual data by modifying characters randomly according to the common orthographys for Spanish
+        Increase textual data by modifying characters randomly according to the common grapheme_spellings for Spanish
         """
         aug_percent = self.aug_percent
-        self.aug_percent = aug_percent / 4
+        self.aug_percent = aug_percent / 7
         output_texts = []
         for i in range(num_samples):
-            text = self._orthography_augment_(text, 1)
+            text = self._grapheme_spelling_augment_(text, 1)
             text = self._keyboard_augment_(text[0], 1)
             text = self._ocr_augment_(text[0], 1)
             text = self._remove_punctuation_augment_(text[0], 1)
             text = self._remove_accents_augmentation_(text[0], 1)
-            # text = self._random_augment_(text[0], 1)
+            text = self._random_augment_(text[0], 1)
+            text = self._random_case_augmentation_(text[0], 1)
             output_texts.append(text[0])
         self.aug_percent = aug_percent
         return output_texts
