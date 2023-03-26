@@ -1,0 +1,17 @@
+pandas
+emoji
+nltk
+torch
+transformers
+datasets
+swifter
+kaleido
+es_core_news_sm
+flit
+twine
+sphinx
+parameterized
+myst-parser
+pytest
+hatchling
+unidecode
