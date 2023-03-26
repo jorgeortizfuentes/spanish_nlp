@@ -36,7 +36,7 @@ class Spelling(DataAugmentationAbstract):
             "randomcase",
             "all",
         ]
-        
+
         if self.method not in available_methods:
             str_methods = ", ".join(available_methods)
             raise ValueError(
@@ -93,9 +93,7 @@ class Spelling(DataAugmentationAbstract):
         elif self.method == "all":
             return self._all_augment_(text, num_samples)
         else:
-            raise ValueError(
-                "Invalid method"
-            )
+            raise ValueError("Invalid method")
 
     def _set_keyboard_augment_dict_(self):
         """Create keyboard augment dict for qwerty keyboard"""
@@ -379,7 +377,6 @@ class Spelling(DataAugmentationAbstract):
         """
         Increase textual data by modifying characters randomly according to the common grapheme_spellings for Spanish
 
-        TODO: improve this function because only replace the first occurrence of the token
         """
         # If self.grapheme_spelling_dict is not defined, define it
         if not hasattr(self, "grapheme_spelling_dict"):
@@ -477,9 +474,9 @@ class Spelling(DataAugmentationAbstract):
         return output_texts
 
     def _lowercase_augmentation_(self, text, num_samples):
-        """Randomly chooses words containing at least one capital letter 
+        """Randomly chooses words containing at least one capital letter
         and converts them to lowercase according to the aug_percent.
-        
+
         Args:
             text (str): text to augment
             num_samples (int): number of samples to generate
@@ -497,11 +494,15 @@ class Spelling(DataAugmentationAbstract):
                 end = index
                 if any(char.isupper() for char in word):
                     uppercase_words.append(
-                        {"word": word, "start": index - len(word), "end": index}
-                    )  
-                start = index+1
+                        {
+                            "word": word,
+                            "start": index - len(word),
+                            "end": index,
+                        }
+                    )
+                start = index + 1
                 word = ""
-                
+
         # Num of words to lowercase
         num_aug = ceil(len(uppercase_words) * self.aug_percent)
         for i in range(num_samples):
@@ -512,14 +513,18 @@ class Spelling(DataAugmentationAbstract):
             # Lowercase the selected words in the new text
             for word in selected_words:
                 new_word = word["word"].lower()
-                new_text = new_text[:word["start"]] + new_word + new_text[word["end"]:]
+                new_text = (
+                    new_text[: word["start"]]
+                    + new_word
+                    + new_text[word["end"] :]
+                )
             output_texts.append(new_text)
         return output_texts
 
     def _uppercase_augmentation_(self, text, num_samples):
-        """Randomly chooses words containing at least one lower letter 
+        """Randomly chooses words containing at least one lower letter
         and converts them to lowercase according to the aug_percent.
-        
+
         Args:
             text (str): text to augment
             num_samples (int): number of samples to generate
@@ -537,11 +542,15 @@ class Spelling(DataAugmentationAbstract):
                 end = index
                 if any(char.islower() for char in word):
                     lowercase_worsd.append(
-                        {"word": word, "start": index - len(word), "end": index}
-                    )  
-                start = index+1
+                        {
+                            "word": word,
+                            "start": index - len(word),
+                            "end": index,
+                        }
+                    )
+                start = index + 1
                 word = ""
-                
+
         # Num of words to lowercase
         num_aug = ceil(len(lowercase_worsd) * self.aug_percent)
         for i in range(num_samples):
@@ -552,7 +561,11 @@ class Spelling(DataAugmentationAbstract):
             # Lowercase the selected words in the new text
             for word in selected_words:
                 new_word = word["word"].upper()
-                new_text = new_text[:word["start"]] + new_word + new_text[word["end"]:]
+                new_text = (
+                    new_text[: word["start"]]
+                    + new_word
+                    + new_text[word["end"] :]
+                )
             output_texts.append(new_text)
         return output_texts
 
@@ -566,7 +579,7 @@ class Spelling(DataAugmentationAbstract):
         # List to save the augmented texts
         output_texts = []
         half_aug_percent = self.aug_percent / 2
-        
+
         for i in range(num_samples):
             # Copy the original text
             new_text = text
@@ -579,7 +592,6 @@ class Spelling(DataAugmentationAbstract):
             # Append the augmented text to the list
             output_texts.append(new_text)
         return output_texts
-        
 
     def _load_mispelled_words_dictionary_(self):
         """
@@ -593,7 +605,7 @@ class Spelling(DataAugmentationAbstract):
             self.misspelled_dict = json.load(f)
 
     def _word_spelling_augmentation_(self, text, num_samples):
-        """ Randomly chooses words from a dictionary and replaces them with a random misspelled word 
+        """Randomly chooses words from a dictionary and replaces them with a random misspelled word
 
         Args:
             text (str): text to augment
@@ -603,9 +615,24 @@ class Spelling(DataAugmentationAbstract):
         if not hasattr(self, "misspelled_dict"):
             self._load_mispelled_words_dictionary_()
         output_texts = []
+        # Split the text in words
+        words = text.split(" ")
+        # Check words in the dictionary
+        words = [word for word in words if word in self.misspelled_dict]
+        # Num of words to replace
+        num_aug = ceil(len(words) * self.aug_percent)
+        for i in range(num_samples):
+            # Copy the original text
+            new_text = text
+            # Choose a random subset of words to replace
+            selected_words = random.sample(words, num_aug)
+            # Replace the selected words in the new text
+            for word in selected_words:
+                # Select a random misspelled word
+                new_word = random.choice(self.misspelled_dict[word])
+                new_text = new_text.replace(word, new_word)
+            output_texts.append(new_text)
         return output_texts
-        
-        
 
     def _all_augment_(self, text, num_samples):
         """
