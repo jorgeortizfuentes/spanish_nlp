@@ -1,6 +1,10 @@
 import re
 
 import numpy as np
+from math import ceil
+from unidecode import unidecode
+import json
+import os
 
 from .abstract import DataAugmentationAbstract
 import random
@@ -24,10 +28,15 @@ class Spelling(DataAugmentationAbstract):
             "ocr",
             "random",
             "orthography",
+            "remove_punctuation",
+            "remove_accents",
+            "lowercase",
+            "uppercase",
+            "randomcase",
             "all",
         ]:
             raise ValueError(
-                "The method must be 'keyboard', 'ocr', 'random','orthography' or 'all'"
+                "The method must be 'keyboard', 'ocr', 'random','orthography', 'remove_punctuation' or 'all'"
             )
 
         self.aug_percent = aug_percent
@@ -65,6 +74,16 @@ class Spelling(DataAugmentationAbstract):
             return self._random_augment_(text, num_samples)
         elif self.method == "orthography":
             return self._orthography_augment_(text, num_samples)
+        elif self.method == "remove_punctuation":
+            return self._remove_punctuation_augment_(text, num_samples)
+        elif self.method == "remove_accents":
+            return self._remove_accents_augmentation_(text, num_samples)
+        elif self.method == "lowercase":
+            return self._lowercase_augmentation_(text, num_samples)
+        elif self.method == "uppercase":
+            self._uppercase_augmentation_(text, num_samples)
+        elif self.method == "randomcase":
+            self._random_case_augmentation_(text, num_samples)
         elif self.method == "all":
             return self._all_augment_(text, num_samples)
         else:
@@ -122,7 +141,8 @@ class Spelling(DataAugmentationAbstract):
 
             # Get the indices of the characters to augment
             aug_indices = np.random.choice(
-                range(len(text)), num_aug, replace=False)
+                range(len(text)), num_aug, replace=False
+            )
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
             # Get the augmented characters
@@ -226,7 +246,8 @@ class Spelling(DataAugmentationAbstract):
             num_aug = int(len(text) * self.aug_percent)
             # Get the indices of the characters to augment
             aug_indices = np.random.choice(
-                range(len(text)), num_aug, replace=False)
+                range(len(text)), num_aug, replace=False
+            )
 
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
@@ -292,7 +313,8 @@ class Spelling(DataAugmentationAbstract):
             num_aug = int(len(text) * self.aug_percent)
             # Get the indices of the characters to augment
             aug_indices = np.random.choice(
-                range(len(text)), num_aug, replace=False)
+                range(len(text)), num_aug, replace=False
+            )
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
             # Get the augmented characters if they are in the alphabet
@@ -304,6 +326,7 @@ class Spelling(DataAugmentationAbstract):
             output_text = list(text)
             for j in range(num_aug):
                 output_text[aug_indices[j]] = aug_chars[j]
+
             output_text = "".join(output_text)
             # Append the augmented text to the list
             output_texts.append(output_text)
@@ -320,10 +343,10 @@ class Spelling(DataAugmentationAbstract):
             "n": "m",
             "v": "b",
             "b": "v",
-            # "ll": "y",
-            # "y": "ll",
+            "ll": "y汉",  # then replace "汉" to ""
+            "y": "漢",  # then replace "漢" to "ll",
             "h": " ",
-            # "qu": "k",
+            "qu": "k汉",  # then replace "汉" to ""
             "g": "j",
             "j": "g",
             "z": "s",
@@ -374,17 +397,190 @@ class Spelling(DataAugmentationAbstract):
             elements = random.sample(aparitions, num_aug)
             for e in elements:
                 start = e[0]
-                end = e[1]+1
+                end = e[1] + 1
                 substring = new_text[start:end]
                 replacement = self.orthography_dict[substring]
                 # Select a random element from the list of replacements
-                replacement = random.choice(replacement)
+                # replacement = random.choice(replacement)
                 start_str = new_text[:start]
                 end_str = new_text[end:] if end < len(new_text) else ""
                 new_text = start_str + replacement + end_str
+
+            # Replace auxiliar characters
+            new_text = new_text.replace("汉", "")
+            new_text = new_text.replace("漢", "ll")
             # Append the augmented text to the list
             output_texts.append(new_text)
         return output_texts
+
+    def _remove_punctuation_augment_(self, text, num_samples):
+        """Remove punctuation in the text according to the aug_percent
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # List to save the augmented texts
+        output_texts = []
+        # List with the punctuation to eliminate
+        punctuation = [".", ",", "¡", "¿"]
+        num_text_punctuation = [c for c in text if c in punctuation]
+        num_aug = len(num_text_punctuation) * self.aug_percent
+        # Round by the upper integer
+        num_aug = ceil(num_aug)
+        for i in range(num_samples):
+            new_text = text
+            # Get the indices of the punctuation to eliminate
+            indices = [i for i, c in enumerate(new_text) if c in punctuation]
+            # Create a list with num_aug elements in indices without repetition
+            elements = random.sample(indices, num_aug)
+            for e in elements:
+                new_text = new_text[:e] + new_text[e + 1 :]
+            # Append the augmented text to the list
+            output_texts.append(new_text)
+        return output_texts
+
+    def _remove_accents_augmentation_(self, text, num_samples):
+        """Remove accents in the text according to the aug_percent
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # List to save the augmented texts
+        output_texts = []
+        # List with the punctuation to eliminate
+        accents = ["á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", "ü", "Ü"]
+        num_text_accents = [c for c in text if c in accents]
+        num_aug = len(num_text_accents) * self.aug_percent
+        # Round by the upper integer
+        num_aug = ceil(num_aug)
+        for i in range(num_samples):
+            new_text = text
+            # Get the indices of the punctuation to eliminate
+            indices = [i for i, c in enumerate(new_text) if c in accents]
+            # Create a list with num_aug elements in indices without repetition
+            elements = random.sample(indices, num_aug)
+            # Replace every element with accent with the same element without accent
+            for e in elements:
+                new_e = unidecode(new_text[e])
+                new_text = new_text[:e] + new_e + new_text[e + 1 :]
+
+            # Append the augmented text to the list
+            output_texts.append(new_text)
+        return output_texts
+
+    def _lowercase_augmentation_(self, text, num_samples):
+        """Randomly chooses words containing at least one capital letter 
+        and converts them to lowercase according to the aug_percent.
+        
+        Don't use .join() because it will remove the spaces between words
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # List to save the augmented texts
+        output_texts = []
+        uppercase_words = []
+        word = ""
+        # Add to uppercase_words the words (separated by spaces) with at least one letter uppercase ({'word': 'word', 'start': first_int, 'end': last_int}})
+        for index, character in enumerate(text):
+            if character.isupper():
+                word += character
+            elif word:
+                uppercase_words.append({'word': word, 'start': index - len(word), 'end': index})
+                word = ""
+            if word:
+                uppercase_words.append({'word': word, 'start': len(text) - len(word), 'end': len(text)})
+        return uppercase_words
+        # Num of words to lowercase
+        num_aug = ceil(len(uppercase_words) * self.aug_percent)
+        for i in range(num_samples):
+            # Copy the original text
+            new_text = text
+            # Choose a random subset of words to lowercase
+            selected_words = random.sample(uppercase_words, num_aug)
+            # Lowercase the selected words in the new text
+            for word in selected_words:
+                new_word = word["word"].lower()
+                new_text = new_text[:word["start"]] + new_word + new_text[word["end"]:]
+            output_texts.append(new_text)
+        return output_texts
+
+    def _uppercase_augmentation_(self, text, num_samples):
+        """Randomly uppercase words in the text according to the aug_percent
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # List to save the augmented texts
+        output_texts = []
+        # List of all words
+        words = text.split()
+        # Count the number of words with at least one letter uppercase
+        words = [w for w in words if w != w.lower()]
+        num_aug = len(words) * self.aug_percent
+        # Round by the upper integer
+        num_aug = ceil(num_aug)
+        print(num_aug)
+        for i in range(num_samples):
+            # Copy the original text
+            new_text = text
+            # Choose a random subset of words to uppercase
+            selected_words = random.sample(words, num_aug)
+            # Uppercase the selected words in the new text
+            for word in selected_words:
+                new_text = new_text.replace(word, word.upper())
+            # Add the new text to the output list
+            output_texts.append(new_text)
+        return output_texts
+
+    def _random_case_augmentation_(self, text, num_samples):
+        """Randomly lowercase or uppercase words in the text according to the aug_percent
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # List to save the augmented texts
+        output_texts = []
+        # List with the punctuation to eliminate
+        punctuation = [".", ",", "¡", "¿"]
+        num_text_punctuation = [c for c in text if c in punctuation]
+        num_aug = len(num_text_punctuation) * self.aug_percent
+        # Round by the upper integer
+        num_aug = ceil(num_aug)
+        for i in range(num_samples):
+            new_text = text
+            # Get the indices of the punctuation to eliminate
+            indices = [i for i, c in enumerate(new_text) if c in punctuation]
+            # Create a list with num_aug elements in indices without repetition
+            elements = random.sample(indices, num_aug)
+            # Replace every element with accent with the same element without accent
+            for e in elements:
+                new_e = (
+                    new_text[e].lower()
+                    if random.random() > 0.5
+                    else new_text[e].upper()
+                )
+                new_text = new_text[:e] + new_e + new_text[e + 1 :]
+
+            # Append the augmented text to the list
+            output_texts.append(new_text)
+        return output_texts
+
+    def _load_misspelled_words_dictionary_(self):
+        """
+        Set the dictionary of misspelled words
+        """
+        # Load the dictionary
+        json_path = os.path.join(
+            os.path.dirname(__file__), "data", "misspelled_words.json"
+        )
+        with open(json_path, "r") as f:
+            self.misspelled_dict = json.load(f)
 
     def _all_augment_(self, text, num_samples):
         """
@@ -394,10 +590,12 @@ class Spelling(DataAugmentationAbstract):
         self.aug_percent = aug_percent / 4
         output_texts = []
         for i in range(num_samples):
-            text = self._orthography_augment_(text, num_samples)
-            text = self._keyboard_augment_(text, num_samples)
-            text = self._ocr_augment_(text, num_samples)
-            text = self._random_augment_(text, num_samples)
-            output_texts.append(text)
+            text = self._orthography_augment_(text, 1)
+            text = self._keyboard_augment_(text[0], 1)
+            text = self._ocr_augment_(text[0], 1)
+            text = self._remove_punctuation_augment_(text[0], 1)
+            text = self._remove_accents_augmentation_(text[0], 1)
+            # text = self._random_augment_(text[0], 1)
+            output_texts.append(text[0])
         self.aug_percent = aug_percent
         return output_texts

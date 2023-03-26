@@ -14,3 +14,4 @@ parameterized
 myst-parser
 pytest
 hatchling
+unidecode
