@@ -76,7 +76,7 @@ class SpanishClassifier:
         }
         return info
 
-    def load_hate_speech(self, type="robertuito"):
+    def load_hate_speech(self, type="bert"):
         if type == "robertuito":
             self._robertuito_hate_speech_()
         elif type == "bert":
@@ -105,7 +105,7 @@ class SpanishClassifier:
     def _bert_hate_speech_(self):
         self.model = pipeline(
             "text-classification",
-            model="jorgeortizfuentes/spanish-hatespeech",
+            model="jorgeortizfuentes/spanish_hate_speech",
             truncation=True,
             max_length=512,
             device=self.device,
@@ -115,8 +115,8 @@ class SpanishClassifier:
         self.n_labels = 2
         self.multiclass = False
         self.labels = {
-            "LABEL_0": "not_hate_speech",
-            "LABEL_1": "hate_speech",
+            "hate": "hate",
+            "no_hate": "no_hate",
         }
 
     def load_incivility(self, type="bert"):
@@ -128,7 +128,7 @@ class SpanishClassifier:
     def _bert_incivility_(self):
         self.model = pipeline(
             "text-classification",
-            model="jorgeortizfuentes/spanish-incivility",
+            model="jorgeortizfuentes/spanish_incivility",
             truncation=True,
             max_length=512,
             device=self.device,
@@ -138,8 +138,8 @@ class SpanishClassifier:
         self.n_labels = 2
         self.multiclass = False
         self.labels = {
-            "LABEL_0": "not_incivility",
-            "LABEL_1": "incivility",
+            "incivility": "incivility",
+            "no_incivility": "no_incivility",
         }
 
     def load_toxic_speach(self, type="political-tweets-es"):
