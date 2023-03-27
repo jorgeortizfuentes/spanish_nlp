@@ -76,6 +76,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 #### Available classifiers
 
 * Hate Speech (hate_speech)
+* Incivility (incivility)
 * Toxic Speech (toxic_speech)
 * Sentiment Analysis (sentiment_analysis)
 * Emotion Analysis (emotion_analysis)
@@ -117,10 +118,16 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 #### Available Augmentation Models
 
 - Spelling augmentation
-  - Keyboard method
-  - OCR method
-  - Random method
-  - Orthography method
+  - Keyboard spelling method
+  - OCR spelling method
+  - Random spelling replace method
+  - Grapheme spelling
+  - Word spelling
+  - Remove punctuation
+  - Remove accents
+  - Lowercase
+  - Uppercase
+  - Randomcase
   - All method
 - Masked augmentation
   - Sustitute method
