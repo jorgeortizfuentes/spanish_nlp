@@ -31,6 +31,7 @@ class Spelling(DataAugmentationAbstract):
             "word_spelling",
             "remove_punctuation",
             "remove_accents",
+            "remove_spaces",
             "lowercase",
             "uppercase",
             "randomcase",
@@ -82,6 +83,8 @@ class Spelling(DataAugmentationAbstract):
             return self._word_spelling_augmentation_(text, num_samples)
         elif self.method == "remove_punctuation":
             return self._remove_punctuation_augment_(text, num_samples)
+        elif self.method == "remove_spaces":
+            return self._remove_spaces_augment_(text, num_samples)
         elif self.method == "remove_accents":
             return self._remove_accents_augmentation_(text, num_samples)
         elif self.method == "lowercase":
@@ -439,6 +442,32 @@ class Spelling(DataAugmentationAbstract):
             elements = random.sample(indices, num_aug)
             for e in elements:
                 new_text = new_text[:e] + new_text[e + 1 :]
+            # Append the augmented text to the list
+            output_texts.append(new_text)
+        return output_texts
+
+    def _remove_spaces_augment_(self, text, num_samples):
+        """Remove spaces in the text according to the aug_percent
+
+        Args:
+            text (str): text to augment
+            num_samples (int): number of samples to generate
+        """
+        # List to save the augmented texts
+        output_texts = []
+        # List with the punctuation to eliminate
+        num_text_spaces = [c for c in text if c == " "]
+        num_aug = len(num_text_spaces) * self.aug_percent
+        # Round by the upper integer
+        num_aug = ceil(num_aug)
+        for i in range(num_samples):
+            new_text = text
+            # Get the indices of the punctuation to eliminate
+            indices = [i for i, c in enumerate(new_text) if c == " "]
+            # Create a list with num_aug elements in indices without repetition
+            elements = random.sample(indices, num_aug)
+            for e in elements:
+                new_text = new_text[:e] + new_text[e + 1:]
             # Append the augmented text to the list
             output_texts.append(new_text)
         return output_texts

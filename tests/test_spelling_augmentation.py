@@ -2,6 +2,7 @@ import unittest
 
 from spanish_nlp import augmentation
 
+
 class TestSpelling(unittest.TestCase):
     def setUp(self):
         self.keyboard_augmentator = augmentation.Spelling(method="keyboard")
@@ -14,6 +15,9 @@ class TestSpelling(unittest.TestCase):
         self.remove_punctuation_augmentator = augmentation.Spelling(
             method="remove_punctuation"
         )
+        self.remove_spaces_augmentator = augmentation.Spelling(
+            method="remove_spaces"
+        )
         self.remove_accents_augmentator = augmentation.Spelling(
             method="remove_accents"
         )
@@ -22,10 +26,10 @@ class TestSpelling(unittest.TestCase):
         self.randomcase_augmentator = augmentation.Spelling(method="randomcase")
         self.all_augmentator = augmentation.Spelling(method="all")
         self.text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
-        
+
     def print_augmentations(self, original, augmentations, method):
         # Save in a file "augmentations_test.txt"
-        with open("tests/augmentations_test.txt", "a") as f:
+        with open("augmentations_test.txt", "a") as f:
             f.write(f"*** SPELLING DATA AUGMENTATION: {method} ***" + "\n")
             f.write(f"Original: {original}" + "\n")
             for i in range(len(augmentations)):
@@ -74,6 +78,13 @@ class TestSpelling(unittest.TestCase):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
 
+    def test_remove_spaces_augment(self):
+        text_aug = self.remove_spaces_augmentator.augment(self.text, 1)
+        self.print_augmentations(self.text, text_aug, method="remove_spaces")
+        for i in range(len(text_aug)):
+            self.assertFalse(self.text == text_aug[i])
+            self.assertFalse(self.text == "")            
+        
     def test_remove_accents_augment(self):
         text_aug = self.remove_accents_augmentator.augment(self.text, 1)
         self.print_augmentations(self.text, text_aug, method="remove_accents")
@@ -87,14 +98,14 @@ class TestSpelling(unittest.TestCase):
         for i in range(len(text_aug)):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
-    
+
     def test_uppercase_augment(self):
         text_aug = self.uppercase_augmentator.augment(self.text, 1)
         self.print_augmentations(self.text, text_aug, method="uppercase")
         for i in range(len(text_aug)):
             self.assertFalse(self.text == text_aug[i])
             self.assertFalse(self.text == "")
-    
+
     def test_randomcase_augment(self):
         text_aug = self.randomcase_augmentator.augment(self.text, 1)
         self.print_augmentations(self.text, text_aug, method="randomcase")
