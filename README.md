@@ -124,6 +124,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
   - Grapheme spelling
   - Word spelling
   - Remove punctuation
+  - Remove spaces
   - Remove accents
   - Lowercase
   - Uppercase
