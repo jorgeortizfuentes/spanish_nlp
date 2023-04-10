@@ -671,12 +671,14 @@ class Spelling(DataAugmentationAbstract):
         self.aug_percent = aug_percent / 7
         output_texts = []
         for i in range(num_samples):
-            text = self._grapheme_spelling_augment_(text, 1)
             text = self._keyboard_augment_(text[0], 1)
             text = self._ocr_augment_(text[0], 1)
-            text = self._remove_punctuation_augment_(text[0], 1)
-            text = self._remove_accents_augmentation_(text[0], 1)
             text = self._random_augment_(text[0], 1)
+            text = self._grapheme_spelling_augment_(text, 1)
+            text = self._word_spelling_augmentation_(text, 1)
+            text = self._remove_punctuation_augment_(text[0], 1)
+            text = self._remove_spaces_augment_(text[0], 1)
+            text = self._remove_accents_augmentation_(text[0], 1)
             text = self._random_case_augmentation_(text[0], 1)
             output_texts.append(text[0])
         self.aug_percent = aug_percent
