@@ -16,7 +16,7 @@ class TestMasked(unittest.TestCase):
 
     def print_augmentations(self, original, augmentations, method):
         # Save in a file "augmentations_test.txt"
-        with open("tests/augmentations_test.txt", "a") as f:
+        with open("augmentations_test.txt", "a") as f:
             f.write(f"*** Masked DATA AUGMENTATION: {method} ***" + "\n")
             f.write(f"Original: {original}" + "\n")
             for i in range(len(augmentations)):
