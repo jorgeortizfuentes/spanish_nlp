@@ -405,9 +405,12 @@ class Spelling(DataAugmentationAbstract):
                 start = e[0]
                 end = e[1] + 1
                 substring = new_text[start:end]
-                replacement = self.grapheme_spelling_dict[substring]
+                # If the substring is in the dictionary, replace it
+                if substring in self.grapheme_spelling_dict.keys():
+                    replacement = self.grapheme_spelling_dict[substring]
+                else:
+                    replacement = substring
                 # Select a random element from the list of replacements
-                # replacement = random.choice(replacement)
                 start_str = new_text[:start]
                 end_str = new_text[end:] if end < len(new_text) else ""
                 new_text = start_str + replacement + end_str
@@ -670,8 +673,10 @@ class Spelling(DataAugmentationAbstract):
         aug_percent = self.aug_percent
         self.aug_percent = aug_percent / 7
         output_texts = []
+        if type(text) == str:
+            text = list(text)
         for i in range(num_samples):
-            text = self._word_spelling_augmentation_(text, 1)
+            text = self._word_spelling_augmentation_(text[0], 1)
             text = self._grapheme_spelling_augment_(text[0], 1)
             text = self._keyboard_augment_(text[0], 1)
             text = self._ocr_augment_(text[0], 1)
