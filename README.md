@@ -4,9 +4,9 @@
 
 Spanish NLP is the first low code Python library for Natural Language Processing in Spanish. It provides three main modules:
 
-* **Preprocess**: it offers several text preprocessing options to clean and prepare texts for further analysis.
-* **Classify**: it allows users to quickly classify texts using different pre-trained models
-* **Augmentation**: it allows generate synthetic data. It is useful for increasing labeled data and improving results in classification model training.
+- **Preprocess**: it offers several text preprocessing options to clean and prepare texts for further analysis.
+- **Classify**: it allows users to quickly classify texts using different pre-trained models
+- **Augmentation**: it allows generate synthetic data. It is useful for increasing labeled data and improving results in classification model training.
 
 ## Installation
 
@@ -21,7 +21,6 @@ pip install spanish_nlp
 ### Preprocessing
 
 See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Preprocess.ipynb)
-
 
 To preprocess text using the preprocess module, you can import it and call the desired parameters:
 
@@ -65,24 +64,27 @@ print(sp.transform(test_text, debug=False))
 ```
 
 Output:
+
 ```bash
-hola a todos este es un texto de prueba:) a continuacion los mostrare un poema de roberto bolaño llamado los perros romanticos 🤭 👀 😅 
+hola a todos este es un texto de prueba:) a continuacion los mostrare un poema de roberto bolaño llamado los perros romanticos 🤭 👀 😅
 me gustan los pinguinos si los pinguinos 🐧 🐧 🐧 🐧 vivan los pinguinos si señor pinguinos del mundo unios ñandues del mundo tambien
 si colaboras con este repositorio te puedes ganar en dinero falso o tal vez pinguinos mi telefono es
 ```
+
 ### Classification
 
 See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Classify.ipynb)
+
 #### Available classifiers
 
-* Hate Speech (hate_speech)
-* Incivility (incivility)
-* Toxic Speech (toxic_speech)
-* Sentiment Analysis (sentiment_analysis)
-* Emotion Analysis (emotion_analysis)
-* Irony Analysis (irony_analysis)
-* Sexist Analysis (sexist_analysis)
-* Racism Analysis (racism_analysis)
+- Hate Speech (hate_speech)
+- Incivility (incivility)
+- Toxic Speech (toxic_speech)
+- Sentiment Analysis (sentiment_analysis)
+- Emotion Analysis (emotion_analysis)
+- Irony Analysis (irony_analysis)
+- Sexist Analysis (sexist_analysis)
+- Racism Analysis (racism_analysis)
 
 #### Classification Example
 
@@ -135,23 +137,22 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
   - Insert method
 - Others models under development (such as Synonyms, WordEmbeddings, GenerativeOpenSource, GenerativeOpenAI, BackTranslation, AbstractiveSummarization)
 
-
 #### Augmentation Models Examples
 
 ```python
 from spanish_nlp import augmentation
 
-ocr = augmentation.Spelling(method="ocr", 
-                            stopwords="default", 
-                            aug_percent=0.3, 
+ocr = augmentation.Spelling(method="ocr",
+                            stopwords="default",
+                            aug_percent=0.3,
                             tokenizer="default")
 
-grapheme_spelling = augmentation.Spelling(method="grapheme_spelling", 
-                                          stopwords="default", 
-                                          aug_percent=0.3, 
+grapheme_spelling = augmentation.Spelling(method="grapheme_spelling",
+                                          stopwords="default",
+                                          aug_percent=0.3,
                                           tokenizer="default")
 
-masked_sustitute = augmentation.Masked(method="sustitute", 
+masked_sustitute = augmentation.Masked(method="sustitute",
                                        model="dccuchile/bert-base-spanish-wwm-cased",
                                        tokenizer="default",
                                        stopwords="default",
