@@ -1,2 +1,2 @@
 from .augmentation import *
-from .preprocess import *
+from .preprocess import SpanishPreprocess                                                                                        

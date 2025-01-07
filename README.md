@@ -25,8 +25,8 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 To preprocess text using the preprocess module, you can import it and call the desired parameters:
 
 ```python
-from spanish_nlp import preprocess
-sp = preprocess.SpanishPreprocess(
+from spanish_nlp import SpanishPreprocess
+sp = SpanishPreprocess(
         lower=False,
         remove_url=True,
         remove_hashtags=False,
