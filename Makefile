@@ -1,5 +1,6 @@
 install:
 	uv pip install -r requirements.txt
+	uv pip install -r requirements-dev.txt
 
 venv:
 	@echo "Setting up virtual environment..."
