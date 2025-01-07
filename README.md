@@ -89,7 +89,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 #### Classification Example
 
 ```python
-from spanish_nlp import classifiers
+from spanish_nlp import SpanishClassifier
 
 sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
 # DISCLAIMER: The following message is merely an example of hate speech and does not represent the views of the author or contributors.
