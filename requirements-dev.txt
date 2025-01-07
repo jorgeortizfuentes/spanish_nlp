@@ -1,0 +1,9 @@
+# Compile time dependencies
+twine~=6.0.1
+hatchling~=1.27.0
+
+# Notebooks
+ipykernel~=6.29.5
+
+# Testing
+pytest~=8.0.0

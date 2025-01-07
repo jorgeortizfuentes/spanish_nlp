@@ -141,7 +141,6 @@ dmypy.json
 
 # Data
 data/*
-*.txt
 
 # Vscode
 .vscode/
