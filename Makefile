@@ -23,5 +23,7 @@ aider:
 	aider
 
 test:
-	@echo "Running tests..."
-	pytest
+	@echo "Creating outputs directory..."
+	@mkdir -p outputs
+	@echo "Running tests with coverage..."
+	pytest --cov=spanish_nlp --cov-report=html:outputs/coverage --cov-report=term-missing -v tests/ | tee outputs/pytest-report.txt
