@@ -1,11 +1,13 @@
 import re
 import string
-
+import logging
 import emoji
 from nltk.stem.snowball import SnowballStemmer
 
 from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
 from spanish_nlp.utils.inclusive_words import normalize_inclusive_language
+
+logger = logging.getLogger(__name__)
 
 
 class SpanishPreprocess:
@@ -145,11 +147,6 @@ class SpanishPreprocess:
                 disable=["ner", "parser", "tagger", "textcat", "vectors"]
             )
 
-    def _debug_method_(self, text, method_name):
-        print(f"Method: {method_name}")
-        print("---" * 30)
-        print(f"Text: {text}")
-        print("===" * 40)
 
     def _lower_(self, text):
         return text.lower()
@@ -299,97 +296,104 @@ class SpanishPreprocess:
         clean = re.compile("<.*?>")
         return re.sub(clean, "", text)
 
-    def transform(self, text, debug=False):
+    def transform(self, text):
+        """Transform input text by applying the configured preprocessing steps.
+        
+        Args:
+            text (str): Input text to transform
+            
+        Returns:
+            str: Transformed text with all preprocessing steps applied
+        """
+        logger.debug("Starting text transformation")
+        
         if self.split_hashtags:
             text = self._split_hashtags_(text)
-            self._debug_method_(text, "split_hashtags") if debug else None
+            logger.debug("Split hashtags: %s", text)
 
         if self.lower:
             text = self._lower_(text)
-            self._debug_method_(text, "lower") if debug else None
+            logger.debug("Lowercase: %s", text)
 
         if self.remove_url:
             text = self._remove_url_(text)
-            self._debug_method_(text, "remove_url") if debug else None
+            logger.debug("Remove URLs: %s", text)
 
         if self.remove_html_tags:
             text = self._remove_html_tags_(text)
-            self._debug_method_(text, "remove_html_tags") if debug else None
+            logger.debug("Remove HTML tags: %s", text)
 
         if self.remove_numbers:
             text = self._remove_numbers_(text)
-            self._debug_method_(text, "remove_numbers") if debug else None
+            logger.debug("Remove numbers: %s", text)
 
         if self.remove_hashtags:
             text = self._remove_hashtags_(text)
-            self._debug_method_(text, "remove_hashtags") if debug else None
+            logger.debug("Remove hashtags: %s", text)
 
         if self.stem:
             text = self._stem_(text)
-            self._debug_method_(text, "stem") if debug else None
+            logger.debug("Stem: %s", text)
 
         if self.lemmatize:
             text = self._lemmatize_(text)
-            self._debug_method_(text, "lemmatize") if debug else None
+            logger.debug("Lemmatize: %s", text)
 
         if self.convert_emojis or not self.remove_emojis:
             text = self._emojis_to_text_(text)
-            self._debug_method_(text, "emojis_to_text") if debug else None
+            logger.debug("Emojis to text: %s", text)
 
         if self.convert_emoticons or not self.remove_emoticons:
             text = self._emoticons_to_text_(text)
-            self._debug_method_(text, "emoticons_to_text") if debug else None
+            logger.debug("Emoticons to text: %s", text)
 
         if self.normalize_inclusive_language:
             text = self._normalize_inclusive_language_(text)
-            self._debug_method_(text, "normalize_inclusive_language") if debug else None
+            logger.debug("Normalize inclusive language: %s", text)
 
         if self.remove_vowels_accents:
             text = self._remove_vowels_accents_(text)
-            self._debug_method_(text, "remove_vowels_accents") if debug else None
+            logger.debug("Remove vowel accents: %s", text)
 
         if self.remove_punctuation:
             text = self._remove_punctuation_(text)
-            self._debug_method_(text, "remove_punctuation") if debug else None
+            logger.debug("Remove punctuation: %s", text)
 
         if self.remove_unprintable:
             text = self._remove_unprintable_(text)
-            self._debug_method_(text, "remove_unprintable") if debug else None
-
-        if self.stem:
-            text = self._stem_(text)
-            self._debug_method_(text, "stem") if debug else None
+            logger.debug("Remove unprintable: %s", text)
 
         if not self.remove_emojis:
             text = self._text_to_emojis_(text)
-            self._debug_method_(text, "text_to_emojis (not delete emojis)") if debug else None
+            logger.debug("Text to emojis: %s", text)
 
         if not self.remove_emoticons:
             text = self._text_to_emoticons_(text)
-            self._debug_method_(text, "text_to_emoticons (not delete emoticons)") if debug else None
+            logger.debug("Text to emoticons: %s", text)
 
         if self.remove_stopwords:
             text = self._remove_stopwords_(text)
-            self._debug_method_(text, "remove_stopwords") if debug else None
+            logger.debug("Remove stopwords: %s", text)
 
         if self.remove_multiple_spaces:
             text = self._remove_multiples_spaces_(text).strip()
-            self._debug_method_(text, "remove_multiples_spaces") if debug else None
+            logger.debug("Remove multiple spaces: %s", text)
 
         if self.normalize_breaklines:
             text = self._normalize_breaklines_(text)
-            self._debug_method_(text, "normalize_breaklines") if debug else None
+            logger.debug("Normalize breaklines: %s", text)
 
         if self.normalize_punctuation_spelling:
             text = self._normalize_punctuation_spelling_(text)
-            self._debug_method_(text, "normalize_punctuation_spelling") if debug else None
+            logger.debug("Normalize punctuation spelling: %s", text)
 
         if self.reduce_spam:
             text = self._reduce_spam_(text)
-            self._debug_method_(text, "reduce_spam") if debug else None
+            logger.debug("Reduce spam: %s", text)
 
         if self.remove_reduplications:
             text = self._remove_reduplications_(text)
-            self._debug_method_(text, "remove_reduplications") if debug else None
+            logger.debug("Remove reduplications: %s", text)
 
+        logger.debug("Text transformation complete")
         return text
