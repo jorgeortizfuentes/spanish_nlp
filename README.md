@@ -6,22 +6,29 @@
 
 ## Introduction
 
-Spanish NLP is a Python library designed to facilitate Natural Language Processing tasks in Spanish. This library provides a comprehensive suite of tools for text preprocessing, classification, and data augmentation, making it easier for researchers and developers to work with Spanish text data. The library is designed to be low-code, allowing users to quickly implement NLP pipelines with minimal effort.
+Spanish NLP is a Python library designed to facilitate Natural Language Processing tasks in Spanish. This library provides a suite of tools for text preprocessing, classification, and data augmentation, making it easier for researchers and developers to work with Spanish text data. The library is designed to be low-code, allowing users to quickly implement NLP pipelines with minimal effort.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Preprocessing](#preprocessing)
-  - [Classification](#classification)
-  - [Augmentation](#augmentation)
-- [License](#license)
-- [Author](#author)
-- [Acknowledgements](#acknowledgements)
-- [Contributing](#contributing)
-- [Citation](#citation)
-- [Contact](#contact)
-- [Disclaimer](#disclaimer)
+- [Spanish NLP](#spanish-nlp)
+  - [Introduction](#introduction)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Preprocessing](#preprocessing)
+    - [Classification](#classification)
+      - [Available classifiers](#available-classifiers)
+      - [Classification Example](#classification-example)
+    - [Augmentation](#augmentation)
+      - [Available Augmentation Models](#available-augmentation-models)
+      - [Augmentation Models Examples](#augmentation-models-examples)
+  - [License](#license)
+  - [Author](#author)
+  - [Acknowledgements](#acknowledgements)
+  - [Contributing](#contributing)
+  - [Citation](#citation)
+  - [Contact](#contact)
+  - [Disclaimer](#disclaimer)
 
 ## Installation
 
@@ -223,15 +230,14 @@ We would like to express our gratitude to the Millennium Institute For Foundatio
 
 ## Contributing
 
-Contributions to Spanish NLP are welcome! Please see the [contributing guide](https://github.com/users/jorgeortizfuentes/projects/1) for more information.
+Contributions to Spanish NLP are welcome!
 
 To contribute to the project, please follow these steps:
 
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Make your changes and commit them with clear messages.
-4.  Push your changes to your fork.
-5.  Submit a pull request to the main repository.
+1. Create a new branch for your feature or bug fix.
+2. Make your changes and commit them with clear messages.
+3. Push your changes to your fork.
+4. Submit a pull request to the main repository.
 
 ## Citation
 
@@ -241,7 +247,7 @@ If you use Spanish NLP in your research, please cite it as follows:
 @misc{spanish_nlp,
   author = {Jorge Ortiz-Fuentes},
   title = {Spanish NLP: A Python library for Natural Language Processing in Spanish},
-  year = {2024},
+  year = {2022},
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/jorgeortizfuentes/spanish_nlp}},
@@ -250,7 +256,7 @@ If you use Spanish NLP in your research, please cite it as follows:
 
 ## Contact
 
-For any questions or inquiries, please contact [Jorge Ortiz-Fuentes](mailto:jorge.ortiz.fuentes@gmail.com).
+For any questions or inquiries, please contact [Jorge Ortiz-Fuentes](mailto:jorge@ortizfuentes.com).
 
 ## Disclaimer
 
