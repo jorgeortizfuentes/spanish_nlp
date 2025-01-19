@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - develop
+      - 'feature/**'
 
 jobs:
   build-and-deploy:
@@ -35,13 +37,14 @@ jobs:
           echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Publish distribution to PyPI
+        if: github.ref == 'refs/heads/main'
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Add tag to repository
-        if: success()
+        if: github.ref == 'refs/heads/main' && success()
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
