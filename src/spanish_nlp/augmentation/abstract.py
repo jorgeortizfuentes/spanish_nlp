@@ -30,7 +30,6 @@ import os
 
 import es_core_news_sm
 import pandas as pd
-import swifter
 
 from datasets import load_dataset
 from tqdm import tqdm
@@ -95,7 +94,7 @@ class DataAugmentationAbstract:
                 num_samples=num_samples
             )
         else:
-            return texts.swifter.apply(
+            return texts.apply(
                 self._text_augment_,
                 num_samples=num_samples,
             )
