@@ -26,8 +26,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make venv
-          source .venv/bin/activate
           make install
           make install_local
 
