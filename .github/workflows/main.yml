@@ -32,7 +32,7 @@ jobs:
           make install_local
 
       - name: Run tests
-        run: pytest tests/
+        run: make test
         continue-on-error: false
 
       - name: Build package
