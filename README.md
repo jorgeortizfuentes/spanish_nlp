@@ -1,12 +1,27 @@
 # Spanish NLP
 
+[![PyPI version](https://badge.fury.io/py/spanish-nlp.svg)](https://badge.fury.io/py/spanish-nlp)
+[![Build Status](https://github.com/jorgeortizfuentes/spanish_nlp/actions/workflows/main.yml/badge.svg)](https://github.com/jorgeortizfuentes/spanish_nlp/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/jorgeortizfuentes/spanish_nlp/branch/main/graph/badge.svg?token=Y18Y796Q0G)](https://codecov.io/gh/jorgeortizfuentes/spanish_nlp)
+
 ## Introduction
 
-Spanish NLP is the first low code Python library for Natural Language Processing in Spanish. It provides three main modules:
+Spanish NLP is a Python library designed to facilitate Natural Language Processing tasks in Spanish. This library provides a comprehensive suite of tools for text preprocessing, classification, and data augmentation, making it easier for researchers and developers to work with Spanish text data. The library is designed to be low-code, allowing users to quickly implement NLP pipelines with minimal effort.
 
-- **Preprocess**: it offers several text preprocessing options to clean and prepare texts for further analysis.
-- **Classify**: it allows users to quickly classify texts using different pre-trained models
-- **Augmentation**: it allows generate synthetic data. It is useful for increasing labeled data and improving results in classification model training.
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Preprocessing](#preprocessing)
+  - [Classification](#classification)
+  - [Augmentation](#augmentation)
+- [License](#license)
+- [Author](#author)
+- [Acknowledgements](#acknowledgements)
+- [Contributing](#contributing)
+- [Citation](#citation)
+- [Contact](#contact)
+- [Disclaimer](#disclaimer)
 
 ## Installation
 
@@ -14,6 +29,14 @@ Spanish NLP can be installed via pip:
 
 ```bash
 pip install spanish_nlp
+```
+
+To install from source, clone the repository and install the package using pip:
+
+```bash
+git clone https://github.com/jorgeortizfuentes/spanish_nlp.git
+cd spanish_nlp
+pip install .
 ```
 
 ## Usage
@@ -201,3 +224,34 @@ We would like to express our gratitude to the Millennium Institute For Foundatio
 ## Contributing
 
 Contributions to Spanish NLP are welcome! Please see the [contributing guide](https://github.com/users/jorgeortizfuentes/projects/1) for more information.
+
+To contribute to the project, please follow these steps:
+
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Make your changes and commit them with clear messages.
+4.  Push your changes to your fork.
+5.  Submit a pull request to the main repository.
+
+## Citation
+
+If you use Spanish NLP in your research, please cite it as follows:
+
+```
+@misc{spanish_nlp,
+  author = {Jorge Ortiz-Fuentes},
+  title = {Spanish NLP: A Python library for Natural Language Processing in Spanish},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/jorgeortizfuentes/spanish_nlp}},
+}
+```
+
+## Contact
+
+For any questions or inquiries, please contact [Jorge Ortiz-Fuentes](mailto:jorge.ortiz.fuentes@gmail.com).
+
+## Disclaimer
+
+The hate speech example provided in the classification section is for demonstration purposes only and does not reflect the views of the author or contributors.
