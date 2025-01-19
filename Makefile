@@ -21,3 +21,7 @@ aider:
 	@echo "VERTEXAI_LOCATION=$(VERTEXAI_LOCATION)"
 	@echo "Executing 'aider'..."
 	aider
+
+test:
+	@echo "Running tests..."
+	pytest
