@@ -28,8 +28,8 @@ class TestSpelling(unittest.TestCase):
         self.text = "En aquel tiempo yo tenía veinte años y estaba loco #sí... Había perdido un país pero había GANADO un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar (NO!) en la madrugada junto a los perros románticos."
 
     def print_augmentations(self, original, augmentations, method):
-        # Save in a file "augmentations_test.txt"
-        with open("augmentations_test.txt", "a") as f:
+        # Save in outputs/augmentations_test.txt
+        with open("outputs/augmentations_test.txt", "a") as f:
             f.write(f"*** SPELLING DATA AUGMENTATION: {method} ***" + "\n")
             f.write(f"Original: {original}" + "\n")
             for i in range(len(augmentations)):

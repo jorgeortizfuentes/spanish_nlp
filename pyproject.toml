@@ -45,7 +45,6 @@ dependencies = [
     "kaleido",
     "nltk",
     "pandas",
-    "swifter",
     "torch",
     "transformers",
 ]

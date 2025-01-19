@@ -1,13 +1,13 @@
 import unittest
 
-from spanish_nlp import classifiers
-
 
 class TestSpanishClassifier(unittest.TestCase):
     def setUp(self):
         self.sc = classifiers.SpanishClassifier(model_name="hate_speech", device="cpu")
         self.t1 = "LAS MUJERES QUE ESTÁN EN EL CONGRESO DEBERÍAN SER EXTERMINADAS"
-        self.t2 = "El presidente convocó a una reunión a los representantes de los partidos políticos"
+        self.t2 = (
+            "El presidente convocó a una reunión a los representantes de los partidos políticos"
+        )
 
     # def test_predict(self):
     #     p1 = self.sc.predict(self.t1)

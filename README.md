@@ -25,8 +25,8 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 To preprocess text using the preprocess module, you can import it and call the desired parameters:
 
 ```python
-from spanish_nlp import preprocess
-sp = preprocess.SpanishPreprocess(
+from spanish_nlp import SpanishPreprocess
+sp = SpanishPreprocess(
         lower=False,
         remove_url=True,
         remove_hashtags=False,
@@ -89,7 +89,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 #### Classification Example
 
 ```python
-from spanish_nlp import classifiers
+from spanish_nlp import SpanishClassifier
 
 sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
 # DISCLAIMER: The following message is merely an example of hate speech and does not represent the views of the author or contributors.

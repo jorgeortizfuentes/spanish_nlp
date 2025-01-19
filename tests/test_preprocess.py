@@ -1,13 +1,12 @@
 import unittest
 
 from parameterized import parameterized
-
-from spanish_nlp import preprocess
+from spanish_nlp import SpanishPreprocess
 
 
 class TestTextPreprocessor(unittest.TestCase):
     def setUp(self):
-        self.preprocessor = preprocess.SpanishPreprocess()
+        self.preprocessor = SpanishPreprocess()
         self.params = {
             "lower": False,
             "remove_url": False,
@@ -178,12 +177,8 @@ Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O 
         self.assertTrue(text != pp_text)
 
     def test_transform_normalize_punctuation_spelling(self):
-        text = (
-            "Este es un texto,con la puntuación incorrecta . Se tiene que solucionar!"
-        )
-        expected = (
-            "Este es un texto, con la puntuación incorrecta. Se tiene que solucionar!"
-        )
+        text = "Este es un texto,con la puntuación incorrecta . Se tiene que solucionar!"
+        expected = "Este es un texto, con la puntuación incorrecta. Se tiene que solucionar!"
         pp_text = self.preprocessor._normalize_punctuation_spelling_(text)
         self.assertEqual(pp_text, expected)
         self.assertTrue(text != pp_text)
@@ -203,7 +198,7 @@ Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O 
         self.assertTrue(text != pp_text)
 
     def test_transform_false(self):
-        pp = preprocess.SpanishPreprocess(**self.params)
+        pp = SpanishPreprocess(**self.params)
         pp_text = pp.transform(self.text)
         self.assertEqual(pp_text, pp_text)
 
@@ -234,7 +229,7 @@ Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O 
             "remove_html_tags": True,
         }
 
-        pp = preprocess.SpanishPreprocess(**params)
+        pp = SpanishPreprocess(**params)
         pp_text = pp.transform(self.text)
         expected = """Hola a todos, este es un texto de prueba:) a continuacion los mostrare un poema de Roberto Bolaño llamado "Los perros romanticos" 🤭 👀 😅 
 Me gustan los pinguinos! Si, los PINGUINOS 🐧 🐧 🐧 🐧 Vivan Los Pinguinos Si Señor Pinguinos Del Mundo Unios Ñandues Del Mundo Tambien
