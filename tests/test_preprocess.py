@@ -1,6 +1,7 @@
 import unittest
 
 from parameterized import parameterized
+from spanish_nlp import SpanishPreprocess
 
 
 class TestTextPreprocessor(unittest.TestCase):
