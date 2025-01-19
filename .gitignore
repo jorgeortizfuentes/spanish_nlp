@@ -144,3 +144,6 @@ data/*
 
 # Aider
 .aider*
+
+# Test outputs
+outputs/
