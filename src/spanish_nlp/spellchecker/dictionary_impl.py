@@ -62,7 +62,16 @@ class DictionarySpellChecker(SpellCheckerBase):
         if not self.spell:
             logger.warning("DictionarySpellChecker not initialized properly, returning no suggestions.")
             return []
-        return list(self.spell.candidates(word.lower()))
+        try:
+            candidates_set = self.spell.candidates(word.lower())
+            # Explicitly check if the result is None before converting to list
+            if candidates_set is None:
+                 logger.warning(f"pyspellchecker returned None for candidates of '{word}'. Returning empty list.")
+                 return []
+            return list(candidates_set)
+        except Exception as e:
+             logger.error(f"Error calling pyspellchecker.candidates for '{word}': {e}", exc_info=True)
+             return [] # Return empty list on any error during candidates call
 
     def correct_word(self, word: str) -> str:
         """Returns the most likely correction based on frequency and edit distance."""
