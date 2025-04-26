@@ -52,6 +52,18 @@ To update the version, use the `hatch version` command. You can specify the new 
     git push origin main
     ```
 
+## Contribution Workflow (Gitflow)
+
+This project follows the Gitflow workflow for managing branches and contributions.
+
+1.  **Main Branch (`main`):** Represents the latest stable release. Direct commits are discouraged. Releases are tagged from this branch.
+2.  **Development Branch (`develop`):** (Optional, if used) Represents the integration branch for upcoming releases. Feature branches are typically merged here first. *Currently, we might be using `main` as the primary development branch.*
+3.  **Feature Branches (`feature/<feature-name>`):** Create these branches from the primary development branch (`main` or `develop`) for new features or significant changes.
+4.  **Pull Requests (PRs):**
+    *   When a feature is complete, create a Pull Request from your `feature/<feature-name>` branch back to the primary development branch (`main` or `develop`).
+    *   Ensure your code adheres to project conventions and passes all tests (`make test`).
+    *   PRs require review before merging.
+
 ## Publishing to PyPI
 
 Publishing to PyPI is **automated** using GitHub Actions (`.github/workflows/main.yml`).
