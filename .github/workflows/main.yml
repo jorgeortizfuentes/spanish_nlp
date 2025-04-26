@@ -5,10 +5,10 @@ on:
     branches:
       - main
       - develop
-      - 'feature/**' # Trigger on feature branches as well
+      - 'feature/**'
 
 jobs:
-  build-test-deploy: # Renamed job for clarity
+  build-test-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,7 +31,7 @@ jobs:
         continue-on-error: false
 
       - name: Build package
-        if: github.ref == 'refs/heads/main' # Only build on main branch
+        if: github.ref == 'refs/heads/main'
         run: |
           hatchling build
           export VERSION=$(hatchling version | awk '{print $NF}')
