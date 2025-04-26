@@ -60,11 +60,12 @@ This project follows the Gitflow workflow for managing branches and contribution
 
 1.  **Main Branch (`main`):** Represents the latest stable release. Direct commits to `main` are **prohibited**. Releases are tagged from this branch after merging from `develop`.
 2.  **Development Branch (`develop`):** This is the primary integration branch for ongoing development. All feature branches must be merged into `develop` first.
-3.  **Feature Branches (`feature/<feature-name>`):** Create these branches from `develop` for new features or significant changes.
+3.  **Feature Branches (`feature/<feature-name>`):** Create these branches **from `develop`** for new features or significant changes. Use the naming convention `feature/nombre-descriptivo-de-la-feature`.
 4.  **Pull Requests (PRs):**
-    *   When a feature is complete, create a Pull Request (PR) from your `feature/<feature-name>` branch back to the `develop` branch.
+    *   **Feature to Develop:** When a feature is complete, create a Pull Request (PR) from your `feature/<feature-name>` branch back to the `develop` branch.
+    *   **Develop to Main:** For releases, create a Pull Request (PR) from the `develop` branch to the `main` branch. This merge triggers the automated publishing process.
     *   Ensure your code adheres to project conventions and passes all tests (`make test`).
-    *   PRs require review before merging.
+    *   All PRs require review before merging.
 
 ## Publishing to PyPI
 
