@@ -49,18 +49,20 @@ To update the version, use the `hatch version` command. You can specify the new 
     git add src/spanish_nlp/__about__.py
     # Use the updated version in the commit message
     git commit -m "Bump version to $(hatch version)"
-    git push origin main
+    # Push the change to the development branch
+    git push origin develop
     ```
+    *Note: After pushing to `develop`, you might need to create a Pull Request to merge `develop` into `main` to trigger the release.*
 
 ## Contribution Workflow (Gitflow)
 
 This project follows the Gitflow workflow for managing branches and contributions.
 
-1.  **Main Branch (`main`):** Represents the latest stable release. Direct commits are discouraged. Releases are tagged from this branch.
-2.  **Development Branch (`develop`):** (Optional, if used) Represents the integration branch for upcoming releases. Feature branches are typically merged here first. *Currently, we might be using `main` as the primary development branch.*
-3.  **Feature Branches (`feature/<feature-name>`):** Create these branches from the primary development branch (`main` or `develop`) for new features or significant changes.
+1.  **Main Branch (`main`):** Represents the latest stable release. Direct commits to `main` are **prohibited**. Releases are tagged from this branch after merging from `develop`.
+2.  **Development Branch (`develop`):** This is the primary integration branch for ongoing development. All feature branches must be merged into `develop` first.
+3.  **Feature Branches (`feature/<feature-name>`):** Create these branches from `develop` for new features or significant changes.
 4.  **Pull Requests (PRs):**
-    *   When a feature is complete, create a Pull Request from your `feature/<feature-name>` branch back to the primary development branch (`main` or `develop`).
+    *   When a feature is complete, create a Pull Request (PR) from your `feature/<feature-name>` branch back to the `develop` branch.
     *   Ensure your code adheres to project conventions and passes all tests (`make test`).
     *   PRs require review before merging.
 
@@ -70,7 +72,7 @@ Publishing to PyPI is **automated** using GitHub Actions (`.github/workflows/mai
 
 **The process is as follows:**
 
-1.  When changes are pushed to the `main` branch.
+1.  When changes are merged (usually via Pull Request) into the `main` branch.
 2.  The GitHub Actions workflow is automatically triggered.
 3.  Tests are run (`make test`).
 4.  If tests pass, the package is built (`hatchling build`).
@@ -78,9 +80,12 @@ Publishing to PyPI is **automated** using GitHub Actions (`.github/workflows/mai
 6.  The package is published to PyPI using the `secrets.PYPI_API_TOKEN`.
 7.  If publishing is successful, a Git tag is automatically created in the repository with the format `vX.Y.Z` (e.g., `v0.4.0`).
 
-**Therefore, to publish a new version, you only need to:**
+**Therefore, to publish a new version:**
 
-1.  Update the version using `hatch version` (as described above).
-2.  Commit and push the changes to the `main` branch.
+1.  Ensure the `develop` branch contains all the features and fixes for the release.
+2.  Update the version in the `develop` branch using `hatch version` (as described above).
+3.  Commit and push the version bump to `develop`.
+4.  Create a Pull Request from `develop` to `main`.
+5.  Once the PR is reviewed and approved, **merge it into `main`**. This merge will trigger the automated publishing workflow.
 
 **You do not need to run `hatch publish` manually.**
