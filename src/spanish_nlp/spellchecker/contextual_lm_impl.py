@@ -200,10 +200,6 @@ class ContextualLMSpellChecker(SpellCheckerBase):
         for i, word_to_check in enumerate(original_words):
             word_to_check_lower = word_to_check.lower()
 
-            if self.dict_checker.is_correct(word_to_check):
-                 logger.debug(f"'{word_to_check}' is correct according to dictionary, skipping LM prediction.")
-                 continue
-
             temp_tokens = list(original_words)
             temp_tokens[i] = self.mask_token
             masked_context = " ".join(temp_tokens)
