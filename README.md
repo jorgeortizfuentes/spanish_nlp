@@ -288,7 +288,7 @@ We would like to express our gratitude to the Millennium Institute For Foundatio
 
 ## Contributing
 
-Contributions to Spanish NLP are welcome!
+Contributions to Spanish NLP are welcome! Please see the [Developer Guide (CONTRIBUTING.md)](CONTRIBUTING.md) for details on the contribution workflow, versioning, and publishing process.
 
 To contribute to the project, please follow these steps:
 
