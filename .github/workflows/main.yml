@@ -1,9 +1,10 @@
-name: Build and Deploy
+name: Build, Test, and Deploy
 
 on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   build-and-deploy:
