@@ -1,12 +1,13 @@
 # Compile time dependencies
-twine~=6.0.1
+twine~=6.1.0
 hatchling~=1.27.0
+hatch~=1.14.1
 
 # Notebooks
 ipykernel~=6.29.5
 ipywidgets~=8.1.5
 
 # Testing
-pytest~=8.0.0
-pytest-cov~=4.1.0
+pytest~=8.3.5
+pytest-cov~=6.1.1
 

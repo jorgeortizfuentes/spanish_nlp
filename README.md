@@ -1,7 +1,10 @@
 # Spanish NLP
 
 [![PyPI version](https://badge.fury.io/py/spanish-nlp.svg)](https://badge.fury.io/py/spanish-nlp)
+[![PyPI Downloads](https://static.pepy.tech/badge/spanish-nlp)](https://pepy.tech/projects/spanish-nlp)
 [![Build Status](https://github.com/jorgeortizfuentes/spanish_nlp/actions/workflows/main.yml/badge.svg)](https://github.com/jorgeortizfuentes/spanish_nlp/actions/workflows/main.yml)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/jorgeortizfuentes/spanish_nlp/graphs/commit-activity)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Introduction
 
@@ -21,6 +24,9 @@ Spanish NLP is a Python library designed to facilitate Natural Language Processi
     - [Augmentation](#augmentation)
       - [Available Augmentation Models](#available-augmentation-models)
       - [Augmentation Models Examples](#augmentation-models-examples)
+    - [Spell Checking](#spell-checking)
+      - [Available Spell Checking Methods](#available-spell-checking-methods)
+      - [Spell Checking Example (Dictionary Method)](#spell-checking-example-dictionary-method)
   - [License](#license)
   - [Author](#author)
   - [Acknowledgements](#acknowledgements)
@@ -215,6 +221,62 @@ En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pe
 ---
 ```
 
+### Spell Checking
+
+See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Spellchecking.ipynb)
+
+#### Available Spell Checking Methods
+
+- Dictionary-based (`dictionary`): Uses `pyspellchecker` for suggestions based on edit distance.
+- Contextual Language Model (`contextual_lm`): Uses transformer models for context-aware corrections (not yet implemented).
+
+#### Spell Checking Example (Dictionary Method)
+
+```python
+from spanish_nlp import SpanishSpellChecker
+
+# Initialize with the dictionary method (default)
+checker = SpanishSpellChecker(method="dictionary")
+
+text_with_errors = "Ola komo stas? Esto es una prueva."
+
+# Find potential errors
+errors = checker.find_errors(text_with_errors)
+print(f"Potential Errors: {errors}")
+
+# Get suggestions for a word
+suggestions = checker.suggest("prueva")
+print(f"Suggestions for 'prueva': {suggestions}")
+
+# Correct a single word
+corrected_word = checker.correct_word("komo")
+print(f"Correction for 'komo': {corrected_word}")
+
+# Correct the entire text
+corrected_text = checker.correct_text(text_with_errors)
+print(f"Corrected Text: {corrected_text}")
+
+# Initialize with custom distance
+checker_strict = SpanishSpellChecker(method="dictionary", distance=1)
+print(f"Strict suggestions for 'pruevs': {checker_strict.suggest('pruevs')}")
+
+# Initialize with custom dictionary words
+checker_custom = SpanishSpellChecker(method="dictionary", custom_dictionary=["levenshtein"])
+print(f"Is 'levenshtein' correct? {checker_custom.is_correct('levenshtein')}")
+
+```
+
+Output:
+
+```bash
+Potential Errors: ['stas', 'komo', 'prueva']
+Suggestions for 'prueva': ['prueba']
+Correction for 'komo': como
+Corrected Text: ola como estas? esto es una prueba.
+Strict suggestions for 'pruevs': []
+Is 'levenshtein' correct? True
+```
+
 ## License
 
 Spanish NLP is licensed under the [GNU General Public License v3.0](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/LICENSE).
@@ -229,7 +291,7 @@ We would like to express our gratitude to the Millennium Institute For Foundatio
 
 ## Contributing
 
-Contributions to Spanish NLP are welcome!
+Contributions to Spanish NLP are welcome! Please see the [Developer Guide (CONTRIBUTING.md)](CONTRIBUTING.md) for details on the contribution workflow, versioning, and publishing process.
 
 To contribute to the project, please follow these steps:
 
