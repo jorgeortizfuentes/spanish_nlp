@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build, Test, and Deploy
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - 'feature/**'
 
 jobs:
-  build-and-deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,6 +31,7 @@ jobs:
         continue-on-error: false
 
       - name: Build package
+        if: github.ref == 'refs/heads/main'
         run: |
           hatchling build
           export VERSION=$(hatchling version | awk '{print $NF}')
