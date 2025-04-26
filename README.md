@@ -225,7 +225,7 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 #### Available Spell Checking Methods
 
 - Dictionary-based (`dictionary`): Uses `pyspellchecker` for suggestions based on edit distance.
-- Contextual Language Model (`contextual_lm`): Uses transformer models for context-aware corrections (currently a skeleton implementation).
+- Contextual Language Model (`contextual_lm`): Uses transformer models for context-aware corrections (not yet implemented).
 
 #### Spell Checking Example (Dictionary Method)
 
