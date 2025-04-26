@@ -215,6 +215,62 @@ En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pe
 ---
 ```
 
+### Spell Checking
+
+See more information in the [Jupyter Notebook example](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/examples/Spellchecking.ipynb)
+
+#### Available Spell Checking Methods
+
+- Dictionary-based (`dictionary`): Uses `pyspellchecker` for suggestions based on edit distance.
+- Contextual Language Model (`contextual_lm`): Uses transformer models for context-aware corrections (currently a skeleton implementation).
+
+#### Spell Checking Example (Dictionary Method)
+
+```python
+from spanish_nlp import SpanishSpellChecker
+
+# Initialize with the dictionary method (default)
+checker = SpanishSpellChecker(method="dictionary")
+
+text_with_errors = "Ola komo stas? Esto es una prueva."
+
+# Find potential errors
+errors = checker.find_errors(text_with_errors)
+print(f"Potential Errors: {errors}")
+
+# Get suggestions for a word
+suggestions = checker.suggest("prueva")
+print(f"Suggestions for 'prueva': {suggestions}")
+
+# Correct a single word
+corrected_word = checker.correct_word("komo")
+print(f"Correction for 'komo': {corrected_word}")
+
+# Correct the entire text
+corrected_text = checker.correct_text(text_with_errors)
+print(f"Corrected Text: {corrected_text}")
+
+# Initialize with custom distance
+checker_strict = SpanishSpellChecker(method="dictionary", distance=1)
+print(f"Strict suggestions for 'pruevs': {checker_strict.suggest('pruevs')}")
+
+# Initialize with custom dictionary words
+checker_custom = SpanishSpellChecker(method="dictionary", custom_dictionary=["levenshtein"])
+print(f"Is 'levenshtein' correct? {checker_custom.is_correct('levenshtein')}")
+
+```
+
+Output:
+
+```bash
+Potential Errors: ['stas', 'komo', 'prueva']
+Suggestions for 'prueva': ['prueba']
+Correction for 'komo': como
+Corrected Text: ola como estas? esto es una prueba.
+Strict suggestions for 'pruevs': []
+Is 'levenshtein' correct? True
+```
+
 ## License
 
 Spanish NLP is licensed under the [GNU General Public License v3.0](https://github.com/jorgeortizfuentes/spanish_nlp/blob/main/LICENSE).
