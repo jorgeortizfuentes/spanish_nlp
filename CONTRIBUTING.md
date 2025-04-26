@@ -11,6 +11,7 @@ To update the version, use the `hatch version` command. You can specify the new 
 **Options:**
 
 1.  **Specify the exact version:**
+
     ```bash
     hatch version <new_version>
     # Example:
@@ -18,18 +19,18 @@ To update the version, use the `hatch version` command. You can specify the new 
     ```
 
 2.  **Increment semantically:**
-    *   Increment patch: `0.3.1` -> `0.3.2`
-        ```bash
-        hatch version patch
-        ```
-    *   Increment minor version: `0.3.1` -> `0.4.0`
-        ```bash
-        hatch version minor
-        ```
-    *   Increment major version: `0.3.1` -> `1.0.0`
-        ```bash
-        hatch version major
-        ```
+    - Increment patch: `0.3.1` -> `0.3.2`
+      ```bash
+      hatch version patch
+      ```
+    - Increment minor version: `0.3.1` -> `0.4.0`
+      ```bash
+      hatch version minor
+      ```
+    - Increment major version: `0.3.1` -> `1.0.0`
+      ```bash
+      hatch version major
+      ```
 
 **Steps:**
 
@@ -48,11 +49,10 @@ To update the version, use the `hatch version` command. You can specify the new 
     ```bash
     git add src/spanish_nlp/__about__.py
     # Use the updated version in the commit message
-    git commit -m "Bump version to $(hatch version)"
+    git commit -m "build: bump version to $(hatch version)"
     # Push the change to the development branch
-    git push origin develop
+    git push
     ```
-    *Note: After pushing to `develop`, you might need to create a Pull Request to merge `develop` into `main` to trigger the release.*
 
 ## Contribution Workflow (Gitflow)
 
@@ -62,10 +62,10 @@ This project follows the Gitflow workflow for managing branches and contribution
 2.  **Development Branch (`develop`):** This is the primary integration branch for ongoing development. All feature branches must be merged into `develop` first.
 3.  **Feature Branches (`feature/<feature-name>`):** Create these branches **from `develop`** for new features or significant changes. Use the naming convention `feature/nombre-descriptivo-de-la-feature`.
 4.  **Pull Requests (PRs):**
-    *   **Feature to Develop:** When a feature is complete, create a Pull Request (PR) from your `feature/<feature-name>` branch back to the `develop` branch.
-    *   **Develop to Main:** For releases, create a Pull Request (PR) from the `develop` branch to the `main` branch. This merge triggers the automated publishing process.
-    *   Ensure your code adheres to project conventions (see [Development Conventions](CONVENTIONS.md)) and passes all tests (`make test`).
-    *   All PRs require review before merging.
+    - **Feature to Develop:** When a feature is complete, create a Pull Request (PR) from your `feature/<feature-name>` branch back to the `develop` branch.
+    - **Develop to Main:** For releases, create a Pull Request (PR) from the `develop` branch to the `main` branch. This merge triggers the automated publishing process.
+    - Ensure your code adheres to project conventions (see [Development Conventions](CONVENTIONS.md)) and passes all tests (`make test`).
+    - All PRs require review before merging.
 
 ## Publishing to PyPI
 
