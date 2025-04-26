@@ -1,6 +1,7 @@
 # Spanish NLP
 
 [![PyPI version](https://badge.fury.io/py/spanish-nlp.svg)](https://badge.fury.io/py/spanish-nlp)
+[![PyPI Downloads](https://static.pepy.tech/badge/spanish-nlp)](https://pepy.tech/projects/spanish-nlp)
 [![Build Status](https://github.com/jorgeortizfuentes/spanish_nlp/actions/workflows/main.yml/badge.svg)](https://github.com/jorgeortizfuentes/spanish_nlp/actions/workflows/main.yml)
 
 ## Introduction
