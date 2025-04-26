@@ -3,13 +3,13 @@ from typing import List, Optional, Union
 
 from .base import SpellCheckerBase
 from .dictionary_impl import DictionarySpellChecker
-# from .contextual_lm_impl import ContextualLMSpellChecker # Removed
+from .contextual_lm_impl import ContextualLMSpellChecker # Added back
 
 logger = logging.getLogger(__name__)
 
 _IMPLEMENTATIONS = {
     'dictionary': DictionarySpellChecker,
-    # 'contextual_lm': ContextualLMSpellChecker, # Removed
+    'contextual_lm': ContextualLMSpellChecker, # Added back
 }
 
 class SpanishSpellChecker:
@@ -85,5 +85,5 @@ __all__ = [
     "SpanishSpellChecker",
     "SpellCheckerBase",
     "DictionarySpellChecker",
-    # "ContextualLMSpellChecker" # Removed
+    "ContextualLMSpellChecker" # Added back
 ]
