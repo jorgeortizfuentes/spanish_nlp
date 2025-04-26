@@ -64,7 +64,7 @@ This project follows the Gitflow workflow for managing branches and contribution
 4.  **Pull Requests (PRs):**
     *   **Feature to Develop:** When a feature is complete, create a Pull Request (PR) from your `feature/<feature-name>` branch back to the `develop` branch.
     *   **Develop to Main:** For releases, create a Pull Request (PR) from the `develop` branch to the `main` branch. This merge triggers the automated publishing process.
-    *   Ensure your code adheres to project conventions and passes all tests (`make test`).
+    *   Ensure your code adheres to project conventions (see [Development Conventions](CONVENTIONS.md)) and passes all tests (`make test`).
     *   All PRs require review before merging.
 
 ## Publishing to PyPI
