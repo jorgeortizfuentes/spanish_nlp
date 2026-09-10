@@ -253,9 +253,7 @@ class SpanishClassifier:
         self.n_labels = 2
         self.labels = {"LABEL_0": "not_sexist", "LABEL_1": "sexist"}
 
-    def load_racism_analysis(
-        self, type="racism_paula_lobo_et_al_average_strict"
-    ):
+    def load_racism_analysis(self, type="racism_paula_lobo_et_al_average_strict"):
         if type == "racism_paula_lobo_et_al_average_strict":
             self._racism_paula_lobo_et_al_average_()
         else:

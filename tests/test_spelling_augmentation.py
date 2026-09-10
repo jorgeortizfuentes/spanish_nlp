@@ -8,19 +8,13 @@ class TestSpelling(unittest.TestCase):
         self.keyboard_augmentator = augmentation.Spelling(method="keyboard")
         self.ocr_augmentator = augmentation.Spelling(method="ocr")
         self.random_augmentator = augmentation.Spelling(method="random")
-        self.grapheme_augmentator = augmentation.Spelling(
-            method="grapheme_spelling"
-        )
+        self.grapheme_augmentator = augmentation.Spelling(method="grapheme_spelling")
         self.word_augmentator = augmentation.Spelling(method="word_spelling")
         self.remove_punctuation_augmentator = augmentation.Spelling(
             method="remove_punctuation"
         )
-        self.remove_spaces_augmentator = augmentation.Spelling(
-            method="remove_spaces"
-        )
-        self.remove_accents_augmentator = augmentation.Spelling(
-            method="remove_accents"
-        )
+        self.remove_spaces_augmentator = augmentation.Spelling(method="remove_spaces")
+        self.remove_accents_augmentator = augmentation.Spelling(method="remove_accents")
         self.lowercase_augmentator = augmentation.Spelling(method="lowercase")
         self.uppercase_augmentator = augmentation.Spelling(method="uppercase")
         self.randomcase_augmentator = augmentation.Spelling(method="randomcase")
@@ -33,7 +27,7 @@ class TestSpelling(unittest.TestCase):
             f.write(f"*** SPELLING DATA AUGMENTATION: {method} ***" + "\n")
             f.write(f"Original: {original}" + "\n")
             for i in range(len(augmentations)):
-                f.write(f"Augmentation {i+1}: {augmentations[i]}" + "\n")
+                f.write(f"Augmentation {i + 1}: {augmentations[i]}" + "\n")
             f.write("-----------------------------" + "\n")
 
     def test_keyboard_augment_(self):
@@ -70,7 +64,7 @@ class TestSpelling(unittest.TestCase):
         for i in range(len(text_aug)):
             self.assertTrue(self.text == text_aug[i])
             self.assertFalse(self.text == "")
-    
+
     def test_remove_punctuation_augment(self):
         text_aug = self.remove_punctuation_augmentator.augment(self.text, 10)
         self.print_augmentations(self.text, text_aug, method="remove_punctuation")
@@ -83,8 +77,8 @@ class TestSpelling(unittest.TestCase):
         self.print_augmentations(self.text, text_aug, method="remove_spaces")
         for i in range(len(text_aug)):
             self.assertFalse(self.text == text_aug[i])
-            self.assertFalse(self.text == "")            
-        
+            self.assertFalse(self.text == "")
+
     def test_remove_accents_augment(self):
         text_aug = self.remove_accents_augmentator.augment(self.text, 10)
         self.print_augmentations(self.text, text_aug, method="remove_accents")
