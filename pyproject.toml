@@ -59,3 +59,14 @@ path = "src/spanish_nlp/__about__.py"
 include = [
     "/src",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.16.6",
+]
+
+[tool.ruff.lint]
+select = ["F", "I", "E"]
+ignore = ["E501"]
