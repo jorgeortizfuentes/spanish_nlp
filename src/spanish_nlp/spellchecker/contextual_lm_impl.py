@@ -1,11 +1,10 @@
 import logging
 from typing import List, Optional, Union
-import torch
-from transformers import pipeline, AutoTokenizer, AutoModelForMaskedLM
 
 from .base import SpellCheckerBase
 
 logger = logging.getLogger(__name__)
+
 
 class ContextualLMSpellChecker(SpellCheckerBase):
     """
@@ -15,10 +14,12 @@ class ContextualLMSpellChecker(SpellCheckerBase):
 
     DEFAULT_MODEL = "dccuchile/bert-base-spanish-wwm-uncased"
 
-    def __init__(self,
-                 model_name: str = DEFAULT_MODEL,
-                 device: Optional[Union[str, int]] = None,
-                 **kwargs):
+    def __init__(
+        self,
+        model_name: str = DEFAULT_MODEL,
+        device: Optional[Union[str, int]] = None,
+        **kwargs,
+    ):
         """
         Initializes the contextual language model spell checker (skeleton).
 
@@ -33,7 +34,9 @@ class ContextualLMSpellChecker(SpellCheckerBase):
         # Placeholder for actual model loading
         self.pipeline = None
         self.tokenizer = None
-        logger.info(f"ContextualLMSpellChecker skeleton initialized (model: {model_name}). Implementation pending.")
+        logger.info(
+            f"ContextualLMSpellChecker skeleton initialized (model: {model_name}). Implementation pending."
+        )
         # In a real implementation, you would load the model/tokenizer/pipeline here
         # try:
         #     # ... model loading logic ...
@@ -49,31 +52,33 @@ class ContextualLMSpellChecker(SpellCheckerBase):
         logger.warning("ContextualLMSpellChecker.is_correct() not implemented.")
         # A basic implementation might check against tokenizer vocab, but it's weak.
         # return word in self.tokenizer.vocab if self.tokenizer else True
-        return True # Placeholder
+        return True  # Placeholder
 
     def suggest(self, word: str) -> List[str]:
         """
         Suggests corrections for a potentially misspelled word (skeleton).
         """
         logger.warning("ContextualLMSpellChecker.suggest() not implemented.")
-        return [] # Placeholder
+        return []  # Placeholder
 
     def correct_word(self, word: str) -> str:
         """
         Returns the most likely correction for a single word (skeleton).
         """
         logger.warning("ContextualLMSpellChecker.correct_word() not implemented.")
-        return word # Placeholder
+        return word  # Placeholder
 
     def correct_text(self, text: str) -> str:
         """
         Attempts to automatically correct an entire text (skeleton).
         """
         # Override base method to indicate it's not fully functional yet
-        logger.warning("ContextualLMSpellChecker.correct_text() not implemented, returning original text.")
-        return text # Placeholder - does not attempt correction
+        logger.warning(
+            "ContextualLMSpellChecker.correct_text() not implemented, returning original text."
+        )
+        return text  # Placeholder - does not attempt correction
 
     def get_implementation_details(self) -> str:
-         details = f"Using implementation: {self.__class__.__name__} (Skeleton)\n"
-         details += f"  LM Model: {self.model_name} (Not fully loaded/used)"
-         return details
+        details = f"Using implementation: {self.__class__.__name__} (Skeleton)\n"
+        details += f"  LM Model: {self.model_name} (Not fully loaded/used)"
+        return details

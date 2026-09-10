@@ -30,10 +30,11 @@ import os
 
 import es_core_news_sm
 import pandas as pd
-
 from datasets import load_dataset
 from tqdm import tqdm
+
 tqdm.pandas()
+
 
 class DataAugmentationAbstract:
     """
@@ -89,10 +90,7 @@ class DataAugmentationAbstract:
         #     self._text_augment_,
         # )
         if num_workers == 1:
-            return texts.progress_apply(
-                self._text_augment_,
-                num_samples=num_samples
-            )
+            return texts.progress_apply(self._text_augment_, num_samples=num_samples)
         else:
             return texts.apply(
                 self._text_augment_,
@@ -111,7 +109,6 @@ class DataAugmentationAbstract:
             load_from_cache_file=False,
         )
         return dataset
-
 
     def _load_default_tokenizer_(self):
         # import es_core_news_sm if it is not imported

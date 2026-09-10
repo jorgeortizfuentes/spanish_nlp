@@ -1,6 +1,7 @@
-from abc import ABC, abstractmethod
 import re
-from typing import List, Tuple, Set
+from abc import ABC, abstractmethod
+from typing import List, Set, Tuple
+
 
 class SpellCheckerBase(ABC):
     """
@@ -69,13 +70,13 @@ class SpellCheckerBase(ABC):
                                      if it's a word (True) or not (False).
         """
         tokens = []
-        for match in re.finditer(r'(\b\w+\b)|(\W+)', text):
+        for match in re.finditer(r"(\b\w+\b)|(\W+)", text):
             word_match = match.group(1)
             non_word_match = match.group(2)
             if word_match:
                 tokens.append((word_match, True))
             elif non_word_match:
-                 tokens.append((non_word_match, False))
+                tokens.append((non_word_match, False))
         return tokens
 
     def find_errors(self, text: str) -> List[str]:
@@ -118,9 +119,9 @@ class SpellCheckerBase(ABC):
                         corrected_word = corrected_word.title()
                     elif original_word.isupper():
                         if len(original_word) > 1 or len(corrected_word) == 1:
-                             corrected_word = corrected_word.upper()
+                            corrected_word = corrected_word.upper()
                         elif len(original_word) == 1 and len(corrected_word) > 1:
-                             corrected_word = corrected_word
+                            corrected_word = corrected_word
                 else:
                     corrected_word = original_word
 

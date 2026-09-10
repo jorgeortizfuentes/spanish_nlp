@@ -61,28 +61,29 @@ To preprocess text using the preprocess module, you can import it and call the d
 
 ```python
 from spanish_nlp import SpanishPreprocess
+
 sp = SpanishPreprocess(
-        lower=False,
-        remove_url=True,
-        remove_hashtags=False,
-        split_hashtags=True,
-        normalize_breaklines=True,
-        remove_emoticons=False,
-        remove_emojis=False,
-        convert_emoticons=False,
-        convert_emojis=False,
-        normalize_inclusive_language=True,
-        reduce_spam=True,
-        remove_vowels_accents=True,
-        remove_multiple_spaces=True,
-        remove_punctuation=True,
-        remove_unprintable=True,
-        remove_numbers=True,
-        remove_stopwords=False,
-        stopwords_list=None,
-        lemmatize=False,
-        stem=False,
-        remove_html_tags=True,
+    lower=False,
+    remove_url=True,
+    remove_hashtags=False,
+    split_hashtags=True,
+    normalize_breaklines=True,
+    remove_emoticons=False,
+    remove_emojis=False,
+    convert_emoticons=False,
+    convert_emojis=False,
+    normalize_inclusive_language=True,
+    reduce_spam=True,
+    remove_vowels_accents=True,
+    remove_multiple_spaces=True,
+    remove_punctuation=True,
+    remove_unprintable=True,
+    remove_numbers=True,
+    remove_stopwords=False,
+    stopwords_list=None,
+    lemmatize=False,
+    stem=False,
+    remove_html_tags=True,
 )
 
 test_text = """𝓣𝓮𝔁𝓽𝓸 𝓭𝓮 𝓹𝓻𝓾𝓮𝓫𝓪
@@ -126,10 +127,12 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 ```python
 from spanish_nlp import SpanishClassifier
 
-sc = classifiers.SpanishClassifier(model_name="hate_speech", device='cpu')
+sc = classifiers.SpanishClassifier(model_name="hate_speech", device="cpu")
 # DISCLAIMER: The following message is merely an example of hate speech and does not represent the views of the author or contributors.
-t1 =  "LAS MUJERES Y GAYS DEBERIAN SER EXTERMINADOS"
-t2 = "El presidente convocó a una reunión a los representantes de los partidos políticos"
+t1 = "LAS MUJERES Y GAYS DEBERIAN SER EXTERMINADOS"
+t2 = (
+    "El presidente convocó a una reunión a los representantes de los partidos políticos"
+)
 p1 = sc.predict(t1)
 p2 = sc.predict(t2)
 
@@ -177,23 +180,26 @@ See more information in the [Jupyter Notebook example](https://github.com/jorgeo
 ```python
 from spanish_nlp import augmentation
 
-ocr = augmentation.Spelling(method="ocr",
-                            stopwords="default",
-                            aug_percent=0.3,
-                            tokenizer="default")
+ocr = augmentation.Spelling(
+    method="ocr", stopwords="default", aug_percent=0.3, tokenizer="default"
+)
 
-grapheme_spelling = augmentation.Spelling(method="grapheme_spelling",
-                                          stopwords="default",
-                                          aug_percent=0.3,
-                                          tokenizer="default")
+grapheme_spelling = augmentation.Spelling(
+    method="grapheme_spelling",
+    stopwords="default",
+    aug_percent=0.3,
+    tokenizer="default",
+)
 
-masked_sustitute = augmentation.Masked(method="sustitute",
-                                       model="dccuchile/bert-base-spanish-wwm-cased",
-                                       tokenizer="default",
-                                       stopwords="default",
-                                       aug_percent=0.4,
-                                       device="cpu",
-                                       top_k=10)
+masked_sustitute = augmentation.Masked(
+    method="sustitute",
+    model="dccuchile/bert-base-spanish-wwm-cased",
+    tokenizer="default",
+    stopwords="default",
+    aug_percent=0.4,
+    device="cpu",
+    top_k=10,
+)
 
 
 text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
@@ -261,9 +267,10 @@ checker_strict = SpanishSpellChecker(method="dictionary", distance=1)
 print(f"Strict suggestions for 'pruevs': {checker_strict.suggest('pruevs')}")
 
 # Initialize with custom dictionary words
-checker_custom = SpanishSpellChecker(method="dictionary", custom_dictionary=["levenshtein"])
+checker_custom = SpanishSpellChecker(
+    method="dictionary", custom_dictionary=["levenshtein"]
+)
 print(f"Is 'levenshtein' correct? {checker_custom.is_correct('levenshtein')}")
-
 ```
 
 Output:
