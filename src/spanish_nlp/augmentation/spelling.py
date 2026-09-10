@@ -1,13 +1,13 @@
-import re
-
-import numpy as np
-from math import ceil
-from unidecode import unidecode
 import json
 import os
+import random
+import re
+from math import ceil
+
+import numpy as np
+from unidecode import unidecode
 
 from .abstract import DataAugmentationAbstract
-import random
 
 
 class Spelling(DataAugmentationAbstract):
@@ -40,9 +40,7 @@ class Spelling(DataAugmentationAbstract):
 
         if self.method not in available_methods:
             str_methods = ", ".join(available_methods)
-            raise ValueError(
-                f"Method not available. The method must be {str_methods}."
-            )
+            raise ValueError(f"Method not available. The method must be {str_methods}.")
 
         self.aug_percent = aug_percent
         self.tokenizer = tokenizer
@@ -147,9 +145,7 @@ class Spelling(DataAugmentationAbstract):
             num_aug = int(len(text) * self.aug_percent)
 
             # Get the indices of the characters to augment
-            aug_indices = np.random.choice(
-                range(len(text)), num_aug, replace=False
-            )
+            aug_indices = np.random.choice(range(len(text)), num_aug, replace=False)
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
             # Get the augmented characters
@@ -252,9 +248,7 @@ class Spelling(DataAugmentationAbstract):
             # Get the number of characters to augment
             num_aug = int(len(text) * self.aug_percent)
             # Get the indices of the characters to augment
-            aug_indices = np.random.choice(
-                range(len(text)), num_aug, replace=False
-            )
+            aug_indices = np.random.choice(range(len(text)), num_aug, replace=False)
 
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
@@ -319,9 +313,7 @@ class Spelling(DataAugmentationAbstract):
             # Get the number of characters to augment
             num_aug = int(len(text) * self.aug_percent)
             # Get the indices of the characters to augment
-            aug_indices = np.random.choice(
-                range(len(text)), num_aug, replace=False
-            )
+            aug_indices = np.random.choice(range(len(text)), num_aug, replace=False)
             # Get the characters to augment
             aug_chars = [text[i] for i in aug_indices]
             # Get the augmented characters if they are in the alphabet
@@ -470,7 +462,7 @@ class Spelling(DataAugmentationAbstract):
             # Create a list with num_aug elements in indices without repetition
             elements = random.sample(indices, num_aug)
             for e in elements:
-                new_text = new_text[:e] + new_text[e + 1:]
+                new_text = new_text[:e] + new_text[e + 1 :]
             # Append the augmented text to the list
             output_texts.append(new_text)
         return output_texts
@@ -546,9 +538,7 @@ class Spelling(DataAugmentationAbstract):
             for word in selected_words:
                 new_word = word["word"].lower()
                 new_text = (
-                    new_text[: word["start"]]
-                    + new_word
-                    + new_text[word["end"] :]
+                    new_text[: word["start"]] + new_word + new_text[word["end"] :]
                 )
             output_texts.append(new_text)
         return output_texts
@@ -594,9 +584,7 @@ class Spelling(DataAugmentationAbstract):
             for word in selected_words:
                 new_word = word["word"].upper()
                 new_text = (
-                    new_text[: word["start"]]
-                    + new_word
-                    + new_text[word["end"] :]
+                    new_text[: word["start"]] + new_word + new_text[word["end"] :]
                 )
             output_texts.append(new_text)
         return output_texts
@@ -673,7 +661,7 @@ class Spelling(DataAugmentationAbstract):
         aug_percent = self.aug_percent
         self.aug_percent = aug_percent / 7
         output_texts = []
-        if type(text) == str:
+        if isinstance(type(text), str):
             text = list(text)
         for i in range(num_samples):
             text = self._word_spelling_augmentation_(text[0], 1)

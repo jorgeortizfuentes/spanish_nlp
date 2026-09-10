@@ -1,16 +1,17 @@
 import logging
-from typing import List, Optional, Union
+from typing import List
 
 from .base import SpellCheckerBase
+from .contextual_lm_impl import ContextualLMSpellChecker  # Added back
 from .dictionary_impl import DictionarySpellChecker
-from .contextual_lm_impl import ContextualLMSpellChecker # Added back
 
 logger = logging.getLogger(__name__)
 
 _IMPLEMENTATIONS = {
-    'dictionary': DictionarySpellChecker,
-    'contextual_lm': ContextualLMSpellChecker, # Added back
+    "dictionary": DictionarySpellChecker,
+    "contextual_lm": ContextualLMSpellChecker,  # Added back
 }
+
 
 class SpanishSpellChecker:
     """
@@ -19,10 +20,8 @@ class SpanishSpellChecker:
     Provides access to different spell checking strategies (e.g., dictionary-based,
     contextual language model-based).
     """
-    def __init__(self,
-                 method: str = 'dictionary',
-                 language: str = 'es',
-                 **kwargs):
+
+    def __init__(self, method: str = "dictionary", language: str = "es", **kwargs):
         """
         Initializes the spell checker using the specified method.
 
@@ -47,15 +46,19 @@ class SpanishSpellChecker:
 
         logger.info(f"Initializing SpanishSpellChecker with method: '{method}'")
 
-        if 'language' not in kwargs:
-             kwargs['language'] = language
+        if "language" not in kwargs:
+            kwargs["language"] = language
 
         try:
             self._impl: SpellCheckerBase = implementation_class(**kwargs)
         except Exception as e:
-            logger.error(f"Failed to instantiate spell checker implementation '{method}': {e}", exc_info=True)
-            raise RuntimeError(f"Could not initialize spell checker method '{method}'. See logs for details.") from e
-
+            logger.error(
+                f"Failed to instantiate spell checker implementation '{method}': {e}",
+                exc_info=True,
+            )
+            raise RuntimeError(
+                f"Could not initialize spell checker method '{method}'. See logs for details."
+            ) from e
 
     def is_correct(self, word: str) -> bool:
         """Checks if a word is correct using the selected method."""
@@ -81,9 +84,10 @@ class SpanishSpellChecker:
         """Returns information about the currently used implementation."""
         return f"Using implementation: {self._impl.__class__.__name__}"
 
+
 __all__ = [
     "SpanishSpellChecker",
     "SpellCheckerBase",
     "DictionarySpellChecker",
-    "ContextualLMSpellChecker" # Added back
+    "ContextualLMSpellChecker",  # Added back
 ]

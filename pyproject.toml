@@ -69,4 +69,4 @@ dev = [
 
 [tool.ruff.lint]
 select = ["F", "I", "E"]
-ignore = ["E501"]
+ignore = ["E501", "F401"]

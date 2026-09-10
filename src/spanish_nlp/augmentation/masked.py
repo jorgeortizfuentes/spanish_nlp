@@ -1,13 +1,15 @@
-import numpy as np
 import math
-import torch
-from transformers import pipeline, AutoTokenizer
-import warnings
-from spanish_nlp.utils.stopwords import punct
-from .abstract import DataAugmentationAbstract
 import re
 
+import numpy as np
+import torch
+from transformers import AutoTokenizer, pipeline
 from transformers.utils import logging
+
+from spanish_nlp.utils.stopwords import punct
+
+from .abstract import DataAugmentationAbstract
+
 logging.set_verbosity(40)
 
 
@@ -69,9 +71,9 @@ class Masked(DataAugmentationAbstract):
         self.mask_token = self.fillmask.tokenizer.mask_token
 
     def __load__tokenizer__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer,
-                                                       truncation=True,
-                                                       use_fast=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.tokenizer, truncation=True, use_fast=True
+        )
 
     def set_aug_percent(self, aug_percent):
         """
@@ -108,8 +110,9 @@ class Masked(DataAugmentationAbstract):
         for _ in range(num_samples):
             # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
             n_tokens = len(self.tokenizer.tokenize(text))
-            n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))+1
+            n_tokens_split = (
+                int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
+            )
             n_splits = math.ceil((n_tokens / n_tokens_split))
 
             if n_splits > 1:
@@ -152,8 +155,7 @@ class Masked(DataAugmentationAbstract):
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
-            masked_sentence = " ".join(
-                words[:K] + [self.mask_token] + words[K + 1:])
+            masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K + 1 :])
             predictions = self.fillmask(masked_sentence, top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
@@ -164,7 +166,7 @@ class Masked(DataAugmentationAbstract):
                 random_number = np.random.randint(0, self.top_k)
                 # Check if there is a punctuation in new_word
                 pattern = "|".join(re.escape(p) for p in punct)
-                if re.search(pattern, new_word) == None and new_word not in not_allowed:
+                if re.search(pattern, new_word) is None and new_word not in not_allowed:
                     break
                 elif count > self.top_k:
                     break
@@ -187,11 +189,11 @@ class Masked(DataAugmentationAbstract):
         """
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
-        n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+        n_tokens_split = (
+            int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
+        )
         n_splits = math.ceil((n_tokens / n_tokens_split))
-        sentence_splits = self._split_text_into_chunks_(
-            sentence, n_splits=n_splits)
+        sentence_splits = self._split_text_into_chunks_(sentence, n_splits=n_splits)
 
         # Augment each chunk of the text and concatenate the results
         augmented_chunks = []
@@ -217,8 +219,7 @@ class Masked(DataAugmentationAbstract):
         tokens = self.tokenizer.tokenize(text)
         n_tokens = len(tokens)
         chunk_size = int(n_tokens / n_splits)
-        chunks = [tokens[i:i+chunk_size]
-                  for i in range(0, n_tokens, chunk_size)]
+        chunks = [tokens[i : i + chunk_size] for i in range(0, n_tokens, chunk_size)]
         return [" ".join(chunk) for chunk in chunks]
 
     def _insert_augment_(self, text, num_samples=1, max_words=450):
@@ -236,8 +237,9 @@ class Masked(DataAugmentationAbstract):
         for _ in range(num_samples):
             # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
             n_tokens = len(self.tokenizer.tokenize(text))
-            n_tokens_split = int(
-                self.tokenizer.model_max_length / (self.aug_percent+1))+1
+            n_tokens_split = (
+                int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
+            )
             n_splits = math.ceil((n_tokens / n_tokens_split))
 
             if n_splits > 1:
@@ -277,10 +279,8 @@ class Masked(DataAugmentationAbstract):
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
-            masked_sentence = " ".join(
-                words[:K] + [self.mask_token] + words[K:])
-            predictions = self.fillmask(masked_sentence,
-                                        top_k=self.top_k)
+            masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K:])
+            predictions = self.fillmask(masked_sentence, top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
 
@@ -289,7 +289,7 @@ class Masked(DataAugmentationAbstract):
             while True:
                 random_number = np.random.randint(0, self.top_k)
                 pattern = "|".join(re.escape(p) for p in punct)
-                if re.search(pattern, new_word) == None and new_word not in not_allowed:
+                if re.search(pattern, new_word) is None and new_word not in not_allowed:
                     break
                 elif count > self.top_k:
                     break
@@ -310,11 +310,11 @@ class Masked(DataAugmentationAbstract):
         """
         # Split the text into chunks with the desired length
         n_tokens = len(self.tokenizer.tokenize(sentence))
-        n_tokens_split = int(
-            self.tokenizer.model_max_length / (self.aug_percent+1)) + 1
+        n_tokens_split = (
+            int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
+        )
         n_splits = math.ceil((n_tokens / n_tokens_split))
-        sentence_splits = self._split_text_into_chunks_(
-            sentence, n_splits=n_splits)
+        sentence_splits = self._split_text_into_chunks_(sentence, n_splits=n_splits)
 
         # Augment each chunk of the text and concatenate the results
         augmented_chunks = []

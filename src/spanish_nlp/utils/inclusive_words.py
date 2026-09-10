@@ -27,6 +27,7 @@ INCLUSIVE_WORDS = {
     "les": "los",
 }
 
+
 def normalize_inclusive_language(text: str) -> str:
     """
     Normalize inclusive language

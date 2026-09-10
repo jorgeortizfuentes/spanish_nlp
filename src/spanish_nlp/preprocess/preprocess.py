@@ -1,6 +1,7 @@
+import logging
 import re
 import string
-import logging
+
 import emoji
 from nltk.stem.snowball import SnowballStemmer
 
@@ -93,11 +94,17 @@ class SpanishPreprocess:
             raise ValueError("Lemmatize and Stem are exclusive. Choose one.")
 
         if self.remove_emojis and self.convert_emojis:
-            raise ValueError("Remove emojis and convert emojis are exclusive. Choose one.")
+            raise ValueError(
+                "Remove emojis and convert emojis are exclusive. Choose one."
+            )
         if self.remove_emoticons and self.convert_emoticons:
-            raise ValueError("Remove emoticons and convert emoticons are exclusive. Choose one.")
+            raise ValueError(
+                "Remove emoticons and convert emoticons are exclusive. Choose one."
+            )
         if self.split_hashtags and self.remove_hashtags:
-            raise ValueError("Split hashtags and remove hashtags are exclusive. Choose one.")
+            raise ValueError(
+                "Split hashtags and remove hashtags are exclusive. Choose one."
+            )
         if self.remove_stopwords and self.stopwords_list is None:
             raise ValueError(
                 "If remove stopwords is True, you must provide a type of stopwords list ('default', 'extended', 'nltk', 'spacy') or a list of stopwords."
@@ -124,7 +131,9 @@ class SpanishPreprocess:
         elif type == "spacy":
             import es_core_news_sm
 
-            nlp = es_core_news_sm.load(disable=["ner", "parser", "tagger", "textcat", "vectors"])
+            nlp = es_core_news_sm.load(
+                disable=["ner", "parser", "tagger", "textcat", "vectors"]
+            )
             self.stopwords_list = nlp.Defaults.stop_words
             del nlp
 
@@ -146,7 +155,6 @@ class SpanishPreprocess:
             self.nlp_spacy = es_core_news_sm.load(
                 disable=["ner", "parser", "tagger", "textcat", "vectors"]
             )
-
 
     def _lower_(self, text):
         return text.lower()
@@ -177,7 +185,9 @@ class SpanishPreprocess:
         # Delete hashtag with numbers
         hashtags = [ht for ht in hashtags if not re.search(r"\d", ht)]
         # Split all hashtags and replace them in the text
-        pattern = re.compile(r"[A-ZÑÁÉIÓÚ]*[a-zñáéíóúü0-9]+|\d+|[A-ZÑÁÉIÓÚ]+(?![a-zñáéíóúü])")
+        pattern = re.compile(
+            r"[A-ZÑÁÉIÓÚ]*[a-zñáéíóúü0-9]+|\d+|[A-ZÑÁÉIÓÚ]+(?![a-zñáéíóúü])"
+        )
         for ht in hashtags:
             words = " ".join(pattern.findall(ht)).strip()
             text = text.replace(f"#{ht}", f"{words}")
@@ -263,7 +273,11 @@ class SpanishPreprocess:
 
     def _remove_stopwords_(self, text):
         return " ".join(
-            [word for word in str(text).split() if word.lower() not in self.stopwords_list]
+            [
+                word
+                for word in str(text).split()
+                if word.lower() not in self.stopwords_list
+            ]
         )
 
     def _stem_(self, text, stemmer=SnowballStemmer("spanish")):
@@ -298,15 +312,15 @@ class SpanishPreprocess:
 
     def transform(self, text):
         """Transform input text by applying the configured preprocessing steps.
-        
+
         Args:
             text (str): Input text to transform
-            
+
         Returns:
             str: Transformed text with all preprocessing steps applied
         """
         logger.debug("Starting text transformation")
-        
+
         if self.split_hashtags:
             text = self._split_hashtags_(text)
             logger.debug("Split hashtags: %s", text)

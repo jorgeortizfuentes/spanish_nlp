@@ -1,6 +1,7 @@
 import unittest
 
 from parameterized import parameterized
+
 from spanish_nlp import SpanishPreprocess
 
 
@@ -177,8 +178,12 @@ Si colaboras con este repositorio te puedes ganar $100.000 (en dinero falso). O 
         self.assertTrue(text != pp_text)
 
     def test_transform_normalize_punctuation_spelling(self):
-        text = "Este es un texto,con la puntuación incorrecta . Se tiene que solucionar!"
-        expected = "Este es un texto, con la puntuación incorrecta. Se tiene que solucionar!"
+        text = (
+            "Este es un texto,con la puntuación incorrecta . Se tiene que solucionar!"
+        )
+        expected = (
+            "Este es un texto, con la puntuación incorrecta. Se tiene que solucionar!"
+        )
         pp_text = self.preprocessor._normalize_punctuation_spelling_(text)
         self.assertEqual(pp_text, expected)
         self.assertTrue(text != pp_text)
