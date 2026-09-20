@@ -1,0 +1,23 @@
+name: Ruff
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Ruff lint
+        run: uvx ruff check .
+
+      - name: Ruff format
+        run: uvx ruff format --check .
