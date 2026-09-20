@@ -1,6 +1,7 @@
 import logging
 import re
 import string
+from typing import Literal
 
 import emoji
 from nltk.stem.snowball import SnowballStemmer
@@ -34,10 +35,10 @@ class SpanishPreprocess:
         remove_unprintable=True,
         remove_numbers=True,
         remove_stopwords=False,
-        stopwords_list=None,
         lemmatize=False,
         stem=False,
         remove_html_tags=True,
+        stopwords_list: list | Literal["default", "extended", "nltk", "spacy"] = "default",
     ):
         """A class for preprocessing Spanish text for NLP tasks.
 
@@ -112,7 +113,9 @@ class SpanishPreprocess:
                 "If remove stopwords is True, you must provide a type of stopwords list ('default', 'extended', 'nltk', 'spacy') or a list of stopwords."
             )
 
-    def _prepare_stopwords_(self, type="default"):
+    def _prepare_stopwords_(
+        self, type: list | Literal["default", "extended", "nltk", "spacy"] = "default"
+    ):
         if type == "default":
             from spanish_nlp.utils.stopwords import default_stopwords
 
