@@ -173,7 +173,7 @@ class SpanishPreprocess:
             "este es #unEjemplo de #TextosConHashtag #SiSeñor #yey." -> "este es un Ejemplo de Textos Con Hashtag Si Señor yey."
         """
         # Find all hashtags
-        hashtags = re.findall(r"(?<=\s)#(\w+)", text)
+        hashtags = re.findall(r"(?:^|\s)#(\w+)", text)
         # Delete hashtag with numbers
         hashtags = [ht for ht in hashtags if not re.search(r"\d", ht)]
         # Split all hashtags and replace them in the text
