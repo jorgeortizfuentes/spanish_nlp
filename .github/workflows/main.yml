@@ -8,8 +8,12 @@ on:
       - 'feature/**'
 
 jobs:
-  build-test-deploy:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,34 +22,41 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: uv sync --locked
 
       - name: Run tests
         run: make test
-        continue-on-error: false
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.10'
 
       - name: Build package
-        if: github.ref == 'refs/heads/main'
         run: |
           uv build
           export VERSION=$(uvx hatch version)
           echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
-        continue-on-error: false
 
       - name: Publish distribution to PyPI
-        if: github.ref == 'refs/heads/main'
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Add tag to repository
-        if: github.ref == 'refs/heads/main' && success()
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: v${{ env.PACKAGE_VERSION }}
-
