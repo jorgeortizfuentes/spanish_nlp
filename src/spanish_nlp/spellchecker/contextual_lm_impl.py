@@ -1,5 +1,4 @@
 import logging
-from typing import List, Optional, Union
 
 from .base import SpellCheckerBase
 
@@ -17,7 +16,7 @@ class ContextualLMSpellChecker(SpellCheckerBase):
     def __init__(
         self,
         model_name: str = DEFAULT_MODEL,
-        device: Optional[Union[str, int]] = None,
+        device: str | int | None = None,
         **kwargs,
     ):
         """
@@ -54,7 +53,7 @@ class ContextualLMSpellChecker(SpellCheckerBase):
         # return word in self.tokenizer.vocab if self.tokenizer else True
         return True  # Placeholder
 
-    def suggest(self, word: str) -> List[str]:
+    def suggest(self, word: str) -> list[str]:
         """
         Suggests corrections for a potentially misspelled word (skeleton).
         """

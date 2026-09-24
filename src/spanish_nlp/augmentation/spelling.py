@@ -621,7 +621,7 @@ class Spelling(DataAugmentationAbstract):
         json_path = os.path.join(
             os.path.dirname(__file__), "data", "misspelled_words.json"
         )
-        with open(json_path, "r") as f:
+        with open(json_path) as f:
             self.misspelled_dict = json.load(f)
 
     def _word_spelling_augmentation_(self, text, num_samples):

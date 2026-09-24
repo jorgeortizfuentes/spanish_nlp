@@ -1,5 +1,4 @@
 import logging
-from typing import List, Optional, Union
 
 from spellchecker import SpellChecker
 
@@ -18,7 +17,7 @@ class DictionarySpellChecker(SpellCheckerBase):
         self,
         language: str = "es",
         distance: int = 2,
-        custom_dictionary: Optional[Union[str, List[str]]] = None,
+        custom_dictionary: str | list[str] | None = None,
         **kwargs,
     ):
         """
@@ -32,7 +31,7 @@ class DictionarySpellChecker(SpellCheckerBase):
             **kwargs: Additional arguments passed to the base class.
         """
         super().__init__(**kwargs)
-        self.spell: Optional[SpellChecker] = None
+        self.spell: SpellChecker | None = None
         try:
             self.spell = SpellChecker(language=language, distance=distance)
 
@@ -76,7 +75,7 @@ class DictionarySpellChecker(SpellCheckerBase):
             return True
         return word.lower() in self.spell
 
-    def suggest(self, word: str) -> List[str]:
+    def suggest(self, word: str) -> list[str]:
         """Suggests corrections based on edit distance."""
         if not self.spell:
             logger.warning(
