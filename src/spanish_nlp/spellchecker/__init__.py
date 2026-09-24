@@ -1,5 +1,4 @@
 import logging
-from typing import List
 
 from .base import SpellCheckerBase
 from .contextual_lm_impl import ContextualLMSpellChecker  # Added back

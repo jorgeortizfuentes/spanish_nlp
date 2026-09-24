@@ -155,7 +155,7 @@ class Masked(DataAugmentationAbstract):
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
-            masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K + 1 :])
+            masked_sentence = " ".join([*words[:K], self.mask_token, *words[K + 1 :]])
             predictions = self.fillmask(masked_sentence, top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
@@ -265,8 +265,6 @@ class Masked(DataAugmentationAbstract):
         # Tokens that are not allowed to be replaced
         words = sentence.split(" ")
         not_allowed = punct + self.stopwords
-        # Tokenize text, count the tokens and if the tokens > max_length, return the original sentence
-        tokens = len(self.tokenizer.tokenize(sentence))
         num_words = int(len(words) * self.aug_percent)
         K_list = []
 
@@ -279,7 +277,7 @@ class Masked(DataAugmentationAbstract):
         # Iterate over the words to be replaced
         for K in K_list:
             words = sentence.split(" ")
-            masked_sentence = " ".join(words[:K] + [self.mask_token] + words[K:])
+            masked_sentence = " ".join([*words[:K], self.mask_token, *words[K:]])
             predictions = self.fillmask(masked_sentence, top_k=self.top_k)
             random_number = np.random.randint(0, self.top_k)
             new_word = predictions[random_number]["token_str"]
