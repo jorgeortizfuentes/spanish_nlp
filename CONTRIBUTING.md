@@ -2,34 +2,49 @@
 
 This document describes the steps for updating the package version and how the publishing process works.
 
+## Development Setup
+
+This project uses [uv](https://docs.astral.sh/uv/) to manage dependencies and virtual environments. Dependencies are declared in `pyproject.toml` and pinned in `uv.lock`, which must be committed.
+
+```bash
+# Create .venv and install runtime + dev dependencies from uv.lock
+uv sync
+# Also install docs and notebook dependencies
+uv sync --all-groups
+# Run the test suite
+make test
+```
+
+To add or remove dependencies, use `uv add <package>` (runtime), `uv add --group dev <package>` (development) or `uv remove <package>`. These commands update both `pyproject.toml` and `uv.lock`; never edit `uv.lock` by hand.
+
 ## Updating the Package Version
 
-This project uses `hatch` for version management. The version is stored in `src/spanish_nlp/__about__.py`.
+This project uses `hatch` for version management (run through `uvx`, so it does not need to be installed). The version is stored in `src/spanish_nlp/__about__.py`.
 
-To update the version, use the `hatch version` command. You can specify the new version directly or use semantic increments (patch, minor, major).
+To update the version, use the `uvx hatch version` command. You can specify the new version directly or use semantic increments (patch, minor, major).
 
 **Options:**
 
 1.  **Specify the exact version:**
 
     ```bash
-    hatch version <new_version>
+    uvx hatch version <new_version>
     # Example:
-    hatch version 0.4.0
+    uvx hatch version 0.4.0
     ```
 
 2.  **Increment semantically:**
     - Increment patch: `0.3.1` -> `0.3.2`
       ```bash
-      hatch version patch
+      uvx hatch version patch
       ```
     - Increment minor version: `0.3.1` -> `0.4.0`
       ```bash
-      hatch version minor
+      uvx hatch version minor
       ```
     - Increment major version: `0.3.1` -> `1.0.0`
       ```bash
-      hatch version major
+      uvx hatch version major
       ```
 
 **Steps:**
@@ -39,17 +54,17 @@ To update the version, use the `hatch version` command. You can specify the new 
     git checkout main
     git pull origin main
     ```
-2.  Run the `hatch version` command with the desired option:
+2.  Run the `uvx hatch version` command with the desired option:
     ```bash
     # Example for a new minor version
-    hatch version minor
+    uvx hatch version minor
     ```
 3.  Verify that the `src/spanish_nlp/__about__.py` file has been updated correctly.
 4.  Add the change to Git staging, commit, and push the changes:
     ```bash
     git add src/spanish_nlp/__about__.py
     # Use the updated version in the commit message
-    git commit -m "build: bump version to $(hatch version)"
+    git commit -m "build: bump version to $(uvx hatch version)"
     # Push the change to the development branch
     git push
     ```
@@ -76,7 +91,7 @@ Publishing to PyPI is **automated** using GitHub Actions (`.github/workflows/mai
 1.  When changes are merged (usually via Pull Request) into the `main` branch.
 2.  The GitHub Actions workflow is automatically triggered.
 3.  Tests are run (`make test`).
-4.  If tests pass, the package is built (`hatchling build`).
+4.  If tests pass, the package is built (`uv build`).
 5.  The version is extracted from the built package.
 6.  The package is published to PyPI using the `secrets.PYPI_API_TOKEN`.
 7.  If publishing is successful, a Git tag is automatically created in the repository with the format `vX.Y.Z` (e.g., `v0.4.0`).
@@ -84,9 +99,9 @@ Publishing to PyPI is **automated** using GitHub Actions (`.github/workflows/mai
 **Therefore, to publish a new version:**
 
 1.  Ensure the `develop` branch contains all the features and fixes for the release.
-2.  Update the version in the `develop` branch using `hatch version` (as described above).
+2.  Update the version in the `develop` branch using `uvx hatch version` (as described above).
 3.  Commit and push the version bump to `develop`.
 4.  Create a Pull Request from `develop` to `main`.
 5.  Once the PR is reviewed and approved, **merge it into `main`**. This merge will trigger the automated publishing workflow.
 
-**You do not need to run `hatch publish` manually.**
+**You do not need to run `uv publish` manually.**
