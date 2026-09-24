@@ -43,12 +43,12 @@ Spanish NLP can be installed via pip:
 pip install spanish-nlp
 ```
 
-To install from source, clone the repository and install the package using pip:
+To install from source for development, clone the repository and sync the environment with [uv](https://docs.astral.sh/uv/):
 
 ```bash
 git clone https://github.com/jorgeortizfuentes/spanish_nlp.git
 cd spanish_nlp
-pip install .
+uv sync
 ```
 
 ## Usage

@@ -1,5 +1,4 @@
 import logging
-from typing import List
 
 from .base import SpellCheckerBase
 from .contextual_lm_impl import ContextualLMSpellChecker  # Added back
@@ -64,7 +63,7 @@ class SpanishSpellChecker:
         """Checks if a word is correct using the selected method."""
         return self._impl.is_correct(word)
 
-    def suggest(self, word: str) -> List[str]:
+    def suggest(self, word: str) -> list[str]:
         """Suggests corrections for a word using the selected method."""
         return self._impl.suggest(word)
 
@@ -72,7 +71,7 @@ class SpanishSpellChecker:
         """Gets the most likely correction for a word using the selected method."""
         return self._impl.correct_word(word)
 
-    def find_errors(self, text: str) -> List[str]:
+    def find_errors(self, text: str) -> list[str]:
         """Finds potential errors in text using the selected method."""
         return self._impl.find_errors(text)
 
@@ -86,8 +85,8 @@ class SpanishSpellChecker:
 
 
 __all__ = [
+    "ContextualLMSpellChecker",  # Added back
+    "DictionarySpellChecker",
     "SpanishSpellChecker",
     "SpellCheckerBase",
-    "DictionarySpellChecker",
-    "ContextualLMSpellChecker",  # Added back
 ]

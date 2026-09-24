@@ -1,20 +1,19 @@
+SHELL := /bin/bash
+.SHELLFLAGS := -eo pipefail -c
+
+.PHONY: install install_all lock test lint format build aider
+
 install:
-	uv pip install -r requirements.txt
-	uv pip install -r requirements-dev.txt
+	@echo "Syncing environment with uv.lock (runtime + dev dependencies)..."
+	uv sync
 
-venv:
-	@echo "Setting up virtual environment..."
-	@rm -rf .venv
-	uv venv .venv
-	uv pip install -U pip
-	@echo "Run 'source .venv/bin/activate' to activate the virtual environment."
+install_all:
+	@echo "Syncing environment with all dependency groups (dev, docs, notebooks)..."
+	uv sync --all-groups
 
-install_local: 
-	@echo "Installing package in editable mode..."
-	uv pip install -e .
-	@echo "Package installed successfully. You can now use the package."
+lock:
+	uv lock
 
-.PHONY: aider
 aider:
 	@echo "Setting up environment variables..."
 	@echo "VERTEXAI_PROJECT=$(VERTEXAI_PROJECT)"
@@ -26,4 +25,15 @@ test:
 	@echo "Creating outputs directory..."
 	@mkdir -p outputs
 	@echo "Running tests with coverage..."
-	pytest --cov=spanish_nlp --cov-report=html:outputs/coverage --cov-report=term-missing -v tests/ | tee outputs/pytest-report.txt
+	uv run pytest --cov=spanish_nlp --cov-report=html:outputs/coverage --cov-report=term-missing -v tests/ | tee outputs/pytest-report.txt
+
+lint:
+	uv run ruff check .
+	uv run ruff format --check .
+
+format:
+	uv run ruff check --fix .
+	uv run ruff format .
+
+build:
+	uv build

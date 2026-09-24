@@ -2,6 +2,7 @@ import json
 import os
 import random
 import re
+from itertools import chain
 from math import ceil
 
 import numpy as np
@@ -263,7 +264,7 @@ class Spelling(DataAugmentationAbstract):
                 for c in aug_chars
             ]
             aug_text = list(text)
-            for i, c in zip(aug_indices, aug_chars):
+            for i, c in zip(aug_indices, aug_chars, strict=True):
                 aug_text[i] = c
             aug_text = "".join(aug_text)
             # Add the augmented text to the list
@@ -382,14 +383,14 @@ class Spelling(DataAugmentationAbstract):
         # Count the times that are self.keyboard_augment_dict keys in the text with self.__find_substring_indexes__(string, substring)
         aparitions = [
             self.__find_substring_indexes__(text, key)
-            for key in self.grapheme_spelling_dict.keys()
+            for key in self.grapheme_spelling_dict
         ]
         # Join all the sublists in a single list
         # Get the number of characters to augment
-        aparitions = sum(aparitions, [])
+        aparitions = list(chain.from_iterable(aparitions))
         num_aug = int(len(aparitions) * self.aug_percent)
         # Iterate over the number of samples
-        for i in range(num_samples):
+        for _ in range(num_samples):
             new_text = text
             # Create a list with num_aug elements in aparitions without repetition
             elements = random.sample(aparitions, num_aug)
@@ -398,7 +399,7 @@ class Spelling(DataAugmentationAbstract):
                 end = e[1] + 1
                 substring = new_text[start:end]
                 # If the substring is in the dictionary, replace it
-                if substring in self.grapheme_spelling_dict.keys():
+                if substring in self.grapheme_spelling_dict:
                     replacement = self.grapheme_spelling_dict[substring]
                 else:
                     replacement = substring
@@ -509,13 +510,11 @@ class Spelling(DataAugmentationAbstract):
         output_texts = []
         uppercase_words = []
         word = ""
-        start = 0
         # Add to uppercase_words the words (separated by spaces) with at least one letter uppercase ({'word': 'word', 'start': first_int, 'end': last_int}})
         for index, character in enumerate(text):
             if character != " ":
                 word += character
             else:
-                end = index
                 if any(char.isupper() for char in word):
                     uppercase_words.append(
                         {
@@ -524,12 +523,11 @@ class Spelling(DataAugmentationAbstract):
                             "end": index,
                         }
                     )
-                start = index + 1
                 word = ""
 
         # Num of words to lowercase
         num_aug = ceil(len(uppercase_words) * self.aug_percent)
-        for i in range(num_samples):
+        for _ in range(num_samples):
             # Copy the original text
             new_text = text
             # Choose a random subset of words to lowercase
@@ -555,13 +553,11 @@ class Spelling(DataAugmentationAbstract):
         output_texts = []
         lowercase_worsd = []
         word = ""
-        start = 0
         # Add to lowercase_worsd the words (separated by spaces) with at least one letter lowercase ({'word': 'word', 'start': first_int, 'end': last_int}})
         for index, character in enumerate(text):
             if character != " ":
                 word += character
             else:
-                end = index
                 if any(char.islower() for char in word):
                     lowercase_worsd.append(
                         {
@@ -570,12 +566,11 @@ class Spelling(DataAugmentationAbstract):
                             "end": index,
                         }
                     )
-                start = index + 1
                 word = ""
 
         # Num of words to lowercase
         num_aug = ceil(len(lowercase_worsd) * self.aug_percent)
-        for i in range(num_samples):
+        for _ in range(num_samples):
             # Copy the original text
             new_text = text
             # Choose a random subset of words to lowercase
@@ -598,9 +593,8 @@ class Spelling(DataAugmentationAbstract):
         """
         # List to save the augmented texts
         output_texts = []
-        half_aug_percent = self.aug_percent / 2
 
-        for i in range(num_samples):
+        for _ in range(num_samples):
             # Copy the original text
             new_text = text
             # Lowercase the text
@@ -621,7 +615,7 @@ class Spelling(DataAugmentationAbstract):
         json_path = os.path.join(
             os.path.dirname(__file__), "data", "misspelled_words.json"
         )
-        with open(json_path, "r") as f:
+        with open(json_path) as f:
             self.misspelled_dict = json.load(f)
 
     def _word_spelling_augmentation_(self, text, num_samples):
@@ -641,7 +635,7 @@ class Spelling(DataAugmentationAbstract):
         words = [word for word in words if word in self.misspelled_dict]
         # Num of words to replace
         num_aug = ceil(len(words) * self.aug_percent)
-        for i in range(num_samples):
+        for _ in range(num_samples):
             # Copy the original text
             new_text = text
             # Choose a random subset of words to replace
@@ -663,7 +657,7 @@ class Spelling(DataAugmentationAbstract):
         output_texts = []
         if isinstance(type(text), str):
             text = list(text)
-        for i in range(num_samples):
+        for _ in range(num_samples):
             text = self._word_spelling_augmentation_(text[0], 1)
             text = self._grapheme_spelling_augment_(text[0], 1)
             text = self._keyboard_augment_(text[0], 1)

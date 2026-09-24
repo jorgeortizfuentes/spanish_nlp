@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "A package for NLP in Spanish"
 readme = "README.md"
 license = "GPL-3.0-or-later"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 authors = [
     { name = "Jorge Ortiz-Fuentes", email = "jorge@ortizfuentes.com" },
 ]
@@ -31,22 +31,24 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Text Processing :: Linguistic",
 ]
 dependencies = [
-    "datasets",
-    "emoji",
-    "es_core_news_sm",
-    "kaleido",
-    "nltk",
-    "pandas",
-    "torch",
-    "transformers",
+    "datasets>=3.5.0",
+    "emoji>=2.14.1",
+    "es_core_news_sm>=3.8.0,<3.9",
+    "nltk>=3.9.1",
+    "numpy>=2.2.5",
+    "pandas>=2.2.3",
+    "pyspellchecker>=0.8.2",
+    "spacy>=3.8.5,<3.9",
+    "torch>=2.7.0",
+    "tqdm>=4.66",
+    "transformers>=4.51.3",
+    "unidecode>=1.4.0",
 ]
 
 [project.urls]
@@ -62,11 +64,47 @@ include = [
 
 [dependency-groups]
 dev = [
+    "parameterized>=0.9.0",
     "pytest>=8.3.5",
-    "pytest-cov>=5.0.0",
+    "pytest-cov>=6.1.1",
     "ruff>=0.16.6",
 ]
+docs = [
+    "sphinx>=7.2.6",
+]
+notebooks = [
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.5",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.uv.sources]
+# es_core_news_sm is not published on PyPI; resolve it from the spaCy models release.
+es_core_news_sm = { url = "https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.ruff.lint]
-select = ["F", "I", "E"]
-ignore = ["E501", "F401"]
+select = [
+    "E", "W", "F", "I",  # pycodestyle, pyflakes, isort
+    "UP",                # pyupgrade
+    "B",                 # flake8-bugbear
+    "SIM", "C4", "PIE",  # simplifications
+    "PT",                # flake8-pytest-style
+    "LOG",               # flake8-logging
+    "RUF",               # ruff-specific rules
+]
+ignore = ["E501"]  # line length is handled by the formatter
+
+[tool.ruff.lint.per-file-ignores]
+# Package __init__ files re-export the public API.
+"__init__.py" = ["F401", "F403"]
+# Tests use unittest-style assertions.
+"tests/**" = ["PT009"]
+# Intentional unicode text (emojis, styled letters, accents).
+"src/spanish_nlp/utils/{emo_unicode,stopwords}.py" = ["RUF001", "RUF002", "RUF003"]
+"tests/test_preprocess.py" = ["RUF001", "RUF002", "RUF003"]
+"examples/Preprocess.ipynb" = ["RUF001", "RUF002", "RUF003"]

@@ -1,6 +1,5 @@
 import re
 from abc import ABC, abstractmethod
-from typing import List, Set, Tuple
 
 
 class SpellCheckerBase(ABC):
@@ -10,12 +9,11 @@ class SpellCheckerBase(ABC):
     Defines the common interface that all spell checkers must adhere to.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs):  # noqa: B027 - optional hook, not abstract
         """
         Base initializer. Can be used for common setup.
         Accepts arbitrary keyword arguments for subclass flexibility.
         """
-        pass
 
     @abstractmethod
     def is_correct(self, word: str) -> bool:
@@ -28,10 +26,9 @@ class SpellCheckerBase(ABC):
         Returns:
             bool: True if the word is deemed correct, False otherwise.
         """
-        pass
 
     @abstractmethod
-    def suggest(self, word: str) -> List[str]:
+    def suggest(self, word: str) -> list[str]:
         """
         Suggests corrections for a potentially misspelled word.
 
@@ -41,7 +38,6 @@ class SpellCheckerBase(ABC):
         Returns:
             List[str]: A list of correction suggestions.
         """
-        pass
 
     @abstractmethod
     def correct_word(self, word: str) -> str:
@@ -55,9 +51,8 @@ class SpellCheckerBase(ABC):
             str: The corrected word, or the original word if no correction is
                  found or deemed necessary.
         """
-        pass
 
-    def _simple_tokenizer(self, text: str) -> List[Tuple[str, bool]]:
+    def _simple_tokenizer(self, text: str) -> list[tuple[str, bool]]:
         """
         Simple tokenizer distinguishing words from non-words.
 
@@ -79,7 +74,7 @@ class SpellCheckerBase(ABC):
                 tokens.append((non_word_match, False))
         return tokens
 
-    def find_errors(self, text: str) -> List[str]:
+    def find_errors(self, text: str) -> list[str]:
         """
         Finds all unique potentially misspelled words in a given text.
 
@@ -89,7 +84,7 @@ class SpellCheckerBase(ABC):
         Returns:
             List[str]: A list of unique words identified as potential errors.
         """
-        errors: Set[str] = set()
+        errors: set[str] = set()
         tokens = self._simple_tokenizer(text)
         for token, is_word in tokens:
             if is_word and not self.is_correct(token):
@@ -107,7 +102,7 @@ class SpellCheckerBase(ABC):
         Returns:
             str: The text with corrections applied based on correct_word().
         """
-        corrected_parts: List[str] = []
+        corrected_parts: list[str] = []
         tokens = self._simple_tokenizer(text)
         for token, is_word in tokens:
             if is_word:

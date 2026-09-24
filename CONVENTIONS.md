@@ -6,7 +6,7 @@ This document outlines the development conventions to follow in the project to m
 • Classes and functions must include docstrings (Google Style).
 • Use type hints to specify the argument types and return values of functions.
 • Use pyproject.toml to specify project dependencies and configurations.
-• Use hatch for project management tasks.
+• Use uv to manage dependencies and environments (uv add, uv sync, uv run). Commit uv.lock.
 • Write and execute unit tests using pytest.
 • Use ruff to automatically format the code.
 • Keep the code as simple and readable as possible. If a function or class is hard to understand, it likely needs refactoring.
