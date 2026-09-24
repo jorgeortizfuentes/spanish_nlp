@@ -9,7 +9,7 @@ class SpellCheckerBase(ABC):
     Defines the common interface that all spell checkers must adhere to.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs):  # noqa: B027 - optional hook, not abstract
         """
         Base initializer. Can be used for common setup.
         Accepts arbitrary keyword arguments for subclass flexibility.

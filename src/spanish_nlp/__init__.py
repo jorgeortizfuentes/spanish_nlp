@@ -1,5 +1,6 @@
 import logging
 
+from . import augmentation
 from .augmentation import *
 from .classifiers import SpanishClassifier
 from .preprocess import SpanishPreprocess
@@ -9,9 +10,8 @@ from .spellchecker import SpanishSpellChecker
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 __all__ = [
-    "SpanishPreprocess",
     "SpanishClassifier",
+    "SpanishPreprocess",
     "SpanishSpellChecker",
-    # Re-exporting augmentation classes might be needed depending on usage
-    "augmentation",  # Or list specific classes like "Spelling", "Masked"
+    "augmentation",
 ]
