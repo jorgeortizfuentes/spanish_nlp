@@ -28,10 +28,12 @@ test:
 	uv run pytest --cov=spanish_nlp --cov-report=html:outputs/coverage --cov-report=term-missing -v tests/ | tee outputs/pytest-report.txt
 
 lint:
-	uv run ruff check src tests
+	uv run ruff check .
+	uv run ruff format --check .
 
 format:
-	uv run ruff format src tests
+	uv run ruff check --fix .
+	uv run ruff format .
 
 build:
 	uv build
