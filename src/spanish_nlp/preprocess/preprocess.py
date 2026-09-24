@@ -10,6 +10,8 @@ from spanish_nlp.utils.inclusive_words import normalize_inclusive_language
 
 logger = logging.getLogger(__name__)
 
+SPANISH_STEMMER = SnowballStemmer("spanish")
+
 
 class SpanishPreprocess:
     def __init__(
@@ -280,7 +282,7 @@ class SpanishPreprocess:
             ]
         )
 
-    def _stem_(self, text, stemmer=SnowballStemmer("spanish")):
+    def _stem_(self, text, stemmer=SPANISH_STEMMER):
         """TODO: add another stemmers"""
         return " ".join([stemmer.stem(word) for word in text.split()])
 
