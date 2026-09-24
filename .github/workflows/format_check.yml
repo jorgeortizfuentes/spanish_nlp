@@ -2,7 +2,7 @@ name: Ruff
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: ["main", "develop"]
 
 jobs:
   ruff:
@@ -12,12 +12,12 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
 
       - name: Ruff lint
-        run: uvx ruff check .
+        run: uv run --locked --only-group dev ruff check .
 
       - name: Ruff format
-        run: uvx ruff format --check .
+        run: uv run --locked --only-group dev ruff format --check .
