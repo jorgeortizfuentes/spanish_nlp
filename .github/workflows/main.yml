@@ -12,19 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
+          enable-cache: true
           python-version: '3.10'
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-dev.txt
-          pip install -e .
+        run: uv sync --locked
 
       - name: Run tests
         run: make test
@@ -33,8 +30,8 @@ jobs:
       - name: Build package
         if: github.ref == 'refs/heads/main'
         run: |
-          hatchling build
-          export VERSION=$(hatchling version | awk '{print $NF}')
+          uv build
+          export VERSION=$(uvx hatch version)
           echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
         continue-on-error: false
 
