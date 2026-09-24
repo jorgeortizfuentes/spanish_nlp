@@ -113,7 +113,7 @@ class Masked(DataAugmentationAbstract):
             n_tokens_split = (
                 int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
             )
-            n_splits = math.ceil((n_tokens / n_tokens_split))
+            n_splits = math.ceil(n_tokens / n_tokens_split)
 
             if n_splits > 1:
                 new_text = self._large_sustitute_(text)
@@ -166,9 +166,9 @@ class Masked(DataAugmentationAbstract):
                 random_number = np.random.randint(0, self.top_k)
                 # Check if there is a punctuation in new_word
                 pattern = "|".join(re.escape(p) for p in punct)
-                if re.search(pattern, new_word) is None and new_word not in not_allowed:
-                    break
-                elif count > self.top_k:
+                if (
+                    re.search(pattern, new_word) is None and new_word not in not_allowed
+                ) or count > self.top_k:
                     break
                 else:
                     count += 1
@@ -192,7 +192,7 @@ class Masked(DataAugmentationAbstract):
         n_tokens_split = (
             int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
         )
-        n_splits = math.ceil((n_tokens / n_tokens_split))
+        n_splits = math.ceil(n_tokens / n_tokens_split)
         sentence_splits = self._split_text_into_chunks_(sentence, n_splits=n_splits)
 
         # Augment each chunk of the text and concatenate the results
@@ -240,7 +240,7 @@ class Masked(DataAugmentationAbstract):
             n_tokens_split = (
                 int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
             )
-            n_splits = math.ceil((n_tokens / n_tokens_split))
+            n_splits = math.ceil(n_tokens / n_tokens_split)
 
             if n_splits > 1:
                 new_text = self._large_insert_(text)
@@ -289,9 +289,9 @@ class Masked(DataAugmentationAbstract):
             while True:
                 random_number = np.random.randint(0, self.top_k)
                 pattern = "|".join(re.escape(p) for p in punct)
-                if re.search(pattern, new_word) is None and new_word not in not_allowed:
-                    break
-                elif count > self.top_k:
+                if (
+                    re.search(pattern, new_word) is None and new_word not in not_allowed
+                ) or count > self.top_k:
                     break
                 else:
                     count += 1
@@ -313,7 +313,7 @@ class Masked(DataAugmentationAbstract):
         n_tokens_split = (
             int(self.tokenizer.model_max_length / (self.aug_percent + 1)) + 1
         )
-        n_splits = math.ceil((n_tokens / n_tokens_split))
+        n_splits = math.ceil(n_tokens / n_tokens_split)
         sentence_splits = self._split_text_into_chunks_(sentence, n_splits=n_splits)
 
         # Augment each chunk of the text and concatenate the results
