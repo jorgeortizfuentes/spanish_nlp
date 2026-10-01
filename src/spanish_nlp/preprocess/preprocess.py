@@ -288,7 +288,7 @@ class SpanishPreprocess:
     def _stem_(self, text, stemmer=None):
         """TODO: add another stemmers"""
         from nltk.stem.snowball import SnowballStemmer
-        SPANISH_STEMMER = SnowballStemmer("spanish")
+        stemmer = SnowballStemmer("spanish")
         return " ".join([stemmer.stem(word) for word in text.split()])
 
     def _lemmatize_(self, text, lemmatizer="es_core_news_sm"):
