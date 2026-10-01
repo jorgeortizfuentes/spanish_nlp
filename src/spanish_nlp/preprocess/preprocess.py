@@ -3,15 +3,10 @@ import re
 import string
 from typing import Literal
 
-import emoji
-from nltk.stem.snowball import SnowballStemmer
-
 from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
 from spanish_nlp.utils.inclusive_words import normalize_inclusive_language
 
 logger = logging.getLogger(__name__)
-
-SPANISH_STEMMER = SnowballStemmer("spanish")
 
 
 class SpanishPreprocess:
@@ -38,7 +33,8 @@ class SpanishPreprocess:
         lemmatize=False,
         stem=False,
         remove_html_tags=True,
-        stopwords_list: list | Literal["default", "extended", "nltk", "spacy"] = "default",
+        stopwords_list: list
+        | Literal["default", "extended", "nltk", "spacy"] = "default",
     ):
         """A class for preprocessing Spanish text for NLP tasks.
 
@@ -211,10 +207,14 @@ class SpanishPreprocess:
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _emojis_to_text_(self, text):
+        import emoji
+
         pp_text = emoji.demojize(text, delimiters=(" __", "__ ")).replace("  ", " ")
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _text_to_emojis_(self, text):
+        import emoji
+
         pp_text = emoji.emojize(text, delimiters=("__", "__"))
         return self._normalize_punctuation_spelling_(pp_text)
 
@@ -285,8 +285,10 @@ class SpanishPreprocess:
             ]
         )
 
-    def _stem_(self, text, stemmer=SPANISH_STEMMER):
+    def _stem_(self, text, stemmer=None):
         """TODO: add another stemmers"""
+        from nltk.stem.snowball import SnowballStemmer
+        SPANISH_STEMMER = SnowballStemmer("spanish")
         return " ".join([stemmer.stem(word) for word in text.split()])
 
     def _lemmatize_(self, text, lemmatizer="es_core_news_sm"):
