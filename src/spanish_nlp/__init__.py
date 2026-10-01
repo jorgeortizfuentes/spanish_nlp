@@ -1,19 +1,11 @@
 import logging
 
-from .augmentation import *
-from .classifiers import SpanishClassifier
 from .preprocess import SpanishPreprocess
-from .spellchecker import SpanishSpellChecker
 
 # Configure logging for the library to avoid 'No handler found' warnings
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
-try:
-    from .preprocess import SpanishPreprocess
-except (ImportError, ModuleNotFoundError) as e:
-    logger.error("Could not import SpanishPreprocess: %s", e)
-    SpanishPreprocess = None
 
 try:
     from .spellchecker import SpanishSpellChecker
@@ -29,6 +21,7 @@ except (ImportError, ModuleNotFoundError) as e:
 
 try:
     from . import classifiers
+    from .classifiers import SpanishClassifier
 except (ImportError, ModuleNotFoundError) as e:
     logger.debug("Classifiers module not available: %s", e)
     classifiers = None
