@@ -17,8 +17,10 @@ Cómo funciona:
 """
 
 import importlib.util
+import re
 import unittest
 
+import pytest
 from parameterized import parameterized
 
 from spanish_nlp import SpanishPreprocess
@@ -62,13 +64,20 @@ CORE_METHODS = [
 ]
 
 
+MSG_ERROR_TEMPLATE = (
+    "'{module}' not found.\n"
+    "Please install with either: \n"
+    "- pip install 'spanish_nlp[{extra}]'\n"
+    "- uv add 'spanish_nlp[{extra}]'"
+)
+
+
 def _has_module(module_name):
     return importlib.util.find_spec(module_name) is not None
 
 
 HAS_NLTK = _has_module("nltk")
 HAS_SPACY_ES = _has_module("es_core_news_sm")
-HAS_EMOJI = _has_module("emoji")
 
 
 # ---------------------------------------------------------------------------
@@ -325,22 +334,17 @@ class TestSpanishPreprocessOptionalSpacy(unittest.TestCase):
 class TestSpanishPreprocessOptionalEmoji(unittest.TestCase):
     def setUp(self):
         self.preprocessor = SpanishPreprocess()
+        self.msg_error = MSG_ERROR_TEMPLATE.format(module="emoji", extra="emoji")
 
-    @unittest.skipUnless(HAS_EMOJI, "requiere 'emoji' (spanish_nlp[all])")
     def test_convert_emojis(self):
         text = "Este texto tiene 😀 y 🙁."
-        expected = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
-        pp_text = self.preprocessor._emojis_to_text_(text)
-        self.assertEqual(pp_text, expected)
-        self.assertTrue(text != pp_text)
+        with pytest.raises(ModuleNotFoundError, match=re.escape(self.msg_error)):
+            self.preprocessor._emojis_to_text_(text)
 
-    @unittest.skipUnless(HAS_EMOJI, "requiere 'emoji' (spanish_nlp[all])")
     def test_remove_emojis(self):
         text = "Este texto tiene __grinning_face__ y __slightly_frowning_face__."
-        expected = "Este texto tiene 😀 y 🙁."
-        pp_text = self.preprocessor._text_to_emojis_(text)
-        self.assertEqual(pp_text, expected)
-        self.assertTrue(text != pp_text)
+        with pytest.raises(ModuleNotFoundError, match=re.escape(self.msg_error)):
+            self.preprocessor._text_to_emojis_(text)
 
 
 if __name__ == "__main__":
