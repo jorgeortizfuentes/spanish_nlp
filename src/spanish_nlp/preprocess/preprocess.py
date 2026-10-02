@@ -4,6 +4,7 @@ import string
 from typing import Literal
 
 from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
+from spanish_nlp.utils.import_utils import assert_optional_import
 from spanish_nlp.utils.inclusive_words import normalize_inclusive_language
 
 logger = logging.getLogger(__name__)
@@ -207,12 +208,14 @@ class SpanishPreprocess:
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _emojis_to_text_(self, text):
+        assert_optional_import("emoji", extra="emoji")
         import emoji
 
         pp_text = emoji.demojize(text, delimiters=(" __", "__ ")).replace("  ", " ")
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _text_to_emojis_(self, text):
+        assert_optional_import("emoji", extra="emoji")
         import emoji
 
         pp_text = emoji.emojize(text, delimiters=("__", "__"))
@@ -288,6 +291,7 @@ class SpanishPreprocess:
     def _stem_(self, text, stemmer=None):
         """TODO: add another stemmers"""
         from nltk.stem.snowball import SnowballStemmer
+
         stemmer = SnowballStemmer("spanish")
         return " ".join([stemmer.stem(word) for word in text.split()])
 
