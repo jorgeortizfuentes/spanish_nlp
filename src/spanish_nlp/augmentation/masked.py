@@ -220,7 +220,7 @@ class Masked(DataAugmentationAbstract):
         n_tokens = len(tokens)
         chunk_size = int(n_tokens / n_splits)
         chunks = [tokens[i : i + chunk_size] for i in range(0, n_tokens, chunk_size)]
-        return [" ".join(chunk) for chunk in chunks]
+        return [self.tokenizer.convert_tokens_to_string(chunk) for chunk in chunks]
 
     def _insert_augment_(self, text, num_samples=1, max_words=450):
         """
