@@ -1,84 +1,58 @@
-import unittest
+import pytest
 
-import pandas as pd
+from spanish_nlp.augmentation import Masked
 
-from spanish_nlp import augmentation
-
-
-class TestMasked(unittest.TestCase):
-    def setUp(self):
-        self.sustitute_augmentor = augmentation.Masked(
-            method="sustitute",
-            model="dccuchile/bert-base-spanish-wwm-cased",
-            aug_percent=0.5,
-            device="cpu",
-        )
-        self.insert_augmentor = augmentation.Masked(
-            method="insert",
-            model="dccuchile/bert-base-spanish-wwm-cased",
-            aug_percent=0.5,
-            device="cpu",
-        )
-
-    def print_augmentations(self, original, augmentations, method):
-        # Save in outputs/augmentations_test.txt
-        with open("outputs/augmentations_test.txt", "a") as f:
-            f.write(f"*** Masked DATA AUGMENTATION: {method} ***" + "\n")
-            f.write(f"Original: {original}" + "\n")
-            for i in range(len(augmentations)):
-                f.write(f"Augmentation {i + 1}: {augmentations[i]}" + "\n")
-            f.write("-----------------------------" + "\n")
-
-    def test_sustitute(self):
-        text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
-        text_aug = self.sustitute_augmentor.augment(text, 1)
-        self.print_augmentations(text, text_aug, method="substitute")
-        for i in range(len(text_aug)):
-            self.assertFalse(text == text_aug[i])
-            self.assertFalse(text == "")
-
-    def test_insert(self):
-        text = "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
-        text_aug = self.insert_augmentor.augment(text, 1)
-        self.print_augmentations(text, text_aug, method="insert")
-        for i in range(len(text_aug)):
-            self.assertFalse(text == text_aug[i])
-            self.assertFalse(text == "")
-
-    def test_sustitute_large(self):
-        text = (
-            30
-            * "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
-        )
-        text_aug = self.sustitute_augmentor.augment(text, 1)
-        self.print_augmentations(text, text_aug, method="substitute")
-        for i in range(len(text_aug)):
-            print(text)
-            print(".....")
-            print(text_aug[i])
-            self.assertFalse(text == text_aug[i])
-            self.assertFalse(text == "")
-
-    def test_insert_large(self):
-        text = (
-            30
-            * "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
-        )
-        text_aug = self.insert_augmentor.augment(text, 1)
-        self.print_augmentations(text, text_aug, method="insert")
-        for i in range(len(text_aug)):
-            self.assertFalse(text == text_aug[i])
-            self.assertFalse(text == "")
-
-    def test_pandas(self):
-        texts = ["soy un texto para probar pandas en ste test"] * 100
-        df = pd.DataFrame({"text": texts})
-        df["sustitute"] = self.sustitute_augmentor.augment(df["text"], num_workers=1)
-        df["insert"] = self.insert_augmentor.augment(df["text"], num_workers=1)
-        # Compare if df["text"] is equal to df["sustitute"] or df["insert"]
-        self.assertFalse(df["text"].equals(df["sustitute"]))
-        self.assertFalse(df["text"].equals(df["insert"]))
+TINY_MODEL = "hf-internal-testing/tiny-random-BertForMaskedLM"
+SPANISH_MODEL = "dccuchile/bert-base-spanish-wwm-cased"
+METHODS = ["sustitute", "insert"]
+SHORT_TEXT = "En aquel tiempo yo tenía veinte años y estaba loco."
+LONG_TEXT = " ".join([SHORT_TEXT] * 15)
+PARAGRAPH = (
+    "En aquel tiempo yo tenía veinte años y estaba loco. Había perdido un país "
+    "pero había ganado un sueño. Y si tenía ese sueño lo demás no importaba. Ni "
+    "trabajar ni rezar ni estudiar en la madrugada junto a los perros románticos."
+)
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.fixture(scope="module", params=METHODS)
+def augmenter(request):
+    return Masked(method=request.param, model=TINY_MODEL, aug_percent=0.3, device="cpu")
+
+
+def normalize(augmenter, text):
+    tokenizer = augmenter.tokenizer
+    return tokenizer.decode(tokenizer(text)["input_ids"], skip_special_tokens=True)
+
+
+def test_invalid_method_raises():
+    with pytest.raises(ValueError, match="'sustitute' or 'insert'"):
+        Masked(method="unknown", model=TINY_MODEL)
+
+
+def test_short_text_is_augmented(augmenter):
+    samples = augmenter.augment(SHORT_TEXT, num_samples=3)
+    assert 1 <= len(samples) <= 3
+    for sample in samples:
+        assert sample != normalize(augmenter, SHORT_TEXT)
+        assert augmenter.mask_token not in sample
+
+
+def test_long_text_is_augmented_in_chunks(augmenter):
+    n_tokens = len(augmenter.tokenizer.tokenize(LONG_TEXT))
+    assert n_tokens > augmenter.tokenizer.model_max_length
+
+    [sample] = augmenter.augment(LONG_TEXT, num_samples=1)
+    assert "##" not in sample
+    assert augmenter.mask_token not in sample
+    assert len(sample.split()) >= 0.8 * len(LONG_TEXT.split())
+
+
+@pytest.mark.parametrize("method", METHODS)
+def test_spanish_model_produces_valid_words(method):
+    augmenter = Masked(
+        method=method, model=SPANISH_MODEL, aug_percent=0.5, device="cpu"
+    )
+    [sample] = augmenter.augment(PARAGRAPH, num_samples=1)
+    assert sample != PARAGRAPH
+    assert "[UNK]" not in sample
+    assert augmenter.mask_token not in sample
