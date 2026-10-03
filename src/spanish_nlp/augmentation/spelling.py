@@ -436,7 +436,7 @@ class Spelling(DataAugmentationAbstract):
             indices = [i for i, c in enumerate(new_text) if c in punctuation]
             # Create a list with num_aug elements in indices without repetition
             elements = random.sample(indices, num_aug)
-            for e in elements:
+            for e in sorted(elements, reverse=True):
                 new_text = new_text[:e] + new_text[e + 1 :]
             # Append the augmented text to the list
             output_texts.append(new_text)
@@ -462,7 +462,7 @@ class Spelling(DataAugmentationAbstract):
             indices = [i for i, c in enumerate(new_text) if c == " "]
             # Create a list with num_aug elements in indices without repetition
             elements = random.sample(indices, num_aug)
-            for e in elements:
+            for e in sorted(elements, reverse=True):
                 new_text = new_text[:e] + new_text[e + 1 :]
             # Append the augmented text to the list
             output_texts.append(new_text)
@@ -654,19 +654,22 @@ class Spelling(DataAugmentationAbstract):
         """
         aug_percent = self.aug_percent
         self.aug_percent = aug_percent / 7
+        augmenters = [
+            self._word_spelling_augmentation_,
+            self._grapheme_spelling_augment_,
+            self._keyboard_augment_,
+            self._ocr_augment_,
+            self._random_augment_,
+            self._remove_punctuation_augment_,
+            self._remove_spaces_augment_,
+            self._remove_accents_augmentation_,
+            self._random_case_augmentation_,
+        ]
         output_texts = []
-        if isinstance(type(text), str):
-            text = list(text)
         for _ in range(num_samples):
-            text = self._word_spelling_augmentation_(text[0], 1)
-            text = self._grapheme_spelling_augment_(text[0], 1)
-            text = self._keyboard_augment_(text[0], 1)
-            text = self._ocr_augment_(text[0], 1)
-            text = self._random_augment_(text[0], 1)
-            text = self._remove_punctuation_augment_(text[0], 1)
-            text = self._remove_spaces_augment_(text[0], 1)
-            text = self._remove_accents_augmentation_(text[0], 1)
-            text = self._random_case_augmentation_(text[0], 1)
-            output_texts.append(text[0])
+            new_text = text
+            for augmenter in augmenters:
+                new_text = augmenter(new_text, 1)[0]
+            output_texts.append(new_text)
         self.aug_percent = aug_percent
         return output_texts
