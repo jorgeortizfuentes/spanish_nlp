@@ -27,6 +27,7 @@ Masked, DataAugmentationGenerative, DataAugmentationBackTranslation and DataAugm
 """
 
 import os
+from functools import lru_cache
 
 import es_core_news_sm
 import pandas as pd
@@ -34,6 +35,13 @@ from datasets import Dataset
 from tqdm import tqdm
 
 tqdm.pandas()
+
+
+@lru_cache(maxsize=1)
+def _load_spacy_tokenizer():
+    return es_core_news_sm.load(
+        disable=["ner", "parser", "tagger", "textcat", "vectors"]
+    )
 
 
 class DataAugmentationAbstract:
@@ -111,14 +119,7 @@ class DataAugmentationAbstract:
         return dataset
 
     def _load_default_tokenizer_(self):
-        # import es_core_news_sm if it is not imported
-        # if "es_core_news_sm" not in sys.modules:
-        #     import es_core_news_sm
-
-        if not hasattr(self, "nlp_spacy"):
-            self.nlp_spacy = es_core_news_sm.load(
-                disable=["ner", "parser", "tagger", "textcat", "vectors"]
-            )
+        self.nlp_spacy = _load_spacy_tokenizer()
 
         def tokenizer(text):
             return [token.text for token in self.nlp_spacy(text)]
