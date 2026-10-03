@@ -30,7 +30,7 @@ import os
 
 import es_core_news_sm
 import pandas as pd
-from datasets import load_dataset
+from datasets import Dataset
 from tqdm import tqdm
 
 tqdm.pandas()
@@ -61,7 +61,7 @@ class DataAugmentationAbstract:
             return self._list_augment_(texts, num_samples, num_workers)
         elif isinstance(texts, pd.Series):
             return self._pandas_augment_(texts, num_samples, num_workers)
-        elif isinstance(texts, load_dataset.Dataset):
+        elif isinstance(texts, Dataset):
             return self._datasets_augment_(texts, num_samples, num_workers)
         else:
             raise ValueError(
