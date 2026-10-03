@@ -296,6 +296,8 @@ This project was developed by [Jorge Ortiz-Fuentes](https://ortizfuentes.com/), 
 
 We would like to express our gratitude to the Millennium Institute For Foundational Research and Department of Computer Science at the University of Chile for supporting the development of Spanish NLP. Special thanks to Felipe Bravo-Marquéz, Ricardo Cordova and Hernán Sarmiento for their knowledge, support and invaluable contribution to the project.
 
+Thanks also to [Michael Suarez](https://github.com/MichaelSuarez0) for the proposals and suggestions that helped improve the project.
+
 ## Contributing
 
 Contributions to Spanish NLP are welcome! Please see the [Developer Guide (CONTRIBUTING.md)](CONTRIBUTING.md) for details on the contribution workflow, versioning, and publishing process.
