@@ -1,6 +1,6 @@
 # Developer Guide
 
-This document describes the steps for updating the package version and how the publishing process works.
+This document describes the steps for updating the package version and the changelog, and how the publishing process works.
 
 ## Development Setup
 
@@ -47,27 +47,62 @@ To update the version, use the `uvx hatch version` command. You can specify the 
       uvx hatch version major
       ```
 
-**Steps:**
+While the package is in `0.x`, breaking changes (dropping a Python version, raising dependency minimums, changing public behavior) bump the **minor** version; fixes and internal changes bump the **patch** version.
 
-1.  Ensure you are on the main branch (`main`) and have the latest changes:
+The version bump and the changelog update are done together, in a single commit on `develop`, right before opening the release PR to `main` (see [Preparing a Release](#preparing-a-release)). Do not bump the version in feature branches.
+
+## Updating the Changelog
+
+`CHANGELOG.md` is generated from the Git history with [git-cliff](https://git-cliff.org), configured in `cliff.toml`. Never edit the generated sections by hand; fix the commit messages instead.
+
+git-cliff relies on [Conventional Commits](https://www.conventionalcommits.org). Each commit type is placed in a changelog section:
+
+| Commit prefix         | Changelog section       |
+| --------------------- | ----------------------- |
+| `feat`                | 🚀 Features             |
+| `fix`                 | 🐛 Bug Fixes            |
+| `refactor`            | 🚜 Refactor             |
+| `doc`/`docs`          | 📚 Documentation        |
+| `perf`                | ⚡ Performance          |
+| `style`               | 🎨 Styling              |
+| `test`                | 🧪 Testing              |
+| `chore`, `ci`         | ⚙️ Miscellaneous Tasks  |
+| `revert`              | ◀️ Revert               |
+| anything else (`build`, ...) | 💼 Other     |
+
+Commits starting with `chore(release): prepare for`, `chore(changelog):` or `chore(deps...)` are left out of the changelog.
+
+git-cliff runs through `uvx`, so it does not need to be installed:
+
+```bash
+# Preview the unreleased changes without writing any file
+uvx git-cliff --unreleased
+# Regenerate CHANGELOG.md, labelling unreleased commits as the given version
+uvx git-cliff --tag v0.5.0 -o CHANGELOG.md
+```
+
+Always pass `--tag` when preparing a release. Without it, the new commits are listed under `[unreleased]` because the `vX.Y.Z` tag does not exist yet.
+
+## Preparing a Release
+
+1.  Make sure every feature branch for the release is merged into `develop`, and update your local copy:
     ```bash
-    git checkout main
-    git pull origin main
+    git checkout develop
+    git pull origin develop
     ```
-2.  Run the `uvx hatch version` command with the desired option:
+2.  Bump the version and regenerate the changelog with the same version:
     ```bash
-    # Example for a new minor version
-    uvx hatch version minor
+    uvx hatch version 0.5.0
+    uvx git-cliff --tag v$(uvx hatch version) -o CHANGELOG.md
     ```
-3.  Verify that the `src/spanish_nlp/__about__.py` file has been updated correctly.
-4.  Add the change to Git staging, commit, and push the changes:
+3.  Review `src/spanish_nlp/__about__.py` and `CHANGELOG.md`. If the release contains breaking changes, make sure they are easy to spot in the release notes.
+4.  Commit both files together and push:
     ```bash
-    git add src/spanish_nlp/__about__.py
-    # Use the updated version in the commit message
-    git commit -m "build: bump version to $(uvx hatch version)"
-    # Push the change to the development branch
-    git push
+    git add src/spanish_nlp/__about__.py CHANGELOG.md
+    git commit -m "chore(release): prepare for v$(uvx hatch version)"
+    git push origin develop
     ```
+5.  Open a Pull Request from `develop` to `main` (see [Publishing to PyPI](#publishing-to-pypi)).
 
 ## Contribution Workflow (Gitflow)
 
@@ -99,8 +134,8 @@ Publishing to PyPI is **automated** using GitHub Actions (`.github/workflows/mai
 **Therefore, to publish a new version:**
 
 1.  Ensure the `develop` branch contains all the features and fixes for the release.
-2.  Update the version in the `develop` branch using `uvx hatch version` (as described above).
-3.  Commit and push the version bump to `develop`.
+2.  Bump the version and regenerate the changelog in `develop` (see [Preparing a Release](#preparing-a-release)).
+3.  Commit and push the release commit to `develop`.
 4.  Create a Pull Request from `develop` to `main`.
 5.  Once the PR is reviewed and approved, **merge it into `main`**. This merge will trigger the automated publishing workflow.
 
