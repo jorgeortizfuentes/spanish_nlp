@@ -1,16 +1,13 @@
 import logging
 import re
 import string
-
-import emoji
-from nltk.stem.snowball import SnowballStemmer
+from typing import Literal
 
 from spanish_nlp.utils.emo_unicode import demoticonize, emoticonize
+from spanish_nlp.utils.import_utils import assert_optional_import
 from spanish_nlp.utils.inclusive_words import normalize_inclusive_language
 
 logger = logging.getLogger(__name__)
-
-SPANISH_STEMMER = SnowballStemmer("spanish")
 
 
 class SpanishPreprocess:
@@ -34,10 +31,11 @@ class SpanishPreprocess:
         remove_unprintable=True,
         remove_numbers=True,
         remove_stopwords=False,
-        stopwords_list=None,
         lemmatize=False,
         stem=False,
         remove_html_tags=True,
+        stopwords_list: list
+        | Literal["default", "extended", "nltk", "spacy"] = "default",
     ):
         """A class for preprocessing Spanish text for NLP tasks.
 
@@ -112,7 +110,9 @@ class SpanishPreprocess:
                 "If remove stopwords is True, you must provide a type of stopwords list ('default', 'extended', 'nltk', 'spacy') or a list of stopwords."
             )
 
-    def _prepare_stopwords_(self, type="default"):
+    def _prepare_stopwords_(
+        self, type: list | Literal["default", "extended", "nltk", "spacy"] = "default"
+    ):
         if type == "default":
             from spanish_nlp.utils.stopwords import default_stopwords
 
@@ -124,6 +124,7 @@ class SpanishPreprocess:
             self.stopwords_list = extended_stopwords
 
         elif type == "nltk":
+            assert_optional_import("nltk", extra="nltk")
             import nltk
 
             nltk.download("stopwords")
@@ -131,6 +132,7 @@ class SpanishPreprocess:
 
             self.stopwords_list = stopwords.words("spanish")
         elif type == "spacy":
+            assert_optional_import("es_core_news_sm", extra="spacy")
             import es_core_news_sm
 
             nlp = es_core_news_sm.load(
@@ -152,6 +154,7 @@ class SpanishPreprocess:
 
     def _prepare_lemmatize_(self, force=False):
         if self.lemmatize or force:
+            assert_optional_import("es_core_news_sm", extra="spacy")
             import es_core_news_sm
 
             self.nlp_spacy = es_core_news_sm.load(
@@ -208,10 +211,16 @@ class SpanishPreprocess:
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _emojis_to_text_(self, text):
+        assert_optional_import("emoji", extra="emoji")
+        import emoji
+
         pp_text = emoji.demojize(text, delimiters=(" __", "__ ")).replace("  ", " ")
         return self._normalize_punctuation_spelling_(pp_text)
 
     def _text_to_emojis_(self, text):
+        assert_optional_import("emoji", extra="emoji")
+        import emoji
+
         pp_text = emoji.emojize(text, delimiters=("__", "__"))
         return self._normalize_punctuation_spelling_(pp_text)
 
@@ -282,8 +291,12 @@ class SpanishPreprocess:
             ]
         )
 
-    def _stem_(self, text, stemmer=SPANISH_STEMMER):
+    def _stem_(self, text, stemmer=None):
         """TODO: add another stemmers"""
+        assert_optional_import("nltk", extra="nltk")
+        from nltk.stem.snowball import SnowballStemmer
+
+        stemmer = SnowballStemmer("spanish")
         return " ".join([stemmer.stem(word) for word in text.split()])
 
     def _lemmatize_(self, text, lemmatizer="es_core_news_sm"):

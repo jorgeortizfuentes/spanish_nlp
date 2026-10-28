@@ -1,10 +1,14 @@
 import logging
 
-from spellchecker import SpellChecker
-
-from .base import SpellCheckerBase
+from spanish_nlp.spellchecker.base import SpellCheckerBase
+from spanish_nlp.utils.import_utils import assert_optional_import
 
 logger = logging.getLogger(__name__)
+
+assert_optional_import(
+    "spellchecker", package_name="pyspellchecker", extra="spellchecker"
+)
+from spellchecker import SpellChecker
 
 
 class DictionarySpellChecker(SpellCheckerBase):
